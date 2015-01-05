@@ -1,12 +1,6 @@
 package reseauSimple;
 import jade.core.Agent;
 
-/**
-   This example shows a minimal agent that just prints "Hello World!" 
-   and then terminates.
-   @author Giovanni Caire - TILAB
- */
-
 public class ObservateurAgent extends Agent {
 
   protected void setup() {
