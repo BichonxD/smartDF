@@ -1,4 +1,3 @@
-
 package reseauSimple;
 
 import javax.swing.JFrame;
@@ -12,13 +11,20 @@ public class ObservateurAgent extends Agent
 {
 	private static final long serialVersionUID = 1L;
 	JFrame frame = null;
-	ObservateurBehaviourRecuInfoProd recupInfosProd = null;
+	GlobalSearchBehaviour recupInfosProd = null;
 	
 	protected void setup()
 	{
 		frame = new JFrame();
 		
-		recupInfosProd = new ObservateurBehaviourRecuInfoProd();
+		
+		// On cherche tous les producteurs
+		DFAgentDescription dfdRecherche = new DFAgentDescription();
+		ServiceDescription sdRecherche = new ServiceDescription();
+		sdRecherche.setName("producteur");
+		sdRecherche.setType("producteur");
+		dfdRecherche.addServices(sdRecherche);
+		recupInfosProd = new GlobalSearchBehaviour(dfdRecherche);
 		addBehaviour(recupInfosProd);
 		
 		// Inscription de l'agent dans l'annuaire
@@ -31,7 +37,7 @@ public class ObservateurAgent extends Agent
 		try
 		{
 			DFService.register(this, dfd);
-		} catch (FIPAException e)
+		}catch(FIPAException e)
 		{
 			e.printStackTrace();
 			System.err.println("Erreur d'inscription de l'observateur " + getAID() + " dans l'annuaire.");
@@ -43,4 +49,10 @@ public class ObservateurAgent extends Agent
 		return frame;
 	}
 	
+	// Put agent clean-up operations here
+	protected void takeDown()
+	{
+		// Printout a dismissal message
+		System.out.println("Buyer-agent" + getAID().getName() + "terminating.");
+	}
 }

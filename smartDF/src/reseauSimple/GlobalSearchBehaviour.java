@@ -1,34 +1,32 @@
-
 package reseauSimple;
 
 import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 
-public class ObservateurBehaviourRecuInfoProd extends OneShotBehaviour
+public class GlobalSearchBehaviour extends OneShotBehaviour
 {
 	private static final long serialVersionUID = 1L;
+	private DFAgentDescription dfdRecherche = null;
+	
+	public GlobalSearchBehaviour(DFAgentDescription dfdRecherche)
+	{
+		this.dfdRecherche = dfdRecherche;
+	}
 	
 	@Override
 	public void action()
 	{
-		// On cherche tous les producteurs
-		DFAgentDescription dfdRecherche = new DFAgentDescription();
-		ServiceDescription sdRecherche = new ServiceDescription();
-		sdRecherche.setName("producteur");
-		sdRecherche.setType("producteur");
-		dfdRecherche.addServices(sdRecherche);
 		DFAgentDescription[] resultRecherche = null;
 		
 		try
 		{
 			resultRecherche = DFService.search(myAgent, dfdRecherche);
-		} catch (FIPAException e)
+		}catch(FIPAException e)
 		{
 			e.printStackTrace();
-			System.err.println("Erreur aucun producteur trouvé.");
+			System.err.println("Erreur aucun résultat trouvé.");
 		}
 		
 		if(resultRecherche != null)
