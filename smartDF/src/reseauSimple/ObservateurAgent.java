@@ -7,7 +7,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
-public class ObservateurAgent extends Agent
+public class ObservateurAgent extends AbstractAgent
 {
 	private static final long serialVersionUID = 1L;
 	JFrame frame = null;
@@ -15,6 +15,9 @@ public class ObservateurAgent extends Agent
 	
 	protected void setup()
 	{
+		setServiceName("observateur");
+		super.setup();
+		
 		frame = new JFrame();
 		
 		
