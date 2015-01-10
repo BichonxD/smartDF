@@ -40,7 +40,6 @@ public class GlobalSearchBehaviour extends TickerBehaviour
 				((AbstractAgent) myAgent).getAnnuairePerso()[i] = resultRecherche[i].getName();
 			}
 		}
-		
 	}
 	
 }
