@@ -1,23 +1,25 @@
 package reseauSimple;
 
 import jade.core.AID;
-import jade.core.behaviours.OneShotBehaviour;
+import jade.core.Agent;
+import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 
-public class GlobalSearchBehaviour extends OneShotBehaviour
+public class GlobalSearchBehaviour extends TickerBehaviour
 {
 	private static final long serialVersionUID = 1L;
 	private DFAgentDescription dfdRecherche = null;
 	
-	public GlobalSearchBehaviour(DFAgentDescription dfdRecherche)
+	public GlobalSearchBehaviour(Agent a, long period, DFAgentDescription dfdRecherche)
 	{
+		super(a, period);
 		this.dfdRecherche = dfdRecherche;
 	}
 	
 	@Override
-	public void action()
+	public void onTick()
 	{
 		DFAgentDescription[] resultRecherche = null;
 		
