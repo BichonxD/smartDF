@@ -1,5 +1,6 @@
 package reseauSimple;
 
+import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -31,10 +32,10 @@ public class GlobalSearchBehaviour extends OneShotBehaviour
 		
 		if(resultRecherche != null)
 		{
-			// Affichage des résultats trouvés
-			for(DFAgentDescription dfd : resultRecherche)
+			((AbstractAgent) myAgent).setAnnuairePerso(new AID[resultRecherche.length]);
+			for(int i = 0; i < resultRecherche.length; i++)
 			{
-				dfd.getName();
+				((AbstractAgent) myAgent).getAnnuairePerso()[i] = resultRecherche[i].getName();
 			}
 		}
 		

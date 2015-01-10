@@ -1,5 +1,6 @@
 package reseauSimple;
 
+import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -10,6 +11,7 @@ public abstract class AbstractAgent extends Agent
 {
 	private static final long serialVersionUID = 1L;
 	private String serviceName = "defaultService";
+	private AID[] annuairePerso;
 	
 	protected void setup()
 	{
@@ -34,6 +36,16 @@ public abstract class AbstractAgent extends Agent
 	public void setServiceName(String serviceName)
 	{
 		this.serviceName = serviceName;
+	}
+	
+	public void setAnnuairePerso(AID[] annuairePerso)
+	{
+		this.annuairePerso = annuairePerso;
+	}
+	
+	public AID[] getAnnuairePerso()
+	{
+		return annuairePerso;
 	}
 	
 	// Put agent clean-up operations here
