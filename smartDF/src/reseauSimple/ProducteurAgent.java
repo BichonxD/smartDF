@@ -1,52 +1,81 @@
 package reseauSimple;
 
-import jade.core.Agent;
-import jade.core.AID;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.domain.DFService;
-import jade.domain.FIPAException;
-// permet de donner un identifiant unique au producteur
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
-// pour ajouter l'agent à la table 
+import java.util.ArrayList;
 
-public class ProducteurAgent extends Agent {
-	private static int tarif = 100;
+import jade.core.AID;
+
+public class ProducteurAgent extends AbstractAgent
+{
+	private static final long serialVersionUID = 1L;
 	
+	private ArrayList<AID> clientsFournisseur = new ArrayList<AID>();
+	private int prixFournisseur = 100;
+	private int argentDispo = 0;
 	
-	public static int getTarif() {
-		return tarif;
+	protected void setup()
+	{
+		setServiceName("producteur");
+		super.setup();
+		
+		prixFournisseur = (int) getArguments()[0];
+		
+		System.out.println("Hello World! My name is " + getLocalName());
+		
+		addBehaviour(new ProducteurBehaviourFactureClient(this, 3000));
+		addBehaviour(new ProducteurBehaviourMsgListener());
 	}
 	
-	protected void setup() {
-		try {
-			System.out.println("Création de l'agent " + getLocalName());
-			System.out.println(getAID());
-			DFAgentDescription descripteurProd = new DFAgentDescription();
-			descripteurProd.setName(getAID());
-			
-			ServiceDescription sdProd = new ServiceDescription();
-			sdProd.setName("producteur");
-			sdProd.setType("null");
-			descripteurProd.addServices(sdProd);
-			
-			DFService.register(this, descripteurProd);
-		} catch (FIPAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public int getPrixFournisseur()
+	{
+		return prixFournisseur;
+	}
+	
+	public void setPrixFournisseur(int prixFournisseur)
+	{
+		this.prixFournisseur = prixFournisseur;
+	}
+	
+	public int getArgentFournisseur()
+	{
+		return argentDispo;
+	}
+	
+	public void setArgentFournisseur(int argentDispo)
+	{
+		this.argentDispo = argentDispo;
+	}
+	
+	public ArrayList<AID> getClientsFournisseur()
+	{
+		return clientsFournisseur;
+	}
+	
+	public void addClientsFournisseur(AID fournisseurID)
+	{
+		if(!clientsFournisseur.contains(fournisseurID))
+		{
+			clientsFournisseur.add(fournisseurID);
+		}else
+		{
+			System.out.println("Le client est déjà présent dans la base!");
 		}
-		
-		//behaviour de test
-		/*
-		addBehaviour(new CyclicBehaviour(this) {
-		      public void action() {
-		        System.out.println("Cycling");
-		      } 
-		    });
-		*/
-		addBehaviour(new ProducteurEnvoiTarif());
-		
 	}
 	
+	public void removeClientsFournisseur(AID fournisseurID)
+	{
+		if(clientsFournisseur.contains(fournisseurID))
+		{
+			clientsFournisseur.remove(fournisseurID);
+		}else
+		{
+			System.out.println("Le client n'est pas présent dans la base");
+		}
+	}
+	
+	protected void takeDown()
+	{
+		System.out.println("Le ProducteurAgent " + getAID().getName() + " is terminating.");
+		super.takeDown();
+	}
 	
 }

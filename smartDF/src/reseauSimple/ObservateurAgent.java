@@ -7,16 +7,19 @@ public class ObservateurAgent extends AbstractAgent
 {
 	private static final long serialVersionUID = 1L;
 	GlobalSearchBehaviour chercheurAnnuaireProducteur = null;
-	GlobalBehaviourAskPrixProducteur recuperateurPrixProducteurs = null;
-	private ObservatorGUI myGUI;
+	ConsommateurBehaviourAskPrixProducteur demandeurPrixProducteurs = null;
+	ObservateurBehaviourMsgListener recuperateurPrixProducteurs = null;
+	private ObservateurGUI myGUI;
 	
 	protected void setup()
 	{
 		setServiceName("observateur");
 		super.setup();
 		
+		System.out.println("Hello World! My name is " + getLocalName() + ".");
+		
 		// Create and show the GUI
-		myGUI = new ObservatorGUI(this);
+		myGUI = new ObservateurGUI(this);
 		myGUI.setVisible(true);
 		
 		// Ajout d'un behaviour de récupération de l'annuaire toutes les minutes
@@ -25,19 +28,21 @@ public class ObservateurAgent extends AbstractAgent
 		sdRecherche.setName("producteur");
 		sdRecherche.setType("producteur");
 		dfdRecherche.addServices(sdRecherche);
-		chercheurAnnuaireProducteur = new GlobalSearchBehaviour(this, 60000, dfdRecherche);
+		chercheurAnnuaireProducteur = new GlobalSearchBehaviour(this, 6000, dfdRecherche);
 		addBehaviour(chercheurAnnuaireProducteur);
 		
+		// Ajout d'un behaviour de demande des tarifs de tous les producteurs executé toutes les minutes
+		demandeurPrixProducteurs = new ConsommateurBehaviourAskPrixProducteur(this, 2000);
+		addBehaviour(demandeurPrixProducteurs);
 		
+		// Ajout d'un behaviour de récupération des tarifs de tous les producteurs executé toutes les secondes
+		recuperateurPrixProducteurs = new ObservateurBehaviourMsgListener();
+		addBehaviour(recuperateurPrixProducteurs);
 	}
 	
-	// Put agent clean-up operations here
-	protected void takeDown()
+	public ObservateurGUI getMyGUI()
 	{
-		// Printout a dismissal message
-		System.out.println("Buyer-agent" + getAID().getName() + "terminating.");
-		
-		// Close the GUI
-		myGUI.dispose();
+		return myGUI;
 	}
+	
 }
