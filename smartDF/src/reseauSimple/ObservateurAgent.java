@@ -9,6 +9,8 @@ public class ObservateurAgent extends AbstractAgent
 	GlobalSearchBehaviour chercheurAnnuaireProducteur = null;
 	ConsommateurBehaviourAskPrixProducteur demandeurPrixProducteurs = null;
 	ObservateurBehaviourMsgListener recuperateurPrixProducteurs = null;
+	ObservateurBehaviourAskArgentProducteur recuperateurArgentProducteurs = null;
+	ObservateurBehaviourAskNbClientProducteur recuperateurNbClientProducteurs = null;
 	private ObservateurGUI myGUI;
 	
 	protected void setup()
@@ -32,8 +34,16 @@ public class ObservateurAgent extends AbstractAgent
 		addBehaviour(chercheurAnnuaireProducteur);
 		
 		// Ajout d'un behaviour de demande des tarifs de tous les producteurs executé toutes les minutes
-		demandeurPrixProducteurs = new ConsommateurBehaviourAskPrixProducteur(this, 2000);
+		demandeurPrixProducteurs = new ConsommateurBehaviourAskPrixProducteur(this, 1000);
 		addBehaviour(demandeurPrixProducteurs);
+		
+		// Ajout d'un behaviour de demande des tarifs de tous les producteurs executé toutes les minutes
+		recuperateurArgentProducteurs = new ObservateurBehaviourAskArgentProducteur(this, 1000);
+		addBehaviour(recuperateurArgentProducteurs);
+		
+		// Ajout d'un behaviour de demande des tarifs de tous les producteurs executé toutes les minutes
+		recuperateurNbClientProducteurs = new ObservateurBehaviourAskNbClientProducteur(this, 1000);
+		addBehaviour(recuperateurNbClientProducteurs);
 		
 		// Ajout d'un behaviour de récupération des tarifs de tous les producteurs executé toutes les secondes
 		recuperateurPrixProducteurs = new ObservateurBehaviourMsgListener();

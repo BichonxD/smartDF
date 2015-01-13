@@ -21,13 +21,19 @@ public class ObservateurBehaviourMsgListener extends CyclicBehaviour
 			{
 				AID sender = msg.getSender();
 				int prix = Integer.parseInt(title.split(" ")[1]);
-				((ObservateurAgent) myAgent).getMyGUI().ajouterLabel(sender, "Le producteur " + sender.getName() + " a pour prix : " + prix + ".\n");
+				((ObservateurAgent) myAgent).getMyGUI().ajouterPrixProducteur(sender, "Le producteur " + sender.getName() + " a pour prix : " + prix + ".");
 			}
 			else if(title.startsWith("argent-producteur "))
 			{
 				AID sender = msg.getSender();
 				int argent = Integer.parseInt(title.split(" ")[1]);
-				((ObservateurAgent) myAgent).getMyGUI().ajouterLabel(sender, "Le producteur " + sender.getName() + " a fait " + argent + "€ de bénéfices.\n");
+				((ObservateurAgent) myAgent).getMyGUI().ajouterArgentProducteur(sender, "Le producteur " + sender.getName() + " a fait " + argent + "€ de bénéfices.");
+			}
+			else if(title.startsWith("nb-clients "))
+			{
+				AID sender = msg.getSender();
+				int nbClient = Integer.parseInt(title.split(" ")[1]);
+				((ObservateurAgent) myAgent).getMyGUI().ajouterNbClientsProducteur(sender, "Le producteur " + sender.getName() + " a " + nbClient + " clients.");
 			}
 			else
 				System.out.println("Message non compris.");

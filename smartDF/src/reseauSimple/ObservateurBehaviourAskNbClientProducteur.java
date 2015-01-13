@@ -5,11 +5,11 @@ import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 
-public class ObservateurBehaviourAskArgentProducteur extends TickerBehaviour
+public class ObservateurBehaviourAskNbClientProducteur extends TickerBehaviour
 {
 	private static final long serialVersionUID = 1L;
 	
-	public ObservateurBehaviourAskArgentProducteur(Agent a, long period)
+	public ObservateurBehaviourAskNbClientProducteur(Agent a, long period)
 	{
 		super(a, period);
 	}
@@ -26,7 +26,7 @@ public class ObservateurBehaviourAskArgentProducteur extends TickerBehaviour
 			{
 				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 				msg.addReceiver(aid);
-				msg.setContent("demande-argent");
+				msg.setContent("demande-nb-clients");
 				myAgent.send(msg);
 			}
 		}

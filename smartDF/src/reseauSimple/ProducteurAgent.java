@@ -9,7 +9,7 @@ public class ProducteurAgent extends AbstractAgent
 	private static final long serialVersionUID = 1L;
 	
 	private ArrayList<AID> clientsFournisseur = new ArrayList<AID>();
-	private int prixFournisseur = 100;
+	private int prixFournisseur;
 	private int argentDispo = 0;
 	
 	protected void setup()
@@ -21,7 +21,7 @@ public class ProducteurAgent extends AbstractAgent
 		
 		System.out.println("Hello World! My name is " + getLocalName());
 		
-		addBehaviour(new ProducteurBehaviourFactureClient(this, 3000));
+		addBehaviour(new ProducteurBehaviourFactureClient(this, 1000));
 		addBehaviour(new ProducteurBehaviourMsgListener());
 	}
 	

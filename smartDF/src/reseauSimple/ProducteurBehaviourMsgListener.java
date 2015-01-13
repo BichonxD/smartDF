@@ -34,6 +34,14 @@ public class ProducteurBehaviourMsgListener extends CyclicBehaviour
 				reply.setContent("argent-producteur " + argent);
 				myAgent.send(reply);
 			}
+			else if(contenu.equals("demande-nb-clients"))
+			{
+				ACLMessage reply = new ACLMessage(ACLMessage.INFORM);
+				reply.addReceiver(sender);
+				int nbClient = ((ProducteurAgent) myAgent).getClientsFournisseur().size();
+				reply.setContent("nb-clients " + nbClient);
+				myAgent.send(reply);
+			}
 			else if(contenu.equals("abonnement"))
 			{
 				((ProducteurAgent) myAgent).addClientsFournisseur(sender);

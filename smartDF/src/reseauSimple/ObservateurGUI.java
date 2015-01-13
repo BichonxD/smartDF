@@ -1,7 +1,6 @@
 package reseauSimple;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.GridLayout;
 import java.util.HashMap;
 
 import jade.core.AID;
@@ -13,7 +12,10 @@ public class ObservateurGUI extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 	private JPanel panel = new JPanel();
-	private HashMap<AID, JLabel> labels = new HashMap<AID, JLabel>();
+	private HashMap<AID, JLabel> labelsPrix = new HashMap<AID, JLabel>();
+	private HashMap<AID, JLabel> labelsArgent = new HashMap<AID, JLabel>();
+	private HashMap<AID, JLabel> labelsNbClients = new HashMap<AID, JLabel>();
+	private GridLayout grille = new GridLayout(10, 1);
 	
 	public ObservateurGUI(final ObservateurAgent myAgent)
 	{
@@ -21,32 +23,55 @@ public class ObservateurGUI extends JFrame
 		this.setSize(600, 600);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setContentPane(panel);
-		
-		this.addWindowListener(new WindowAdapter()
-	        {
-	            @Override
-	            public void windowClosing(WindowEvent e)
-	            {
-	                System.out.println("Ordre de terminer l'application.");
-	                e.getWindow().dispose();
-	                myAgent.doDelete();
-	            }
-	        });
+		panel.setLayout(grille);
 	}
 	
-	public void ajouterLabel(AID a, String s)
+	public void ajouterPrixProducteur(AID a, String s)
 	{
-		if(labels.containsKey(a))
-			labels.get(a).setText(s);
+		if(labelsPrix.containsKey(a))
+			labelsPrix.get(a).setText(s);
 		else
 		{
-			JLabel newLabel = new JLabel(s);
-			labels.put(a, newLabel);
-			this.getContentPane().add(newLabel);
+			JLabel l = new JLabel(s);
+			labelsPrix.put(a, l);
+			getContentPane().add(l);
 		}
 		
-		this.pack();
-		this.revalidate();
-		this.repaint();
+		pack();
+		revalidate();
+		repaint();
 	}
+	
+	public void ajouterArgentProducteur(AID a, String s)
+	{
+		if(labelsArgent.containsKey(a))
+			labelsArgent.get(a).setText(s);
+		else
+		{
+			JLabel l = new JLabel(s);
+			labelsArgent.put(a, l);
+			getContentPane().add(l);
+		}
+		
+		pack();
+		revalidate();
+		repaint();
+	}
+	
+	public void ajouterNbClientsProducteur(AID a, String s)
+	{
+		if(labelsNbClients.containsKey(a))
+			labelsNbClients.get(a).setText(s);
+		else
+		{
+			JLabel l = new JLabel(s);
+			labelsNbClients.put(a, l);
+			getContentPane().add(l);
+		}
+		
+		pack();
+		revalidate();
+		repaint();
+	}
+	
 }

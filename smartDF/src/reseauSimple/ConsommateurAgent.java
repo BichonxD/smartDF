@@ -39,7 +39,7 @@ public class ConsommateurAgent extends AbstractAgent
 		rechercheProducteur.addServices(SDProducteur);
 		
 		addBehaviour(new GlobalSearchBehaviour(this, 6000, rechercheProducteur));
-		addBehaviour(new ConsommateurBehaviourAskPrixProducteur(this, 6000));
+		addBehaviour(new ConsommateurBehaviourAskPrixProducteur(this, 1000));
 		addBehaviour(new ConsomateurBehaviourMsgListener());
 	}
 	

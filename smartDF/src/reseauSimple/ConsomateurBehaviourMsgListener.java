@@ -45,8 +45,9 @@ public class ConsomateurBehaviourMsgListener extends CyclicBehaviour
 					myAgent.send(reply2);
 				}
 			}
-			else if(title.equals("demande-paiement") && msg.getSender() == ((ConsommateurAgent) myAgent).getFournisseurID())
+			else if(title.equals("demande-paiement") /*&& msg.getSender() == ((ConsommateurAgent) myAgent).getFournisseurID()*/)
 			{
+				
 				int paiement = ((ConsommateurAgent) myAgent).getBesoin();
 				if(((ConsommateurAgent) myAgent).isConsommateurProducteur())
 				{
@@ -56,10 +57,9 @@ public class ConsomateurBehaviourMsgListener extends CyclicBehaviour
 						paiement -= ((ConsommateurAgent) myAgent).getCapaciteProducteur();
 				}
 				paiement *= ((ConsommateurAgent) myAgent).getPrixfournisseur();
-				
 				ACLMessage reply = new ACLMessage(ACLMessage.INFORM);
-				msg.addReceiver(((ConsommateurAgent) myAgent).getFournisseurID());
-				msg.setContent("paiement " + paiement);
+				reply.addReceiver(msg.getSender());
+				reply.setContent("paiement " + paiement);
 				myAgent.send(reply);
 			}
 			else if(title.startsWith("changement-tarif "))
@@ -78,12 +78,15 @@ public class ConsomateurBehaviourMsgListener extends CyclicBehaviour
 				}
 			}
 			else
-				System.out.println("Message non compris.");
+			{
+				System.out.println("Message non compris.\n" + msg);
+				System.out.println(((ConsommateurAgent) myAgent).getFournisseurID());
+				System.out.println(msg.getSender());
+			}
 			
 		}
 		else
 			block();
-		
 	}
 	
 }
