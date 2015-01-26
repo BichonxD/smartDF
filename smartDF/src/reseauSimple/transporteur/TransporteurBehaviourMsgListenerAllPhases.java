@@ -15,11 +15,7 @@ import jade.lang.acl.MessageTemplate;
 public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 	private static final long serialVersionUID = 1L;
 	private int capaciteRestante = ((TransporteurAgent) myAgent).getCapaciteTransporteur();
-
-	public TransporteurBehaviourMsgListenerAllPhases(Agent a) {
-		super(a);
-	}
-	
+	private TreeMap<AID, Integer> demandeEnAttente = new TreeMap<AID, Integer>();
 	public void termineTour(){
 		capaciteRestante = ((TransporteurAgent) myAgent).getCapaciteTransporteur();
 	}
@@ -56,8 +52,10 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 			//augmenter ou diminuer le prix
 			else if (msg.getPerformative() == AbstractAgent.DEMANDE_FACTURATION){
 				if(msg.getSender() == ((TransporteurAgent) myAgent).getFournisseurID()){
-					((TransporteurAgent) myAgent).get())
+					capaciteRestante -= ((TransporteurAgent) myAgent).getCapaciteTransporteur();
 				}
+				//ajout du message à la pile des demandes en attendant de recevoir la demande de son producteur
+				else
 				int demandeTransport = Integer.parseInt(msg.getContent());
 			}
 		}
