@@ -71,9 +71,15 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 			
 		int electriciteTransporteurUniverselPrevisionnel =  electriciteAFournirPrevisionnel - capaciteTransportPersonnel;
 		
-		int nouveauPrix = 0;
+		int nouveauPrix = ((ProducteurAgent) myAgent).getPrixFournisseur();
 		
-		if(electriciteAFournirPrevisionnel)
+		//Si on est pas dans le cas initial, a savoir un fournisseur sans client
+		if(electriciteAFournirPrevisionnel != 0) {
+			if (electriciteTransporteurUniverselPrevisionnel > 0)
+				nouveauPrix *= 1.1;
+			else if (electriciteTransporteurUniverselPrevisionnel < 0)
+				nouveauPrix *= 0.9;
+		}
 		
 		if (((ProducteurAgent) myAgent).getPrixFournisseur() != nouveauPrix) {
 			ACLMessage changementPrix = new ACLMessage(AbstractAgent.PRIX_PRODUCTEUR_CHANGEMENT);
