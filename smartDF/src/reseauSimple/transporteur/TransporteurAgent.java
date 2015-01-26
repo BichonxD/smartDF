@@ -1,11 +1,8 @@
 package reseauSimple.transporteur;
 
-import reseauSimple.consommateur.ConsommateurBehaviourAskPrixProducteur;
+import reseauSimple.consommateur.ConsommateurBehaviourHorlogeListener;
 import reseauSimple.global.AbstractAgent;
-import reseauSimple.global.GlobalSearchBehaviour;
 import jade.core.AID;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class TransporteurAgent extends AbstractAgent
 {
@@ -30,6 +27,9 @@ public class TransporteurAgent extends AbstractAgent
 			super.setup();
 			
 			System.out.println("Creation d'un nouveau transporteur :\n" + toString());
+			
+			addBehaviour(new TransporteurBehaviourHorlogeListener());
+			addBehaviour(new TransporteurBehaviourMsgListenerAllPhases());
 		}
 	}
 
