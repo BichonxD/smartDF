@@ -61,7 +61,10 @@ public class ConsommateurBehaviourMsgListenerFacturation extends CyclicBehaviour
 				int aPayer = besoin * ((ConsommateurAgent) myAgent).getPrixfournisseur();
 				ACLMessage reply = msg.createReply();
 				reply.setPerformative(AbstractAgent.FACTURATION_PRODUCTEUR_REPONSE);
+				reply.setContent(Integer.toString(aPayer));
 				myAgent.send(reply);
+				
+				((ConsommateurAgent) myAgent).setaEteFacture(true);
 			}
 			
 			else

@@ -13,6 +13,7 @@ public class ConsommateurAgent extends AbstractAgent
 	private AID fournisseurID;
 	private int prixfournisseur;
 	private int dureeRenouvellement = 12;
+	private boolean aEteFacture = false;
 	
 	protected void setup()
 	{
@@ -72,6 +73,14 @@ public class ConsommateurAgent extends AbstractAgent
 	public int getDureeRenouvellement()
 	{
 		return dureeRenouvellement;
+	}
+
+	public boolean isaEteFacture() {
+		return aEteFacture;
+	}
+
+	public void setaEteFacture(boolean aEteFacture) {
+		this.aEteFacture = aEteFacture;
 	}
 	
 }

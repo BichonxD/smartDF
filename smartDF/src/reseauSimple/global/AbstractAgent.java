@@ -20,6 +20,8 @@ public abstract class AbstractAgent extends Agent
 	static public final int PRIX_PRODUCTEUR_DEMANDE = 100;
 	static public final int PRIX_PRODUCTEUR_REPONSE = 101;
 	static public final int PRIX_PRODUCTEUR_ABONNEMENT = 102;
+	static public final int PRIX_PRODUCTEUR_DESABONNEMENT = 103;
+	static public final int PRIX_PRODUCTEUR_CHANGEMENT = 104;
 	
 	static public final int FACTURATION_PRODUCTEUR_DEMANDE = 110;
 	static public final int FACTURATION_PRODUCTEUR_REPONSE = 111;
@@ -27,6 +29,8 @@ public abstract class AbstractAgent extends Agent
 	static public final int HORLOGE_PHASE_NEGOCIATION = 120;
 	static public final int HORLOGE_PHASE_FACTURATION = 121;
 	static public final int HORLOGE_PHASE_DEPARTAGE = 122;
+	
+	static public final int AMENDE_PRODUCTEUR = 130;
 	
 	protected void setup()
 	{

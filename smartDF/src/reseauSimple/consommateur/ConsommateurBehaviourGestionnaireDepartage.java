@@ -1,5 +1,7 @@
 package reseauSimple.consommateur;
 
+import reseauSimple.global.AbstractAgent;
+import reseauSimple.global.GlobalBehaviourHorlogeTalker;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -20,7 +22,17 @@ public class ConsommateurBehaviourGestionnaireDepartage extends OneShotBehaviour
 	public void action()
 	{
 		// TODO Auto-generated method stub
+		if (((ConsommateurAgent) myAgent).isaEteFacture())
+			((ConsommateurAgent) myAgent).setaEteFacture(false);
+		else {
+			ACLMessage amende = new ACLMessage(AbstractAgent.AMENDE_PRODUCTEUR);
+			int prix = ((ConsommateurAgent) myAgent).getBesoin() * ((ConsommateurAgent) myAgent).getPrixfournisseur() * 3;
+			amende.addReceiver(((ConsommateurAgent) myAgent).getFournisseurID());
+			amende.setContent(Integer.toString(prix));
+			myAgent.send(amende);
+		}
 		
+		myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msgHorlogeToAnswer));
 	}
 	
 }

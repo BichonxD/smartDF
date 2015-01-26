@@ -9,21 +9,20 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour
-{
+public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour {
 	private static final long serialVersionUID = 1L;
-	
+
 	private ACLMessage msgHorlogeToAnswer;
 	private boolean isDone = false;
-	private TreeMap<AID, Integer> repProducteur = new TreeMap<AID, Integer>(); 
+	private TreeMap<AID, Integer> repProducteur = new TreeMap<AID, Integer>();
 	int cpt = 0;
-	
-	public ConsommateurBehaviourMsgListenerNegociation(Agent a, ACLMessage msgHorlogeToAnswer)
-	{
+
+	public ConsommateurBehaviourMsgListenerNegociation(Agent a,
+			ACLMessage msgHorlogeToAnswer) {
 		super(a);
 		this.msgHorlogeToAnswer = msgHorlogeToAnswer;
 	}
-	
+
 	@Override
 	public void action()
 	{
@@ -46,62 +45,70 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour
 		// TODO Traitement du message
 		if(msg != null)
 		{
-			if(cpt < producteurpossible.length){
-				if(msg.getPerformative() == AbstractAgent.PRIX_PRODUCTEUR_REPONSE)
+			if(msg.getPerformative() == AbstractAgent.PRIX_PRODUCTEUR_REPONSE)
+			{
+				if(cpt < producteurpossible.length){
 				{
 					int prix = Integer.parseInt(msg.getContent());
 					repProducteur.put(msg.getSender(), prix);
 					cpt ++;
 				}
-				else
-				{
-					System.out.println("Message non compris.\n" + msg);
-					System.out.println(((ConsommateurAgent) myAgent).getFournisseurID());
-					System.out.println(msg.getSender());
+				if(cpt == producteurpossible.length){
+					
 				}
-			}		
-			
-			if(cpt == producteurpossible.length){
-				//prendre la décision => dire au mec que c'est ok.
-				int prixTemp = repProducteur.get(repProducteur.firstKey());
-				AID aidTemp = repProducteur.firstKey();
-				
-				for (AID id : repProducteur.navigableKeySet()) {
-						if (repProducteur.get(id) < prixTemp) {
-							prixTemp = repProducteur.get(id);
-							aidTemp = id;
-						}
-				}
-				
-				AID ancienFournisseur = ((ConsommateurAgent) myAgent).getFournisseurID();
-				
-				if(ancienFournisseur != null){
-					if(ancienFournisseur == aidTemp){
-						((ConsommateurAgent) myAgent).setPrixfournisseur(prixTemp);
+					//prendre la décision => dire au mec que c'est ok.
+					int prixTemp = repProducteur.get(repProducteur.firstKey());
+					AID aidTemp = repProducteur.firstKey();
+					
+					for (AID id : repProducteur.navigableKeySet()) {
+							if (repProducteur.get(id) < prixTemp) {
+								prixTemp = repProducteur.get(id);
+								aidTemp = id;
+							}
 					}
-					else{
-						ACLMessage desabonnement = new ACLMessage(AbstractAgent.PRIX_PRODUCTEUR_DESABONNEMENT);
-						desabonnement.addReceiver(ancienFournisseur);
-						myAgent.send(desabonnement);
-						
-						
+					
+					AID ancienFournisseur = ((ConsommateurAgent) myAgent).getFournisseurID();
+					
+					if(ancienFournisseur != null){
+						if(ancienFournisseur == aidTemp){
+							((ConsommateurAgent) myAgent).setPrixfournisseur(prixTemp);
+						}
+						else{
+							ACLMessage desabonnement = new ACLMessage(AbstractAgent.PRIX_PRODUCTEUR_DESABONNEMENT);
+							desabonnement.addReceiver(ancienFournisseur);
+							myAgent.send(desabonnement);
+							
+							
+							((ConsommateurAgent) myAgent).setFournisseurID(aidTemp);
+							((ConsommateurAgent) myAgent).setPrixfournisseur(prixTemp);
+							ACLMessage abonnement = new ACLMessage(AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT);
+							abonnement.addReceiver(aidTemp);
+							myAgent.send(abonnement);
+						}
+					}
+					else {
 						((ConsommateurAgent) myAgent).setFournisseurID(aidTemp);
 						((ConsommateurAgent) myAgent).setPrixfournisseur(prixTemp);
 						ACLMessage abonnement = new ACLMessage(AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT);
 						abonnement.addReceiver(aidTemp);
 						myAgent.send(abonnement);
-					}
+					}				
+					
+					myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msgHorlogeToAnswer));
+					isDone = true;
 				}
-				else {
-					((ConsommateurAgent) myAgent).setFournisseurID(aidTemp);
-					((ConsommateurAgent) myAgent).setPrixfournisseur(prixTemp);
-					ACLMessage reply = msg.createReply();
-					reply.setPerformative(AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT);
-					myAgent.send(reply);
-				}				
-				
-				myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msgHorlogeToAnswer));
-				isDone = true;
+			}
+			
+			else if(msg.getPerformative() == AbstractAgent.PRIX_PRODUCTEUR_CHANGEMENT)
+			{
+				((ConsommateurAgent) myAgent).setPrixfournisseur(Integer.parseInt(msg.getContent()));
+			}
+			
+			else
+			{
+				System.out.println("Message non compris.\n" + msg);
+				System.out.println(((ConsommateurAgent) myAgent).getFournisseurID());
+				System.out.println(msg.getSender());
 			}
 		}
 		else
@@ -109,9 +116,8 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour
 	}
 
 	@Override
-	public boolean done()
-	{
+	public boolean done() {
 		return isDone;
 	}
-	
+
 }
