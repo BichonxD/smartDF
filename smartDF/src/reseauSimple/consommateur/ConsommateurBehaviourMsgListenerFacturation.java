@@ -13,7 +13,6 @@ public class ConsommateurBehaviourMsgListenerFacturation extends CyclicBehaviour
 
 	private static final long serialVersionUID = 1L;
 	private ACLMessage msgHorlogeToAnswer;
-	private boolean isDone = false;
 	
 	public ConsommateurBehaviourMsgListenerFacturation(Agent a, ACLMessage msgHorlogeToAnswer)
 	{
@@ -76,7 +75,6 @@ public class ConsommateurBehaviourMsgListenerFacturation extends CyclicBehaviour
 			
 			//prevenir horloge et terminer behaviour
 			myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msgHorlogeToAnswer));
-			isDone = true;
 		}
 	else
 		block();
