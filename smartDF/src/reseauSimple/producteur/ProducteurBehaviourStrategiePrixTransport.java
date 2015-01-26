@@ -1,6 +1,5 @@
 package reseauSimple.producteur;
 
-import reseauSimple.consommateur.ConsommateurBehaviourMsgListenerFacturation;
 import reseauSimple.global.AbstractAgent;
 import reseauSimple.global.GlobalBehaviourHorlogeTalker;
 import jade.core.Agent;
