@@ -1,8 +1,8 @@
 package reseauSimple.consommateur;
 
 import reseauSimple.global.AbstractAgent;
+import reseauSimple.global.GlobalBehaviourHorlogeTalker;
 import reseauSimple.global.GlobalSearchBehaviour;
-import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -18,7 +18,7 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 	public void action()
 	{
 		// Reçoit les messages envoyés par l'horloge
-		MessageTemplate mt = MessageTemplate.or(MessageTemplate.or(MessageTemplate.MatchConversationId("horloge-phase-negociation"), MessageTemplate.MatchConversationId("horloge-phase-facturaction")), MessageTemplate.MatchConversationId("horloge-phase-departage")); 
+		MessageTemplate mt = MessageTemplate.or(MessageTemplate.or(MessageTemplate.MatchContent("horloge-phase-negociation"), MessageTemplate.MatchContent("horloge-phase-facturaction")), MessageTemplate.MatchContent("horloge-phase-departage")); 
 		ACLMessage msg = myAgent.receive(mt);
 		
 		if(msg != null)
@@ -27,7 +27,7 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 			 * A chaque fois que nous rentrons dans une nouvelle phase nous supprimons tous les comportements
 			 * existants de la phase précédente.
 			 */
-			switch(msg.getConversationId())
+			switch(msg.getContent())
 			{
 				/* 
 				 * Si nous sommes en phase de négociation :
@@ -75,7 +75,7 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 					((AbstractAgent) myAgent).getListCyclicBehaviour().add(cbmlf);
 					
 					// On signale qu'on a terminé notre phase de facturation.
-					myAgent.addBehaviour(new ConsommateurBehaviourHorlogeTalker(myAgent, msg));
+					myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msg));
 					break;
 					
 				/*

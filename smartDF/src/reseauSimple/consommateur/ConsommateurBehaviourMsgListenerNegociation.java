@@ -38,7 +38,7 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour
 		}
 		ACLMessage msg = myAgent.receive(mt);
 		
-		// Traitement du message
+		// TODO Traitement du message
 		if(msg != null)
 		{
 			String title = msg.getContent();
