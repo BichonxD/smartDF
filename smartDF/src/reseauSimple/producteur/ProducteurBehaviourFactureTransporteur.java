@@ -40,6 +40,45 @@ public class ProducteurBehaviourFactureTransporteur extends OneShotBehaviour
 			}
 		}
 		
+		int capaciteTransportPersonnel = 0;
+		
+		if (((ProducteurAgent) myAgent).getTransportsFournisseur() != null && ((ProducteurAgent) myAgent).getTransportsFournisseur().size() != 0) {
+			ACLMessage capaciteprevisionnel = new ACLMessage(AbstractAgent.CAPACITE_TRANSPORTEUR_DEMANDE);
+			for (AID id : ((ProducteurAgent) myAgent).getTransportsFournisseur())
+				capaciteprevisionnel.addReceiver(id);
+			myAgent.send(capaciteprevisionnel);
+			
+			int nombreReponse = 0;
+			
+			while (nombreReponse < ((ProducteurAgent) myAgent).getTransportsFournisseur().size()) {
+				ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.CAPACITE_TRANSPORTEUR_REPONSE));
+				
+				if(msg != null)
+				{
+					capaciteTransportPersonnel += Integer.parseInt(msg.getContent());
+					nombreReponse++;
+				}
+			}
+		}
+		
+		//Utiliser capacite transporteur prive avec le code juste en dessous
+		
+		/*
+		 * ACLMessage utilisation = new ACLMessage(AbstractAgent.DEMANDE_FACURATION_TRANSPORTEUR);
+			for (AID id : ((ProducteurAgent) myAgent).getTransportsFournisseur())
+				utilisation.addReceiver(id);
+			myAgent.send(utilisation);
+		 */
+		
+		
+			
+		int electriciteTransporteurUniversel =  electriciteATransporter - capaciteTransportPersonnel;
+		
+		//Recuperer AID transporteur universelle
+		AID TransporteurUniverselle;
+		
+		
+		
 		
 	}
 
