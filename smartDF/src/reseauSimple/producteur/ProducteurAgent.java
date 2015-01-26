@@ -10,6 +10,7 @@ public class ProducteurAgent extends AbstractAgent
 	private static final long serialVersionUID = 1L;
 	
 	private ArrayList<AID> clientsFournisseur = new ArrayList<AID>();
+	private ArrayList<AID> transportsFournisseur = new ArrayList<AID>();
 	private int prixFournisseur;
 	private int argentDispo = 0;
 	private int electriciteAFournir = 0;
@@ -85,6 +86,14 @@ public class ProducteurAgent extends AbstractAgent
 
 	public void setElectriciteAFournir(int electriciteAFournir) {
 		this.electriciteAFournir = electriciteAFournir;
+	}
+
+	public ArrayList<AID> getTransportsFournisseur() {
+		return transportsFournisseur;
+	}
+
+	public void setTransportsFournisseur(ArrayList<AID> transportsFournisseur) {
+		this.transportsFournisseur = transportsFournisseur;
 	}
 	
 }
