@@ -1,15 +1,7 @@
 package reseauSimple.horloge;
 
-import reseauSimple.consommateur.ConsommateurBehaviourAskPrixProducteur;
-import reseauSimple.consommateur.ConsommateurBehaviourGestionnaireDepartage;
-import reseauSimple.consommateur.ConsommateurBehaviourMsgListenerFacturation;
 import reseauSimple.global.AbstractAgent;
-import reseauSimple.global.GlobalBehaviourHorlogeTalker;
-import reseauSimple.global.GlobalSearchBehaviour;
-import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
 public class HorlogeBehaviourListener extends CyclicBehaviour
@@ -27,6 +19,7 @@ public class HorlogeBehaviourListener extends CyclicBehaviour
 		
 		if(msg != null)
 		{
+			if(msg.getPerformative())
 			switch(msg.getPerformative())
 			{
 				case AbstractAgent.HORLOGE_PHASE_NEGOCIATION :
@@ -37,7 +30,7 @@ public class HorlogeBehaviourListener extends CyclicBehaviour
 					}
 					else
 					{
-						myAgent.addBehaviour(new HorlogeBehaviourTalker(myAgent, HORLOGE_PHASE_FACTURATION));
+						myAgent.addBehaviour(new HorlogeBehaviourTalker(myAgent, AbstractAgent.HORLOGE_PHASE_FACTURATION));
 						nbReponseRecu = 0;
 					}
 					break;
@@ -50,7 +43,7 @@ public class HorlogeBehaviourListener extends CyclicBehaviour
 					}
 					else
 					{
-						myAgent.addBehaviour(new HorlogeBehaviourTalker(myAgent, HORLOGE_PHASE_DEPARTAGE));
+						myAgent.addBehaviour(new HorlogeBehaviourTalker(myAgent, AbstractAgent.HORLOGE_PHASE_DEPARTAGE));
 						nbReponseRecu = 0;
 					}
 					break;
@@ -63,7 +56,7 @@ public class HorlogeBehaviourListener extends CyclicBehaviour
 					}
 					else
 					{
-						myAgent.addBehaviour(new HorlogeBehaviourTalker(myAgent, HORLOGE_PHASE_NEGOCIATION));
+						myAgent.addBehaviour(new HorlogeBehaviourTalker(myAgent, AbstractAgent.HORLOGE_PHASE_NEGOCIATION));
 						nbReponseRecu = 0;
 					}
 					break;

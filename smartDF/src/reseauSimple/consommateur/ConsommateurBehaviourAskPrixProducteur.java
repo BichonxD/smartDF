@@ -10,12 +10,9 @@ public class ConsommateurBehaviourAskPrixProducteur extends OneShotBehaviour
 {
 	private static final long serialVersionUID = 1L;
 	
-	private ACLMessage msgHorlogeToAnswer;
-	
-	public ConsommateurBehaviourAskPrixProducteur(Agent a, ACLMessage msgHorlogeToAnswer)
+	public ConsommateurBehaviourAskPrixProducteur(Agent a)
 	{
 		super(a);
-		this.msgHorlogeToAnswer = msgHorlogeToAnswer;
 	}
 	
 	@Override
@@ -36,9 +33,6 @@ public class ConsommateurBehaviourAskPrixProducteur extends OneShotBehaviour
 				myAgent.send(msg);
 			}
 		}
-		
-		// Créé un listener pour écouter les réponses aux messages
-		myAgent.addBehaviour(new ConsommateurBehaviourMsgListenerNegociation(myAgent, msgHorlogeToAnswer));
 	}
 	
 }

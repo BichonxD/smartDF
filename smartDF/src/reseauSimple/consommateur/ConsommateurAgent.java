@@ -12,6 +12,7 @@ public class ConsommateurAgent extends AbstractAgent
 	private int capaciteProducteur;
 	private AID fournisseurID;
 	private int prixfournisseur;
+	private int dureeRenouvellement = 12;
 	
 	protected void setup()
 	{
@@ -66,6 +67,11 @@ public class ConsommateurAgent extends AbstractAgent
 	public void setPrixfournisseur(int prixfournisseur)
 	{
 		this.prixfournisseur = prixfournisseur;
+	}
+	
+	public int getDureeRenouvellement()
+	{
+		return dureeRenouvellement;
 	}
 	
 }

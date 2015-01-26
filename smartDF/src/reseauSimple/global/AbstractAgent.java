@@ -17,12 +17,16 @@ public abstract class AbstractAgent extends Agent
 	private AID[] annuairePerso;
 	private ArrayList<Behaviour> listCyclicBehaviour = new ArrayList<Behaviour>();
 	
-	static public int PRIX_PRODUCTEUR_DEMANDE = 100;
-	static public int PRIX_PRODUCTEUR_REPONSE = 101;
-	static public int PRIX_PRODUCTEUR_ABONNEMENT = 102;
+	static public final int PRIX_PRODUCTEUR_DEMANDE = 100;
+	static public final int PRIX_PRODUCTEUR_REPONSE = 101;
+	static public final int PRIX_PRODUCTEUR_ABONNEMENT = 102;
 	
-	static public int FACTURATION_PRODUCTEUR_DEMANDE = 110;
-	static public int FACTURATION_PRODUCTEUR_REPONSE = 111;
+	static public final int FACTURATION_PRODUCTEUR_DEMANDE = 110;
+	static public final int FACTURATION_PRODUCTEUR_REPONSE = 111;
+
+	static public final int HORLOGE_PHASE_NEGOCIATION = 120;
+	static public final int HORLOGE_PHASE_FACTURATION = 121;
+	static public final int HORLOGE_PHASE_DEPARTAGE = 122;
 	
 	protected void setup()
 	{
