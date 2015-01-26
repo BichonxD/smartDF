@@ -19,51 +19,41 @@ public class HorlogeBehaviourListener extends CyclicBehaviour
 		
 		if(msg != null)
 		{
-			if(msg.getPerformative())
-			switch(msg.getPerformative())
+			if(msg.getPerformative() == phaseActuelle)
 			{
-				case AbstractAgent.HORLOGE_PHASE_NEGOCIATION :
+				if(nbReponseRecu < ((AbstractAgent) myAgent).getAnnuairePerso().length)
+				{
+					nbReponseRecu++;
+				}
+				// Si j'ai reçu la réponse de tous les agents
+				else
+				{
+					switch(phaseActuelle)
+					{
+						case AbstractAgent.HORLOGE_PHASE_NEGOCIATION :
+							phaseActuelle = AbstractAgent.HORLOGE_PHASE_FACTURATION;
+							break;
+						
+						case AbstractAgent.HORLOGE_PHASE_FACTURATION :
+							phaseActuelle = AbstractAgent.HORLOGE_PHASE_DEPARTAGE;
+							break;
+						
+						case AbstractAgent.HORLOGE_PHASE_DEPARTAGE :
+							phaseActuelle = AbstractAgent.HORLOGE_PHASE_NEGOCIATION;
+							break;
+							
+						default :
+							System.err.println("Phase actuelle inconnue.");
+							break;
+					}
 					
-					if(nbReponseRecu < ((AbstractAgent) myAgent).getAnnuairePerso().length)
-					{
-						nbReponseRecu++;
-					}
-					else
-					{
-						myAgent.addBehaviour(new HorlogeBehaviourTalker(myAgent, AbstractAgent.HORLOGE_PHASE_FACTURATION));
-						nbReponseRecu = 0;
-					}
-					break;
-				
-				case AbstractAgent.HORLOGE_PHASE_FACTURATION :
-					
-					if(nbReponseRecu < ((AbstractAgent) myAgent).getAnnuairePerso().length)
-					{
-						nbReponseRecu++;
-					}
-					else
-					{
-						myAgent.addBehaviour(new HorlogeBehaviourTalker(myAgent, AbstractAgent.HORLOGE_PHASE_DEPARTAGE));
-						nbReponseRecu = 0;
-					}
-					break;
-				
-				case AbstractAgent.HORLOGE_PHASE_DEPARTAGE :
-					
-					if(nbReponseRecu < ((AbstractAgent) myAgent).getAnnuairePerso().length)
-					{
-						nbReponseRecu++;
-					}
-					else
-					{
-						myAgent.addBehaviour(new HorlogeBehaviourTalker(myAgent, AbstractAgent.HORLOGE_PHASE_NEGOCIATION));
-						nbReponseRecu = 0;
-					}
-					break;
-					
-				default :
-					System.err.println("Message reçu inconnu.");
-					break;
+					myAgent.addBehaviour(new HorlogeBehaviourTalker(myAgent, phaseActuelle));
+					nbReponseRecu = 0;
+				}
+			}
+			else
+			{
+				System.err.println("Un agent pense être dans la mauvaise phase.");
 			}
 		}
 		else
