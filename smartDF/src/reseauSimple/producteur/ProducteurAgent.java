@@ -15,6 +15,7 @@ public class ProducteurAgent extends AbstractAgent
 	private ArrayList<AID> clientsFournisseur = new ArrayList<AID>();
 	private int prixFournisseur;
 	private int argentDispo = 0;
+	private int electriciteAFournir = 0;
 	
 	protected void setup()
 	{
@@ -88,6 +89,14 @@ public class ProducteurAgent extends AbstractAgent
 	{
 		System.out.println("Le ProducteurAgent " + getAID().getName() + " is terminating.");
 		super.takeDown();
+	}
+
+	public int getElectriciteAFournir() {
+		return electriciteAFournir;
+	}
+
+	public void setElectriciteAFournir(int electriciteAFournir) {
+		this.electriciteAFournir = electriciteAFournir;
 	}
 	
 }

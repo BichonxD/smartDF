@@ -16,7 +16,7 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour {
 	private ACLMessage msgHorlogeToAnswer;
 	private boolean isDone = false;
 	private TreeMap<AID, Integer> repProducteur = new TreeMap<AID, Integer>();
-	int cpt = 0;
+	private int cpt = 0;
 
 	public ConsommateurBehaviourMsgListenerNegociation(Agent a,
 			ACLMessage msgHorlogeToAnswer) {
