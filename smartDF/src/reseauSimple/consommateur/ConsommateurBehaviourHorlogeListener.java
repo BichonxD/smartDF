@@ -14,11 +14,13 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 {
 	private static final long serialVersionUID = 1L;
 	
+	private int nbTourEffectue = 0;
+	
 	@Override
 	public void action()
 	{
 		// Reçoit les messages envoyés par l'horloge
-		MessageTemplate mt = MessageTemplate.or(MessageTemplate.or(MessageTemplate.MatchContent("horloge-phase-negociation"), MessageTemplate.MatchContent("horloge-phase-facturaction")), MessageTemplate.MatchContent("horloge-phase-departage")); 
+		MessageTemplate mt = MessageTemplate.or(MessageTemplate.or(MessageTemplate.MatchPerformative(AbstractAgent.HORLOGE_PHASE_NEGOCIATION), MessageTemplate.MatchPerformative(AbstractAgent.HORLOGE_PHASE_FACTURATION)), MessageTemplate.MatchPerformative(AbstractAgent.HORLOGE_PHASE_DEPARTAGE)); 
 		ACLMessage msg = myAgent.receive(mt);
 		
 		if(msg != null)
@@ -27,15 +29,15 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 			 * A chaque fois que nous rentrons dans une nouvelle phase nous supprimons tous les comportements
 			 * existants de la phase précédente.
 			 */
-			switch(msg.getContent())
+			switch(msg.getPerformative())
 			{
 				/* 
 				 * Si nous sommes en phase de négociation :
-				 * - on met à jour l'annuaire des producteurs,
+				 * - on met à jour l'annuaire des producteurs tous les ,
 				 * - on demande le prix à tous les producteurs,
 				 * - on ecoute les messages émis par les producteurs.
 				 */
-				case "horloge-phase-negociation" :
+				case AbstractAgent.HORLOGE_PHASE_NEGOCIATION :
 					
 					// On supprime tous les comportements existants.
 					for(Behaviour b : ((AbstractAgent) myAgent).getListCyclicBehaviour())
@@ -44,16 +46,21 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 					}
 					((AbstractAgent) myAgent).getListCyclicBehaviour().clear();
 					
-					// On met à jour l'annuaire des producteurs.
-					DFAgentDescription rechercheProducteur = new DFAgentDescription();
-					ServiceDescription SDProducteur = new ServiceDescription();
-					SDProducteur.setName("producteur");
-					SDProducteur.setType("producteur");
-					rechercheProducteur.addServices(SDProducteur);
-					myAgent.addBehaviour(new GlobalSearchBehaviour(myAgent, rechercheProducteur));
-					
-					// On demande le prix à tous les producteurs.
-					myAgent.addBehaviour(new ConsommateurBehaviourAskPrixProducteur(myAgent, msg));
+					if(nbTourEffectue % ((ConsommateurAgent) myAgent).getDureeRenouvellement() == 0)
+					{
+						// On met à jour l'annuaire des producteurs.
+						DFAgentDescription rechercheProducteur = new DFAgentDescription();
+						ServiceDescription SDProducteur = new ServiceDescription();
+						SDProducteur.setName("producteur");
+						SDProducteur.setType("producteur");
+						rechercheProducteur.addServices(SDProducteur);
+						myAgent.addBehaviour(new GlobalSearchBehaviour(myAgent, rechercheProducteur));
+						
+						// On demande le prix à tous les producteurs.
+						myAgent.addBehaviour(new ConsommateurBehaviourAskPrixProducteur(myAgent));
+					}
+					// On ecoute les messages émis par les producteurs.
+					myAgent.addBehaviour(new ConsommateurBehaviourMsgListenerNegociation(myAgent, msg));
 					break;
 				
 				/*
@@ -61,7 +68,7 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 				 * - on créé un listener pour cette phase,
 				 * - on signale qu'on a terminé notre phase de facturation.
 				 */
-				case "horloge-phase-facturaction" :
+				case AbstractAgent.HORLOGE_PHASE_FACTURATION :
 					
 					// On supprime tous les comportements existants.
 					for(Behaviour b : ((AbstractAgent) myAgent).getListCyclicBehaviour())
@@ -71,7 +78,7 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 					((AbstractAgent) myAgent).getListCyclicBehaviour().clear();
 					
 					// On créé un listener pour cette phase.
-					ConsommateurBehaviourMsgListenerFacturation cbmlf = new ConsommateurBehaviourMsgListenerFacturation(myAgent);
+					ConsommateurBehaviourMsgListenerFacturation cbmlf = new ConsommateurBehaviourMsgListenerFacturation(myAgent, msg);
 					myAgent.addBehaviour(cbmlf);
 					((AbstractAgent) myAgent).getListCyclicBehaviour().add(cbmlf);
 					
@@ -83,7 +90,7 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 				 * Si nous sommes en phase de departage :
 				 * - on créé un comportement qui va gérer la phase.
 				 */
-				case "horloge-phase-departage" :
+				case AbstractAgent.HORLOGE_PHASE_DEPARTAGE :
 					
 					// On supprime tous les comportements existants.
 					for(Behaviour b : ((AbstractAgent) myAgent).getListCyclicBehaviour())
