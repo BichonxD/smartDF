@@ -32,7 +32,8 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 				/* 
 				 * Si nous sommes en phase de négociation :
 				 * - on met à jour l'annuaire des producteurs,
-				 * - on demande le prix à tous les producteurs.
+				 * - on demande le prix à tous les producteurs,
+				 * - on ecoute les messages émis par les producteurs.
 				 */
 				case "horloge-phase-negociation" :
 					
