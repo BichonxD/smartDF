@@ -16,7 +16,7 @@ public class HorlogeBehaviourListener extends CyclicBehaviour
 {
 	private static final long serialVersionUID = 1L;
 	
-	private int phaseActuelle = ;
+	private int phaseActuelle = AbstractAgent.HORLOGE_PHASE_NEGOCIATION;
 	private int nbReponseRecu = 0;
 	
 	@Override

@@ -20,7 +20,7 @@ public class HorlogeAgent extends AbstractAgent
 		ServiceDescription SDAllAgents = new ServiceDescription();
 		rechercheAllAgents.addServices(SDAllAgents);
 		addBehaviour(new GlobalSearchBehaviour(this, rechercheAllAgents));
-		addBehaviour(new HorlogeBehaviourTalker(this, "horloge-phase-negociation"));
+		addBehaviour(new HorlogeBehaviourTalker(this, AbstractAgent.HORLOGE_PHASE_NEGOCIATION));
 		addBehaviour(new HorlogeBehaviourListener());
 	}
 	
