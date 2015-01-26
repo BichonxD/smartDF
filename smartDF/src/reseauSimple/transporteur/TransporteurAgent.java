@@ -1,12 +1,8 @@
 package reseauSimple.transporteur;
 
-import reseauSimple.consommateur.ConsommateurBehaviourAskPrixProducteur;
-import reseauSimple.consommateur.ConsommateurBehaviourMsgListenerNegociation;
+import reseauSimple.consommateur.ConsommateurBehaviourHorlogeListener;
 import reseauSimple.global.AbstractAgent;
-import reseauSimple.global.GlobalSearchBehaviour;
 import jade.core.AID;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class TransporteurAgent extends AbstractAgent
 {
@@ -27,71 +23,21 @@ public class TransporteurAgent extends AbstractAgent
 			proprietaire = (AbstractAgent) getArguments()[0];
 			capaciteTransporteur = (int) getArguments()[1];
 			prixKWhTransporteur = (int) getArguments()[2];
+			setServiceName("transporteur");
 			super.setup();
 			
-			System.out.println("Céation d'un nouveau transporteur :\n" + toString());
+			System.out.println("Creation d'un nouveau transporteur :\n" + toString());
 			
-			DFAgentDescription rechercheProducteur = new DFAgentDescription();
-			
-			ServiceDescription SDProducteur = new ServiceDescription();
-			SDProducteur.setName("producteur");
-			SDProducteur.setType("producteur");
-			rechercheProducteur.addServices(SDProducteur);
-			
-			addBehaviour(new GlobalSearchBehaviour(this, 6000, rechercheProducteur));
-			addBehaviour(new ConsommateurBehaviourAskPrixProducteur(this, 1000));
-			addBehaviour(new ConsommateurBehaviourMsgListenerNegociation());
+			addBehaviour(new TransporteurBehaviourHorlogeListener());
+			addBehaviour(new TransporteurBehaviourMsgListenerAllPhases());
 		}
 	}
-	
-	public boolean isConsommateurProducteur()
-	{
-		return consommateurProducteur;
+
+	public AID getFournisseurID() {
+		return proprietaire.getAID();
 	}
 	
-	public void setConsommateurProducteur(boolean consommateurProducteur)
-	{
-		this.consommateurProducteur = consommateurProducteur;
+	public int getCapaciteTransporteur(){
+		return capaciteTransporteur;
 	}
-	
-	public int getCapaciteProducteur()
-	{
-		return capaciteProducteur;
-	}
-	
-	public void setCapaciteProducteur(int capaciteProducteur)
-	{
-		this.capaciteProducteur = capaciteProducteur;
-	}
-	
-	public AID getFournisseurID()
-	{
-		return fournisseurID;
-	}
-	
-	public void setFournisseurID(AID fournisseurID)
-	{
-		this.fournisseurID = fournisseurID;
-	}
-	
-	public int getPrixfournisseur()
-	{
-		return prixfournisseur;
-	}
-	
-	public void setPrixfournisseur(int prixfournisseur)
-	{
-		this.prixfournisseur = prixfournisseur;
-	}
-	
-	public int getBesoin()
-	{
-		return besoin;
-	}
-	
-	public void setBesoin(int besoin)
-	{
-		this.besoin = besoin;
-	}
-	
 }
