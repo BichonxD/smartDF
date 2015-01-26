@@ -1,6 +1,8 @@
 package reseauSimple.consommateur;
 
+import java.util.TreeMap;
 import reseauSimple.global.AbstractAgent;
+import reseauSimple.global.GlobalBehaviourHorlogeTalker;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -13,6 +15,8 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour
 	
 	private ACLMessage msgHorlogeToAnswer;
 	private boolean isDone = false;
+	private TreeMap<AID, Integer> repProducteur = new TreeMap<AID, Integer>(); 
+	int cpt = 0;
 	
 	public ConsommateurBehaviourMsgListenerNegociation(Agent a, ACLMessage msgHorlogeToAnswer)
 	{
@@ -38,79 +42,47 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour
 		}
 		ACLMessage msg = myAgent.receive(mt);
 		
+		
 		// TODO Traitement du message
 		if(msg != null)
 		{
-			String title = msg.getContent();
+			if(cpt < producteurpossible.length){
+				if(msg.getPerformative() == AbstractAgent.PRIX_PRODUCTEUR_REPONSE)
+				{
+					int prix = Integer.parseInt(msg.getContent());
+					repProducteur.put(msg.getSender(), prix);
+					cpt ++;
+				}
+				else
+				{
+					System.out.println("Message non compris.\n" + msg);
+					System.out.println(((ConsommateurAgent) myAgent).getFournisseurID());
+					System.out.println(msg.getSender());
+				}
+			}		
 			
-			if(title.startsWith("prix-producteur "))
-			{
-				AID sender = msg.getSender();
-				int prix = Integer.parseInt(title.split(" ")[1]);
+			else {
+				//prendre la décision => dire au mec que c'est ok.
+				int prixTemp = repProducteur.get(repProducteur.firstKey());
+				AID aidTemp = repProducteur.firstKey();
 				
-				// Algorithme de décision du producteur
-				if(((ConsommateurAgent) myAgent).getFournisseurID() == null)
-				{
-					((ConsommateurAgent) myAgent).setFournisseurID(sender);
-					((ConsommateurAgent) myAgent).setPrixfournisseur(prix);
-					ACLMessage reply = new ACLMessage(ACLMessage.INFORM);
-					reply.addReceiver(sender);
-					reply.setContent("abonnement");
-					myAgent.send(reply);
+				for (AID id : repProducteur.navigableKeySet()) {
+						if (repProducteur.get(id) < prixTemp) {
+							prixTemp = repProducteur.get(id);
+							aidTemp = id;
+						}
 				}
-				else if(prix < ((ConsommateurAgent) myAgent).getPrixfournisseur())
-				{
-					ACLMessage reply1 = new ACLMessage(ACLMessage.INFORM);
-					reply1.addReceiver(((ConsommateurAgent) myAgent).getFournisseurID());
-					reply1.setContent("desabonnement");
-					myAgent.send(reply1);
-					((ConsommateurAgent) myAgent).setFournisseurID(sender);
-					((ConsommateurAgent) myAgent).setPrixfournisseur(prix);
-					ACLMessage reply2 = new ACLMessage(ACLMessage.INFORM);
-					reply2.addReceiver(sender);
-					reply2.setContent("abonnement");
-					myAgent.send(reply2);
-				}
-			}
-			else if(title.equals("demande-paiement") /*&& msg.getSender() == ((ConsommateurAgent) myAgent).getFournisseurID()*/)
-			{
 				
-				int paiement = ((ConsommateurAgent) myAgent).getBesoin();
-				if(((ConsommateurAgent) myAgent).isConsommateurProducteur())
-				{
-					if(((ConsommateurAgent) myAgent).getCapaciteProducteur() > paiement)
-						paiement = 0;
-					else
-						paiement -= ((ConsommateurAgent) myAgent).getCapaciteProducteur();
-				}
-				paiement *= ((ConsommateurAgent) myAgent).getPrixfournisseur();
-				ACLMessage reply = new ACLMessage(ACLMessage.INFORM);
-				reply.addReceiver(msg.getSender());
-				reply.setContent("paiement " + paiement);
+				((ConsommateurAgent) myAgent).setFournisseurID(aidTemp);
+				((ConsommateurAgent) myAgent).setPrixfournisseur(prixTemp);
+				
+				ACLMessage reply = msg.createReply();
+				reply.setPerformative(AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT);
 				myAgent.send(reply);
-			}
-			else if(title.startsWith("changement-tarif "))
-			{
-				AID sender = msg.getSender();
-				int prix = Integer.getInteger(title.split(" ")[2]);
 				
-				if(sender == ((ConsommateurAgent) myAgent).getFournisseurID())
-				{
-					((ConsommateurAgent) myAgent).setPrixfournisseur(prix);
-				}
-				else if(prix < ((ConsommateurAgent) myAgent).getPrixfournisseur())
-				{
-					((ConsommateurAgent) myAgent).setFournisseurID(sender);
-					((ConsommateurAgent) myAgent).setPrixfournisseur(prix);
-				}
+				myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msgHorlogeToAnswer));
+				isDone = true;
 			}
-			else
-			{
-				System.out.println("Message non compris.\n" + msg);
-				System.out.println(((ConsommateurAgent) myAgent).getFournisseurID());
-				System.out.println(msg.getSender());
-			}
-			
 		}
 		else
 			block();

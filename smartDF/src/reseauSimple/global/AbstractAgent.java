@@ -17,6 +17,13 @@ public abstract class AbstractAgent extends Agent
 	private AID[] annuairePerso;
 	private ArrayList<Behaviour> listCyclicBehaviour = new ArrayList<Behaviour>();
 	
+	static public int PRIX_PRODUCTEUR_DEMANDE = 100;
+	static public int PRIX_PRODUCTEUR_REPONSE = 101;
+	static public int PRIX_PRODUCTEUR_ABONNEMENT = 102;
+	
+	static public int FACTURATION_PRODUCTEUR_DEMANDE = 110;
+	static public int FACTURATION_PRODUCTEUR_REPONSE = 111;
+	
 	protected void setup()
 	{
 		// Inscription de l'agent dans l'annuaire
