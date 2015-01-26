@@ -21,6 +21,7 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 	public void termineTour(){
 		capaciteRestante = ((TransporteurAgent) myAgent).getCapaciteTransporteur();
 		prixTransporteur = ((TransporteurAgent) myAgent).getPrixKWhTransporteur();
+		demandeEnAttente.clear();
 	}
 
 	@Override
@@ -60,15 +61,32 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 			//une fois que j'ai la demande de mon agent je choisi une demande dans mes capacite 
 			//ou faire la difference avec la capacite qu'il me reste
 			//augmenter ou diminuer le prix
-			else if (msg.getPerformative() == AbstractAgent.DEMANDE_FACTURATION){
+			
+			else if (msg.getPerformative() == AbstractAgent.DEMANDE_FACTURATION_TRANSPORTEUR){
+				//dans le cas ou c'est mon agent la capacité diminue, pas de facture
 				if(msg.getSender() == ((TransporteurAgent) myAgent).getFournisseurID()){
 					capaciteRestante -= ((TransporteurAgent) myAgent).getCapaciteTransporteur();
+					//on diminue la capacité et on facture les autres gus
+					for (AID id : demandeEnAttente.navigableKeySet()) {
+						if (demandeEnAttente.get(id) < capaciteRestante) {
+							//soit on accepte une demande dans les capacité et on demande a etre payé
+							capaciteRestante -= demandeEnAttente.get(id);
+							ACLMessage msgReply = new ACLMessage(AbstractAgent.REPONSE_FACTURATION_TRANSPORTEUR_POSITIVE);
+							msgReply.setSender(id);
+							msgReply.setContent(Integer.toString(demandeEnAttente.get(id)));
+							myAgent.send(msgReply);
+						}
+						
+						else{
+							//on refuse
+							ACLMessage msgReply = new ACLMessage(AbstractAgent.REPONSE_FACTURATION_TRANSPORTEUR_NEGATIVE);
+							msgReply.setSender(id);
+							myAgent.send(msgReply);
+						}
+						
+					}
 					
-					//recherche d'une demande qui corresponde a sa capacité restante, et on lui facture
-					//sinon contre proposition
-					//sinon on le refuse
-					//on augmente le prix si on a trop de demande
-					//on diminue le prix si on a pas de demande en attente
+					//on verifie la capacité restante pour savoir la politique restante au tour suivant
 				}
 				//ajout du message à la pile des demandes en attendant de recevoir la demande de son producteur
 				else{
