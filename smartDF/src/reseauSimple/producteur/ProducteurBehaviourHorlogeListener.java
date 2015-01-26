@@ -52,13 +52,14 @@ public class ProducteurBehaviourHorlogeListener extends CyclicBehaviour
 					myAgent.addBehaviour(new GlobalSearchBehaviour(myAgent, rechercheTransporteur));
 					
 					// On repense la politique de prix et de transport.
-					myAgent.addBehaviour(new ProducteurBehaviourStrategiePrixTransport(myAgent));
+					myAgent.addBehaviour(new ProducteurBehaviourStrategiePrixTransport(myAgent, msg));
 					break;
 				
 				/*
 				 * Si nous sommes en phase de facturation :
-				 * - on créé un listener pour cette phase,
-				 * - on signale qu'on a terminé notre phase de facturation.
+				 * - on demande au transporteur de nous facturer,
+				 * - on facture le consommateur,
+				 * - on signale la fin du tour de facturation à l'horloge.
 				 */
 				case AbstractAgent.HORLOGE_PHASE_FACTURATION :
 					
@@ -69,18 +70,20 @@ public class ProducteurBehaviourHorlogeListener extends CyclicBehaviour
 					}
 					((AbstractAgent) myAgent).getListCyclicBehaviour().clear();
 					
-					// On créé un listener pour cette phase.
-					ConsommateurBehaviourMsgListenerFacturation cbmlf = new ConsommateurBehaviourMsgListenerFacturation(myAgent, msg);
-					myAgent.addBehaviour(cbmlf);
-					((AbstractAgent) myAgent).getListCyclicBehaviour().add(cbmlf);
+					// On demande au transporteur de nous facturer.
+					myAgent.addBehaviour(new ProducteurBehaviourFactureTransporteur(myAgent));
 					
 					// On signale qu'on a terminé notre phase de facturation.
+					myAgent.addBehaviour(new ProducteurBehaviourFactureClient(myAgent));
+					
+					// On signale la fin du tour de facturation à l'horloge.
 					myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msg));
 					break;
 					
 				/*
 				 * Si nous sommes en phase de departage :
-				 * - on créé un comportement qui va gérer la phase.
+				 * - on créé un comportement qui va gérer la phase,
+				 * - on signale la fin du tour de departage à l'horloge.
 				 */
 				case AbstractAgent.HORLOGE_PHASE_DEPARTAGE :
 					
@@ -91,8 +94,13 @@ public class ProducteurBehaviourHorlogeListener extends CyclicBehaviour
 					}
 					((AbstractAgent) myAgent).getListCyclicBehaviour().clear();
 					
+					// On signale la fin du tour de facturation à l'horloge.
+					myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msg));
+					
 					// On créé un comportement qui va gérer la phase
-					myAgent.addBehaviour(new ConsommateurBehaviourGestionnaireDepartage(myAgent, msg));
+					ProducteurBehaviourMsgListenerDepartage pbmld = new ProducteurBehaviourMsgListenerDepartage(myAgent);
+					myAgent.addBehaviour(pbmld);
+					((AbstractAgent) myAgent).getListCyclicBehaviour().add(pbmld);
 					break;
 					
 				default :

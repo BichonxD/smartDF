@@ -2,24 +2,24 @@ package reseauSimple.producteur;
 
 import java.util.List;
 
-
-
 import jade.core.AID;
-import jade.core.behaviours.TickerBehaviour;
+import jade.core.Agent;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 
-public class ProducteurBehaviourFactureClient extends TickerBehaviour
+public class ProducteurBehaviourFactureClient extends OneShotBehaviour
 {
 	private static final long serialVersionUID = 1L;
 	
-	public ProducteurBehaviourFactureClient(ProducteurAgent a, int period)
+	public ProducteurBehaviourFactureClient(Agent a)
 	{
-		super(a, period);
+		super(a);
 	}
 	
 	@Override
-	protected void onTick()
+	public void action()
 	{
+		// TODO
 		List<AID> clientsFournisseur = ((ProducteurAgent) myAgent).getClientsFournisseur();
 		
 		if(clientsFournisseur != null)
