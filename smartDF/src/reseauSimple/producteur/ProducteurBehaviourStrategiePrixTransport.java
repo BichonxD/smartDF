@@ -26,6 +26,13 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 		 * Définit un prix de vente.
 		 * Envoie à tous les clients le changement des tarifs s'il y a.
 		 */
+		int nouveauPrix;
+		
+		if (((ProducteurAgent) myAgent).getPrixFournisseur() != nouveauPrix) {
+			for ()
+		}
+		
+		
 		
 		/*
 		 * Signale la fin des négociations à l'horloge.
