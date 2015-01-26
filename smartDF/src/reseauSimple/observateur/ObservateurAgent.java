@@ -3,18 +3,22 @@ package reseauSimple.observateur;
 import reseauSimple.consommateur.ConsommateurBehaviourAskPrixProducteur;
 import reseauSimple.global.AbstractAgent;
 import reseauSimple.global.GlobalSearchBehaviour;
+import jade.core.AID;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class ObservateurAgent extends AbstractAgent
 {
 	private static final long serialVersionUID = 1L;
-	GlobalSearchBehaviour chercheurAnnuaireProducteur = null;
+	
+	private ObservateurBehaviourGetAnnuaireProducteurEtTransporteur chercheurAnnuaire = null;
 	ConsommateurBehaviourAskPrixProducteur demandeurPrixProducteurs = null;
 	ObservateurBehaviourMsgListener recuperateurPrixProducteurs = null;
 	ObservateurBehaviourAskArgentProducteur recuperateurArgentProducteurs = null;
 	ObservateurBehaviourAskNbClientProducteur recuperateurNbClientProducteurs = null;
 	private ObservateurGUI myGUI;
+	private AID[] AnnuairePersoProducteur;
+	private AID[] AnnuairePersoTransporteur;
 	
 	protected void setup()
 	{
@@ -27,14 +31,9 @@ public class ObservateurAgent extends AbstractAgent
 		myGUI = new ObservateurGUI(this);
 		myGUI.setVisible(true);
 		
-		// Ajout d'un behaviour de récupération de l'annuaire toutes les minutes
-		DFAgentDescription dfdRecherche = new DFAgentDescription();
-		ServiceDescription sdRecherche = new ServiceDescription();
-		sdRecherche.setName("producteur");
-		sdRecherche.setType("producteur");
-		dfdRecherche.addServices(sdRecherche);
-		chercheurAnnuaireProducteur = new GlobalSearchBehaviour(this, 6000, dfdRecherche);
-		addBehaviour(chercheurAnnuaireProducteur);
+		// Récupération des annuaires nécessaires
+		chercheurAnnuaire = new ObservateurBehaviourGetAnnuaireProducteurEtTransporteur();
+		addBehaviour(chercheurAnnuaire);
 		
 		// Ajout d'un behaviour de demande des tarifs de tous les producteurs executé toutes les minutes
 		demandeurPrixProducteurs = new ConsommateurBehaviourAskPrixProducteur(this, 1000);
@@ -56,6 +55,16 @@ public class ObservateurAgent extends AbstractAgent
 	public ObservateurGUI getMyGUI()
 	{
 		return myGUI;
+	}
+	
+	public AID[] getAnnuairePersoProducteur()
+	{
+		return AnnuairePersoProducteur;
+	}
+	
+	public AID[] getAnnuairePersoTransporteur()
+	{
+		return AnnuairePersoTransporteur;
 	}
 	
 }
