@@ -15,9 +15,12 @@ import jade.lang.acl.MessageTemplate;
 public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 	private static final long serialVersionUID = 1L;
 	private int capaciteRestante = ((TransporteurAgent) myAgent).getCapaciteTransporteur();
+	private int prixTransporteur = ((TransporteurAgent) myAgent).getPrixKWhTransporteur();
 	private TreeMap<AID, Integer> demandeEnAttente = new TreeMap<AID, Integer>();
+	
 	public void termineTour(){
 		capaciteRestante = ((TransporteurAgent) myAgent).getCapaciteTransporteur();
+		prixTransporteur = ((TransporteurAgent) myAgent).getPrixKWhTransporteur();
 	}
 
 	@Override
@@ -42,7 +45,14 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 			if (msg.getPerformative() == AbstractAgent.PRIX_TRANSPORTEUR_DEMANDE) {
 				ACLMessage reply = msg.createReply();
 				reply.setPerformative(AbstractAgent.PRIX_TRANSPORTEUR_REPONSE);
-				reply.setContent(((TransporteurAgent) myAgent).getPrixKWhTransporteur());
+				reply.setContent(Integer.toString(prixTransporteur));
+				myAgent.send(reply);
+			}
+			else if (msg.getPerformative() == AbstractAgent.CAPACITE_TRANSPORTEUR_DEMANDE){
+				ACLMessage reply = msg.createReply();
+				reply.setPerformative(AbstractAgent.CAPACITE_TRANSPORTEUR_REPONSE);
+				reply.setContent(Integer.toString(capaciteRestante));
+				myAgent.send(reply);
 			}
 			
 			//regarder si c'est mon agent
@@ -53,15 +63,21 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 			else if (msg.getPerformative() == AbstractAgent.DEMANDE_FACTURATION){
 				if(msg.getSender() == ((TransporteurAgent) myAgent).getFournisseurID()){
 					capaciteRestante -= ((TransporteurAgent) myAgent).getCapaciteTransporteur();
+					
+					//recherche d'une demande qui corresponde a sa capacité restante, et on lui facture
+					//sinon contre proposition
+					//sinon on le refuse
+					//on augmente le prix si on a trop de demande
+					//on diminue le prix si on a pas de demande en attente
 				}
 				//ajout du message à la pile des demandes en attendant de recevoir la demande de son producteur
-				else
-				int demandeTransport = Integer.parseInt(msg.getContent());
+				else{
+					AID demandeAidTransport = msg.getSender();
+					int demandePrixTransport = Integer.parseInt(msg.getContent());
+					demandeEnAttente.put(demandeAidTransport, demandePrixTransport);
+				}
 			}
 		}
 				block();
 	}
-	
-	
-
 }
