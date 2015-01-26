@@ -32,6 +32,9 @@ public abstract class AbstractAgent extends Agent
 	
 	static public final int AMENDE_PRODUCTEUR = 130;
 	
+	static public final int BESOIN_CONSOMMATEUR_DEMANDE = 140;
+	static public final int BESOIN_CONSOMMATEUR_REPONSE = 141;
+	
 	protected void setup()
 	{
 		// Inscription de l'agent dans l'annuaire

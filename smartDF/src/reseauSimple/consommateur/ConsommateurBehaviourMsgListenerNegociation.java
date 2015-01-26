@@ -1,6 +1,7 @@
 package reseauSimple.consommateur;
 
 import java.util.TreeMap;
+
 import reseauSimple.global.AbstractAgent;
 import reseauSimple.global.GlobalBehaviourHorlogeTalker;
 import jade.core.AID;
@@ -24,94 +25,115 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour {
 	}
 
 	@Override
-	public void action()
-	{
+	public void action() {
 		// Reçoit les messages des producteurs
 		MessageTemplate mt = null;
 		AID[] producteurpossible = ((AbstractAgent) myAgent).getAnnuairePerso();
-		if(producteurpossible != null && producteurpossible.length != 0)
-		{
-			for(AID aid : producteurpossible)
-			{
-				if(mt == null)
+		if (producteurpossible != null && producteurpossible.length != 0) {
+			for (AID aid : producteurpossible) {
+				if (mt == null)
 					mt = MessageTemplate.MatchSender(aid);
 				else
-					mt = MessageTemplate.or(mt, MessageTemplate.MatchSender(aid));
+					mt = MessageTemplate.or(mt,
+							MessageTemplate.MatchSender(aid));
 			}
 		}
 		ACLMessage msg = myAgent.receive(mt);
-		
-		
+
 		// TODO Traitement du message
-		if(msg != null)
-		{
-			if(msg.getPerformative() == AbstractAgent.PRIX_PRODUCTEUR_REPONSE)
-			{
-				if(cpt < producteurpossible.length){
-				{
-					int prix = Integer.parseInt(msg.getContent());
-					repProducteur.put(msg.getSender(), prix);
-					cpt ++;
-				}
-				if(cpt == producteurpossible.length){
-					
-				}
-					//prendre la décision => dire au mec que c'est ok.
+		if (msg != null) {
+			if (msg.getPerformative() == AbstractAgent.PRIX_PRODUCTEUR_REPONSE) {
+				if (cpt < producteurpossible.length) {
+					{
+						int prix = Integer.parseInt(msg.getContent());
+						repProducteur.put(msg.getSender(), prix);
+						cpt++;
+					}
+					if (cpt == producteurpossible.length) {
+
+					}
+					// prendre la décision => dire au mec que c'est ok.
 					int prixTemp = repProducteur.get(repProducteur.firstKey());
 					AID aidTemp = repProducteur.firstKey();
-					
+
 					for (AID id : repProducteur.navigableKeySet()) {
-							if (repProducteur.get(id) < prixTemp) {
-								prixTemp = repProducteur.get(id);
-								aidTemp = id;
-							}
-					}
-					
-					AID ancienFournisseur = ((ConsommateurAgent) myAgent).getFournisseurID();
-					
-					if(ancienFournisseur != null){
-						if(ancienFournisseur == aidTemp){
-							((ConsommateurAgent) myAgent).setPrixfournisseur(prixTemp);
+						if (repProducteur.get(id) < prixTemp) {
+							prixTemp = repProducteur.get(id);
+							aidTemp = id;
 						}
-						else{
-							ACLMessage desabonnement = new ACLMessage(AbstractAgent.PRIX_PRODUCTEUR_DESABONNEMENT);
+					}
+
+					AID ancienFournisseur = ((ConsommateurAgent) myAgent)
+							.getFournisseurID();
+
+					if (ancienFournisseur != null) {
+						if (ancienFournisseur == aidTemp) {
+							((ConsommateurAgent) myAgent)
+									.setPrixfournisseur(prixTemp);
+						} else {
+							ACLMessage desabonnement = new ACLMessage(
+									AbstractAgent.PRIX_PRODUCTEUR_DESABONNEMENT);
 							desabonnement.addReceiver(ancienFournisseur);
 							myAgent.send(desabonnement);
-							
-							
-							((ConsommateurAgent) myAgent).setFournisseurID(aidTemp);
-							((ConsommateurAgent) myAgent).setPrixfournisseur(prixTemp);
-							ACLMessage abonnement = new ACLMessage(AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT);
+
+							((ConsommateurAgent) myAgent)
+									.setFournisseurID(aidTemp);
+							((ConsommateurAgent) myAgent)
+									.setPrixfournisseur(prixTemp);
+							ACLMessage abonnement = new ACLMessage(
+									AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT);
 							abonnement.addReceiver(aidTemp);
 							myAgent.send(abonnement);
 						}
-					}
-					else {
+					} else {
 						((ConsommateurAgent) myAgent).setFournisseurID(aidTemp);
-						((ConsommateurAgent) myAgent).setPrixfournisseur(prixTemp);
-						ACLMessage abonnement = new ACLMessage(AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT);
+						((ConsommateurAgent) myAgent)
+								.setPrixfournisseur(prixTemp);
+						ACLMessage abonnement = new ACLMessage(
+								AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT);
 						abonnement.addReceiver(aidTemp);
 						myAgent.send(abonnement);
-					}				
-					
-					myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msgHorlogeToAnswer));
+					}
+
+					myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(
+							myAgent, msgHorlogeToAnswer));
 					isDone = true;
 				}
 			}
-			
-			else if(msg.getPerformative() == AbstractAgent.PRIX_PRODUCTEUR_CHANGEMENT)
-			{
-				((ConsommateurAgent) myAgent).setPrixfournisseur(Integer.parseInt(msg.getContent()));
+
+			else if (msg.getPerformative() == AbstractAgent.PRIX_PRODUCTEUR_CHANGEMENT) {
+				((ConsommateurAgent) myAgent).setPrixfournisseur(Integer
+						.parseInt(msg.getContent()));
 			}
-			
-			else
-			{
+
+			else if (msg.getPerformative() == AbstractAgent.BESOIN_CONSOMMATEUR_DEMANDE) {
+				ACLMessage reply = msg.createReply();
+				reply.setPerformative(AbstractAgent.BESOIN_CONSOMMATEUR_REPONSE);
+				
+				int besoin = ((ConsommateurAgent) myAgent).getBesoin();
+
+				// calcul du besoin reel si l'agent est aussi producteur
+				if (((ConsommateurAgent) myAgent).isConsommateurProducteur()) {
+					// si le consommateur produit trop d'electricité
+					if (((ConsommateurAgent) myAgent).getCapaciteProducteur() > besoin)
+						besoin = 0;
+
+					else
+						besoin -= ((ConsommateurAgent) myAgent)
+								.getCapaciteProducteur();
+				}
+				
+				reply.setContent(Integer.toString(besoin));
+				myAgent.send(reply);
+			}
+
+			else {
 				System.out.println("Message non compris.\n" + msg);
-				System.out.println(((ConsommateurAgent) myAgent).getFournisseurID());
+				System.out.println(((ConsommateurAgent) myAgent)
+						.getFournisseurID());
 				System.out.println(msg.getSender());
 			}
-		}
-		else
+		} else
 			block();
 	}
 
