@@ -66,6 +66,27 @@ public class ConsommateurBehaviourMsgListenerFacturation extends CyclicBehaviour
 				((ConsommateurAgent) myAgent).setaEteFacture(true);
 			}
 			
+			else if (msg.getPerformative() == AbstractAgent.BESOIN_CONSOMMATEUR_DEMANDE) {
+				ACLMessage reply = msg.createReply();
+				reply.setPerformative(AbstractAgent.BESOIN_CONSOMMATEUR_REPONSE);
+				
+				int besoin = ((ConsommateurAgent) myAgent).getBesoin();
+
+				// calcul du besoin reel si l'agent est aussi producteur
+				if (((ConsommateurAgent) myAgent).isConsommateurProducteur()) {
+					// si le consommateur produit trop d'electricité
+					if (((ConsommateurAgent) myAgent).getCapaciteProducteur() > besoin)
+						besoin = 0;
+
+					else
+						besoin -= ((ConsommateurAgent) myAgent)
+								.getCapaciteProducteur();
+				}
+				
+				reply.setContent(Integer.toString(besoin));
+				myAgent.send(reply);
+			}
+			
 			else
 			{
 				System.out.println("Message non compris.\n" + msg);

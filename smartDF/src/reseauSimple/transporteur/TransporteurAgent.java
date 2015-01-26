@@ -40,4 +40,12 @@ public class TransporteurAgent extends AbstractAgent
 	public int getCapaciteTransporteur(){
 		return capaciteTransporteur;
 	}
+
+	public int getPrixKWhTransporteur() {
+		return prixKWhTransporteur;
+	}
+	
+	public void setPrixKWhTransporteur(int prixKWhTransporteur) {
+		this.prixKWhTransporteur = prixKWhTransporteur ;
+	}
 }
