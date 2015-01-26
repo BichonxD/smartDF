@@ -1,4 +1,4 @@
-package reseauSimple;
+package reseauSimple.observateur;
 
 import java.awt.GridLayout;
 import java.util.HashMap;
@@ -7,6 +7,7 @@ import jade.core.AID;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 
 public class ObservateurGUI extends JFrame
 {

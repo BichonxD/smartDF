@@ -1,4 +1,4 @@
-package reseauSimple;
+package reseauSimple.observateur;
 
 import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;

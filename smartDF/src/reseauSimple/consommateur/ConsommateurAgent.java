@@ -1,18 +1,17 @@
-package reseauSimple;
+package reseauSimple.consommateur;
 
+import reseauSimple.global.AbstractAgent;
 import jade.core.AID;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class ConsommateurAgent extends AbstractAgent
 {
 	private static final long serialVersionUID = 1L;
 	
+	private int besoin;
 	private boolean consommateurProducteur;
 	private int capaciteProducteur;
 	private AID fournisseurID;
 	private int prixfournisseur;
-	private int besoin;
 	
 	protected void setup()
 	{
@@ -31,16 +30,12 @@ public class ConsommateurAgent extends AbstractAgent
 		fournisseurID = null;
 		prixfournisseur = 0;
 		
-		DFAgentDescription rechercheProducteur = new DFAgentDescription();
-		
-		ServiceDescription SDProducteur = new ServiceDescription();
-		SDProducteur.setName("producteur");
-		SDProducteur.setType("producteur");
-		rechercheProducteur.addServices(SDProducteur);
-		
-		addBehaviour(new GlobalSearchBehaviour(this, 6000, rechercheProducteur));
-		addBehaviour(new ConsommateurBehaviourAskPrixProducteur(this, 1000));
-		addBehaviour(new ConsomateurBehaviourMsgListener());
+		addBehaviour(new ConsommateurBehaviourHorlogeListener());
+	}
+	
+	public int getBesoin()
+	{
+		return besoin;
 	}
 	
 	public boolean isConsommateurProducteur()
@@ -48,19 +43,9 @@ public class ConsommateurAgent extends AbstractAgent
 		return consommateurProducteur;
 	}
 	
-	public void setConsommateurProducteur(boolean consommateurProducteur)
-	{
-		this.consommateurProducteur = consommateurProducteur;
-	}
-	
 	public int getCapaciteProducteur()
 	{
 		return capaciteProducteur;
-	}
-	
-	public void setCapaciteProducteur(int capaciteProducteur)
-	{
-		this.capaciteProducteur = capaciteProducteur;
 	}
 	
 	public AID getFournisseurID()
@@ -81,16 +66,6 @@ public class ConsommateurAgent extends AbstractAgent
 	public void setPrixfournisseur(int prixfournisseur)
 	{
 		this.prixfournisseur = prixfournisseur;
-	}
-	
-	public int getBesoin()
-	{
-		return besoin;
-	}
-	
-	public void setBesoin(int besoin)
-	{
-		this.besoin = besoin;
 	}
 	
 }

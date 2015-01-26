@@ -1,6 +1,8 @@
-package reseauSimple;
+package reseauSimple.producteur;
 
 import java.util.List;
+
+
 
 import jade.core.AID;
 import jade.core.behaviours.TickerBehaviour;

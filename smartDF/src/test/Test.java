@@ -7,9 +7,9 @@ package test;
 
 import java.util.ArrayList;
 
-import reseauSimple.ProducteurAgent;
-import reseauSimple.ConsommateurAgent;
-import reseauSimple.ObservateurAgent;
+import reseauSimple.consommateur.ConsommateurAgent;
+import reseauSimple.observateur.ObservateurAgent;
+import reseauSimple.producteur.ProducteurAgent;
 import jade.core.Runtime;
 import jade.core.Profile;
 import jade.core.ProfileImpl;

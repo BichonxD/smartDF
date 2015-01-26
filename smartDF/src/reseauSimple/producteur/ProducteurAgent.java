@@ -1,6 +1,9 @@
-package reseauSimple;
+package reseauSimple.producteur;
 
 import java.util.ArrayList;
+
+import reseauSimple.global.AbstractAgent;
+
 
 import jade.core.AID;
 
@@ -22,7 +25,7 @@ public class ProducteurAgent extends AbstractAgent
 		System.out.println("Hello World! My name is " + getLocalName());
 		
 		addBehaviour(new ProducteurBehaviourFactureClient(this, 1000));
-		addBehaviour(new ProducteurBehaviourMsgListener());
+		addBehaviour(new ProducteurBehaviourMsgListenerFacturation());
 	}
 	
 	public int getPrixFournisseur()

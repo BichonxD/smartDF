@@ -1,5 +1,6 @@
-package reseauSimple;
+package reseauSimple.observateur;
 
+import reseauSimple.global.AbstractAgent;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;

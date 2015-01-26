@@ -1,7 +1,10 @@
-package reseauSimple;
+package reseauSimple.global;
+
+import java.util.ArrayList;
 
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -12,6 +15,7 @@ public abstract class AbstractAgent extends Agent
 	private static final long serialVersionUID = 1L;
 	private String serviceName = "defaultService";
 	private AID[] annuairePerso;
+	private ArrayList<Behaviour> listCyclicBehaviour = new ArrayList<Behaviour>();
 	
 	protected void setup()
 	{
@@ -46,6 +50,11 @@ public abstract class AbstractAgent extends Agent
 	public AID[] getAnnuairePerso()
 	{
 		return annuairePerso;
+	}
+	
+	public ArrayList<Behaviour> getListCyclicBehaviour()
+	{
+		return listCyclicBehaviour;
 	}
 	
 	// Put agent clean-up operations here

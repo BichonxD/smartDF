@@ -1,18 +1,44 @@
-package reseauSimple;
+package reseauSimple.consommateur;
 
+import reseauSimple.global.AbstractAgent;
 import jade.core.AID;
-import jade.core.behaviours.CyclicBehaviour;
+import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
-public class ConsomateurBehaviourMsgListener extends CyclicBehaviour
+public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour
 {
 	private static final long serialVersionUID = 1L;
+	
+	private ACLMessage msgHorlogeToAnswer;
+	private boolean isDone = false;
+	
+	public ConsommateurBehaviourMsgListenerNegociation(Agent a, ACLMessage msgHorlogeToAnswer)
+	{
+		super(a);
+		this.msgHorlogeToAnswer = msgHorlogeToAnswer;
+	}
 	
 	@Override
 	public void action()
 	{
-		ACLMessage msg = myAgent.receive();
+		// Reçoit les messages des producteurs
+		MessageTemplate mt = null;
+		AID[] producteurpossible = ((AbstractAgent) myAgent).getAnnuairePerso();
+		if(producteurpossible != null && producteurpossible.length != 0)
+		{
+			for(AID aid : producteurpossible)
+			{
+				if(mt == null)
+					mt = MessageTemplate.MatchSender(aid);
+				else
+					mt = MessageTemplate.or(mt, MessageTemplate.MatchSender(aid));
+			}
+		}
+		ACLMessage msg = myAgent.receive(mt);
 		
+		// Traitement du message
 		if(msg != null)
 		{
 			String title = msg.getContent();
@@ -22,6 +48,7 @@ public class ConsomateurBehaviourMsgListener extends CyclicBehaviour
 				AID sender = msg.getSender();
 				int prix = Integer.parseInt(title.split(" ")[1]);
 				
+				// Algorithme de décision du producteur
 				if(((ConsommateurAgent) myAgent).getFournisseurID() == null)
 				{
 					((ConsommateurAgent) myAgent).setFournisseurID(sender);
@@ -87,6 +114,12 @@ public class ConsomateurBehaviourMsgListener extends CyclicBehaviour
 		}
 		else
 			block();
+	}
+
+	@Override
+	public boolean done()
+	{
+		return isDone;
 	}
 	
 }

@@ -1,5 +1,8 @@
-package reseauSimple;
+package reseauSimple.observateur;
 
+import reseauSimple.consommateur.ConsommateurBehaviourAskPrixProducteur;
+import reseauSimple.global.AbstractAgent;
+import reseauSimple.global.GlobalSearchBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 

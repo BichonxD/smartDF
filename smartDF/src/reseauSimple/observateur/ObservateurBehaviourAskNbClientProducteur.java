@@ -1,15 +1,16 @@
-package reseauSimple;
+package reseauSimple.observateur;
 
+import reseauSimple.global.AbstractAgent;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 
-public class ConsommateurBehaviourAskPrixProducteur extends TickerBehaviour
+public class ObservateurBehaviourAskNbClientProducteur extends TickerBehaviour
 {
 	private static final long serialVersionUID = 1L;
 	
-	public ConsommateurBehaviourAskPrixProducteur(Agent a, long period)
+	public ObservateurBehaviourAskNbClientProducteur(Agent a, long period)
 	{
 		super(a, period);
 	}
@@ -24,9 +25,9 @@ public class ConsommateurBehaviourAskPrixProducteur extends TickerBehaviour
 			
 			for(AID aid : producteurpossible)
 			{
-				ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 				msg.addReceiver(aid);
-				msg.setContent("demande-prix");
+				msg.setContent("demande-nb-clients");
 				myAgent.send(msg);
 			}
 		}
