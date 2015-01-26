@@ -11,14 +11,12 @@ public class ObservateurAgent extends AbstractAgent
 {
 	private static final long serialVersionUID = 1L;
 	
-	private ObservateurBehaviourGetAnnuaireProducteurEtTransporteur chercheurAnnuaire = null;
+	private GlobalSearchBehaviour chercheurAnnuaire = null;
 	ConsommateurBehaviourAskPrixProducteur demandeurPrixProducteurs = null;
 	ObservateurBehaviourMsgListener recuperateurPrixProducteurs = null;
 	ObservateurBehaviourAskArgentProducteur recuperateurArgentProducteurs = null;
 	ObservateurBehaviourAskNbClientProducteur recuperateurNbClientProducteurs = null;
 	private ObservateurGUI myGUI;
-	private AID[] AnnuairePersoProducteur;
-	private AID[] AnnuairePersoTransporteur;
 	
 	protected void setup()
 	{
@@ -32,7 +30,18 @@ public class ObservateurAgent extends AbstractAgent
 		myGUI.setVisible(true);
 		
 		// Récupération des annuaires nécessaires
-		chercheurAnnuaire = new ObservateurBehaviourGetAnnuaireProducteurEtTransporteur();
+		DFAgentDescription dfdRechercheProducteur = new DFAgentDescription();
+		ServiceDescription sdProd = new ServiceDescription();
+		sdProd.setName("producteur");
+		sdProd.setType("producteur");
+		dfdRechercheProducteur.addServices(sdProd);
+		
+		DFAgentDescription dfdRechercheTransporteur = new DFAgentDescription();
+		ServiceDescription sdTrans = new ServiceDescription();
+		sdTrans.setName("transporteur");
+		sdTrans.setType("transporteur");
+		dfdRechercheTransporteur.addServices(sdTrans);
+		chercheurAnnuaire = new GlobalSearchBehaviour(this, dfdRechercheProducteur, dfdRechercheTransporteur);
 		addBehaviour(chercheurAnnuaire);
 		
 		// Ajout d'un behaviour de demande des tarifs de tous les producteurs executé toutes les minutes
@@ -55,16 +64,6 @@ public class ObservateurAgent extends AbstractAgent
 	public ObservateurGUI getMyGUI()
 	{
 		return myGUI;
-	}
-	
-	public AID[] getAnnuairePersoProducteur()
-	{
-		return AnnuairePersoProducteur;
-	}
-	
-	public AID[] getAnnuairePersoTransporteur()
-	{
-		return AnnuairePersoTransporteur;
 	}
 	
 }

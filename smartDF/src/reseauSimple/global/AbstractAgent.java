@@ -15,6 +15,7 @@ public abstract class AbstractAgent extends Agent
 	private static final long serialVersionUID = 1L;
 	private String serviceName = "defaultService";
 	private AID[] annuairePerso;
+	private AID[] annuairePersoOptionnel;
 	private ArrayList<Behaviour> listCyclicBehaviour = new ArrayList<Behaviour>();
 	
 	static public final int PRIX_PRODUCTEUR_DEMANDE = 100;
@@ -74,6 +75,16 @@ public abstract class AbstractAgent extends Agent
 	public AID[] getAnnuairePerso()
 	{
 		return annuairePerso;
+	}
+	
+	public void setAnnuairePersoOptionnel(AID[] annuairePersoOptionnel)
+	{
+		this.annuairePersoOptionnel = annuairePersoOptionnel;
+	}
+	
+	public AID[] getAnnuairePersoOptionnel()
+	{
+		return annuairePersoOptionnel;
 	}
 	
 	public ArrayList<Behaviour> getListCyclicBehaviour()
