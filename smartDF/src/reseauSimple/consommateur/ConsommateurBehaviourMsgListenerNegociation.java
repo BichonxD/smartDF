@@ -61,7 +61,7 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour
 				}
 			}		
 			
-			else {
+			if(cpt == producteurpossible.length){
 				//prendre la décision => dire au mec que c'est ok.
 				int prixTemp = repProducteur.get(repProducteur.firstKey());
 				AID aidTemp = repProducteur.firstKey();
@@ -73,12 +73,32 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour
 						}
 				}
 				
-				((ConsommateurAgent) myAgent).setFournisseurID(aidTemp);
-				((ConsommateurAgent) myAgent).setPrixfournisseur(prixTemp);
+				AID ancienFournisseur = ((ConsommateurAgent) myAgent).getFournisseurID();
 				
-				ACLMessage reply = msg.createReply();
-				reply.setPerformative(AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT);
-				myAgent.send(reply);
+				if(ancienFournisseur != null){
+					if(ancienFournisseur == aidTemp){
+						((ConsommateurAgent) myAgent).setPrixfournisseur(prixTemp);
+					}
+					else{
+						ACLMessage desabonnement = new ACLMessage(AbstractAgent.PRIX_PRODUCTEUR_DESABONNEMENT);
+						desabonnement.addReceiver(ancienFournisseur);
+						myAgent.send(desabonnement);
+						
+						
+						((ConsommateurAgent) myAgent).setFournisseurID(aidTemp);
+						((ConsommateurAgent) myAgent).setPrixfournisseur(prixTemp);
+						ACLMessage abonnement = new ACLMessage(AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT);
+						abonnement.addReceiver(aidTemp);
+						myAgent.send(abonnement);
+					}
+				}
+				else {
+					((ConsommateurAgent) myAgent).setFournisseurID(aidTemp);
+					((ConsommateurAgent) myAgent).setPrixfournisseur(prixTemp);
+					ACLMessage reply = msg.createReply();
+					reply.setPerformative(AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT);
+					myAgent.send(reply);
+				}				
 				
 				myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msgHorlogeToAnswer));
 				isDone = true;
