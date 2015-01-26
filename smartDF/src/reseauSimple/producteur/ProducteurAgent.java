@@ -3,9 +3,10 @@ package reseauSimple.producteur;
 import java.util.ArrayList;
 
 import reseauSimple.global.AbstractAgent;
-
-
+import reseauSimple.global.GlobalSearchBehaviour;
 import jade.core.AID;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class ProducteurAgent extends AbstractAgent
 {
@@ -23,6 +24,14 @@ public class ProducteurAgent extends AbstractAgent
 		prixFournisseur = (int) getArguments()[0];
 		
 		System.out.println("Hello World! My name is " + getLocalName());
+		
+		// On met à jour l'annuaire des transporteurs.
+		DFAgentDescription rechercheTransporteur = new DFAgentDescription();
+		ServiceDescription SDTransporteur = new ServiceDescription();
+		SDTransporteur.setName("transporteur");
+		SDTransporteur.setType("transporteur");
+		rechercheTransporteur.addServices(SDTransporteur);
+		addBehaviour(new GlobalSearchBehaviour(this, rechercheTransporteur));
 		
 		addBehaviour(new ProducteurBehaviourFactureClient(this, 1000));
 		addBehaviour(new ProducteurBehaviourMsgListenerFacturation());

@@ -43,21 +43,16 @@ public class ProducteurBehaviourHorlogeListener extends CyclicBehaviour
 					}
 					((AbstractAgent) myAgent).getListCyclicBehaviour().clear();
 					
-					if(nbTourEffectue % ((ConsommateurAgent) myAgent).getDureeRenouvellement() == 0)
-					{
-						// On met à jour l'annuaire des producteurs.
-						DFAgentDescription rechercheProducteur = new DFAgentDescription();
-						ServiceDescription SDProducteur = new ServiceDescription();
-						SDProducteur.setName("producteur");
-						SDProducteur.setType("producteur");
-						rechercheProducteur.addServices(SDProducteur);
-						myAgent.addBehaviour(new GlobalSearchBehaviour(myAgent, rechercheProducteur));
-						
-						// On demande le prix à tous les producteurs.
-						myAgent.addBehaviour(new ConsommateurBehaviourAskPrixProducteur(myAgent));
-					}
-					// On ecoute les messages émis par les producteurs.
-					myAgent.addBehaviour(new ConsommateurBehaviourMsgListenerNegociation(myAgent, msg));
+					// On met à jour l'annuaire des transporteurs.
+					DFAgentDescription rechercheTransporteur = new DFAgentDescription();
+					ServiceDescription SDTransporteur = new ServiceDescription();
+					SDTransporteur.setName("transporteur");
+					SDTransporteur.setType("transporteur");
+					rechercheTransporteur.addServices(SDTransporteur);
+					myAgent.addBehaviour(new GlobalSearchBehaviour(myAgent, rechercheTransporteur));
+					
+					// On repense la politique de prix et de transport.
+					myAgent.addBehaviour(new ProducteurBehaviourStrategiePrixTransport(myAgent));
 					break;
 				
 				/*
