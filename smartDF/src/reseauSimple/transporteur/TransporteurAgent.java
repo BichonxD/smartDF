@@ -1,6 +1,5 @@
 package reseauSimple.transporteur;
 
-import reseauSimple.consommateur.ConsommateurBehaviourHorlogeListener;
 import reseauSimple.global.AbstractAgent;
 import jade.core.AID;
 
@@ -11,6 +10,7 @@ public class TransporteurAgent extends AbstractAgent
 	private AbstractAgent proprietaire;
 	private int capaciteTransporteur;
 	private int prixKWhTransporteur;
+	private TransporteurBehaviourMsgListenerAllPhases tansporteurBehaviourMsg;
 	
 	protected void setup()
 	{
@@ -29,7 +29,8 @@ public class TransporteurAgent extends AbstractAgent
 			System.out.println("Creation d'un nouveau transporteur :\n" + toString());
 			
 			addBehaviour(new TransporteurBehaviourHorlogeListener());
-			addBehaviour(new TransporteurBehaviourMsgListenerAllPhases());
+			tansporteurBehaviourMsg = new TransporteurBehaviourMsgListenerAllPhases();
+			addBehaviour(tansporteurBehaviourMsg);
 		}
 	}
 
@@ -48,4 +49,10 @@ public class TransporteurAgent extends AbstractAgent
 	public void setPrixKWhTransporteur(int prixKWhTransporteur) {
 		this.prixKWhTransporteur = prixKWhTransporteur ;
 	}
+	
+	public TransporteurBehaviourMsgListenerAllPhases getTansporteurBehaviourMsg()
+	{
+		return tansporteurBehaviourMsg;
+	}
+	
 }
