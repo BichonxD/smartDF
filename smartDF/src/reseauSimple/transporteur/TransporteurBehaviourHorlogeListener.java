@@ -21,10 +21,10 @@ public class TransporteurBehaviourHorlogeListener extends CyclicBehaviour
 		{
 			switch(msg.getPerformative())
 			{
-				case AbstractAgent.HORLOGE_PHASE_NEGOCIATION :
+				case AbstractAgent.HORLOGE_PHASE_DEPARTAGE :
 					((TransporteurAgent) myAgent).getTansporteurBehaviourMsg().termineTour();
 					break;
-					
+				
 				default :
 					break;
 			}
