@@ -35,9 +35,9 @@ public class Test
 		for(int i = 0; i < nbClient + 1; i++){
 			besoin = (int) (Math.random() * 9 + 1);
 			prod = (int) (Math.random() * 9 + 1);
-			lAC.add(mc.createNewAgent("Consommateur " + (i + 1), ConsommateurAgent.class.getName(), new Object[]{besoin, (i % 2 == 0), prod}));
+			lAC.add(mc.createNewAgent("Consommateur " + (i + 1), ConsommateurAgent.class.getName(), new Object[0]));
 		}
-		lAC.add(mc.createNewAgent("Producteur 1", ProducteurAgent.class.getName(), new Object[]{10}));
+		lAC.add(mc.createNewAgent("Producteur 1", ProducteurAgent.class.getName(), new Object[0]));
 		lAC.add(mc.createNewAgent("Observateur 1", ObservateurAgent.class.getName(), new Object[0]));
 		
 		for(AgentController aC : lAC)

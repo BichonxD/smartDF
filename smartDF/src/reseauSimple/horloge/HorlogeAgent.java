@@ -14,7 +14,7 @@ public class HorlogeAgent extends AbstractAgent
 		setServiceName("horloge");
 		super.setup();
 		
-		System.out.println("Céation d'une horloge :\n" + toString());
+		System.out.println("Céation de l'horloge.");
 		
 		DFAgentDescription rechercheAllAgents = new DFAgentDescription();
 		ServiceDescription SDAllAgents = new ServiceDescription();

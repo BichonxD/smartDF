@@ -7,22 +7,28 @@ import jade.core.AID;
 
 public class ProducteurAgent extends AbstractAgent
 {
+	// Constantes
 	private static final long serialVersionUID = 1L;
+	private static final int PRIX_MAX = 15;
+	private static final int PRIX_MIN = 10;
 	
-	private ArrayList<AID> clientsFournisseur = new ArrayList<AID>();
-	private ArrayList<AID> transportsFournisseur = new ArrayList<AID>();
-	private int prixFournisseur;
+	// Variables statiques
+	private static int currentID = 0;
+	
+	// Variables propres
+	private final int idProducteur = getNextID();
+	private int prixFournisseur = (int) (Math.random() * (PRIX_MAX - PRIX_MIN) + PRIX_MIN);
 	private int argentDispo = 0;
 	private int electriciteAFournir = 0;
+	private ArrayList<AID> clientsFournisseur = new ArrayList<AID>();
+	private ArrayList<AID> transportsFournisseur = new ArrayList<AID>();
 	
 	protected void setup()
 	{
 		setServiceName("producteur");
 		super.setup();
-		
-		prixFournisseur = (int) getArguments()[0];
-		
-		System.out.println("Hello World! My name is " + getLocalName());
+
+		System.out.println("Creation d'un nouveau producteur :\n" + toString());
 		
 		addBehaviour(new ConsommateurBehaviourHorlogeListener());
 	}
@@ -57,7 +63,8 @@ public class ProducteurAgent extends AbstractAgent
 		if(!clientsFournisseur.contains(fournisseurID))
 		{
 			clientsFournisseur.add(fournisseurID);
-		}else
+		}
+		else
 		{
 			System.out.println("Le client est déjà présent dans la base!");
 		}
@@ -68,32 +75,46 @@ public class ProducteurAgent extends AbstractAgent
 		if(clientsFournisseur.contains(fournisseurID))
 		{
 			clientsFournisseur.remove(fournisseurID);
-		}else
+		}
+		else
 		{
 			System.out.println("Le client n'est pas présent dans la base");
 		}
 	}
 	
-	protected void takeDown()
+	public int getElectriciteAFournir()
 	{
-		System.out.println("Le ProducteurAgent " + getAID().getName() + " is terminating.");
-		super.takeDown();
-	}
-
-	public int getElectriciteAFournir() {
 		return electriciteAFournir;
 	}
-
-	public void setElectriciteAFournir(int electriciteAFournir) {
+	
+	public void setElectriciteAFournir(int electriciteAFournir)
+	{
 		this.electriciteAFournir = electriciteAFournir;
 	}
-
-	public ArrayList<AID> getTransportsFournisseur() {
+	
+	public ArrayList<AID> getTransportsFournisseur()
+	{
 		return transportsFournisseur;
 	}
-
-	public void setTransportsFournisseur(ArrayList<AID> transportsFournisseur) {
+	
+	public void setTransportsFournisseur(ArrayList<AID> transportsFournisseur)
+	{
 		this.transportsFournisseur = transportsFournisseur;
+	}
+	
+	public static int getNextID()
+	{
+		return currentID++;
+	}
+	
+	@Override
+	public String toString()
+	{
+		String ret = "Consommateur " + idProducteur + " : \n";
+		ret += "\tPrix = " + prixFournisseur + " €/kWh\n";
+		ret += "\tPossède : " + argentDispo + " €\n";
+		ret += "\tDoit fournir : " + electriciteAFournir + " kWh\n";
+		return ret;
 	}
 	
 }
