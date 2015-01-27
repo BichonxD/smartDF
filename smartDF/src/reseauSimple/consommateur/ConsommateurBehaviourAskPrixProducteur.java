@@ -27,9 +27,8 @@ public class ConsommateurBehaviourAskPrixProducteur extends OneShotBehaviour
 		{
 			for(AID aid : producteurpossible)
 			{
-				ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+				ACLMessage msg = new ACLMessage(AbstractAgent.PRODUCTEUR_PRIX_DEMANDE);
 				msg.addReceiver(aid);
-				msg.setContent("demande-prix");
 				myAgent.send(msg);
 			}
 		}

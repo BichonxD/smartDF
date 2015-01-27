@@ -42,7 +42,7 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour {
 
 		// TODO Traitement du message
 		if (msg != null) {
-			if (msg.getPerformative() == AbstractAgent.PRIX_PRODUCTEUR_REPONSE) {
+			if (msg.getPerformative() == AbstractAgent.PRODUCTEUR_PRIX_REPONSE) {
 				if (cpt < producteurpossible.length) {
 					{
 						int prix = Integer.parseInt(msg.getContent());
@@ -72,7 +72,7 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour {
 									.setPrixfournisseur(prixTemp);
 						} else {
 							ACLMessage desabonnement = new ACLMessage(
-									AbstractAgent.PRIX_PRODUCTEUR_DESABONNEMENT);
+									AbstractAgent.PRODUCTEUR_DESABONNEMENT);
 							desabonnement.addReceiver(ancienFournisseur);
 							myAgent.send(desabonnement);
 
@@ -81,7 +81,7 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour {
 							((ConsommateurAgent) myAgent)
 									.setPrixfournisseur(prixTemp);
 							ACLMessage abonnement = new ACLMessage(
-									AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT);
+									AbstractAgent.PRODUCTEUR_ABONNEMENT);
 							abonnement.addReceiver(aidTemp);
 							myAgent.send(abonnement);
 						}
@@ -90,7 +90,7 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour {
 						((ConsommateurAgent) myAgent)
 								.setPrixfournisseur(prixTemp);
 						ACLMessage abonnement = new ACLMessage(
-								AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT);
+								AbstractAgent.PRODUCTEUR_ABONNEMENT);
 						abonnement.addReceiver(aidTemp);
 						myAgent.send(abonnement);
 					}
@@ -101,14 +101,14 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour {
 				}
 			}
 
-			else if (msg.getPerformative() == AbstractAgent.PRIX_PRODUCTEUR_CHANGEMENT) {
+			else if (msg.getPerformative() == AbstractAgent.PRODUCTEUR_PRIX_CHANGEMENT) {
 				((ConsommateurAgent) myAgent).setPrixfournisseur(Integer
 						.parseInt(msg.getContent()));
 			}
 
-			else if (msg.getPerformative() == AbstractAgent.BESOIN_CONSOMMATEUR_DEMANDE) {
+			else if (msg.getPerformative() == AbstractAgent.CONSOMMATEUR_BESOIN_DEMANDE) {
 				ACLMessage reply = msg.createReply();
-				reply.setPerformative(AbstractAgent.BESOIN_CONSOMMATEUR_REPONSE);
+				reply.setPerformative(AbstractAgent.CONSOMMATEUR_BESOIN_REPONSE);
 				
 				int besoin = ((ConsommateurAgent) myAgent).getBesoin();
 

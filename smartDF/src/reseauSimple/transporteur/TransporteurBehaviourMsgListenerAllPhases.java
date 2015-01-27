@@ -43,15 +43,15 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 		// TODO Traitement du message
 		if (msg != null) {
 			// 2 type de messages, celui pour connaitre le prix, celui pour facturer
-			if (msg.getPerformative() == AbstractAgent.PRIX_TRANSPORTEUR_DEMANDE) {
+			if (msg.getPerformative() == AbstractAgent.TRANSPORTEUR_PRIX_DEMANDE) {
 				ACLMessage reply = msg.createReply();
-				reply.setPerformative(AbstractAgent.PRIX_TRANSPORTEUR_REPONSE);
+				reply.setPerformative(AbstractAgent.TRANSPORTEUR_PRIX_REPONSE);
 				reply.setContent(Integer.toString(prixTransporteur));
 				myAgent.send(reply);
 			}
-			else if (msg.getPerformative() == AbstractAgent.CAPACITE_TRANSPORTEUR_DEMANDE){
+			else if (msg.getPerformative() == AbstractAgent.TRANSPORTEUR_CAPACITE_DEMANDE){
 				ACLMessage reply = msg.createReply();
-				reply.setPerformative(AbstractAgent.CAPACITE_TRANSPORTEUR_REPONSE);
+				reply.setPerformative(AbstractAgent.TRANSPORTEUR_CAPACITE_REPONSE);
 				reply.setContent(Integer.toString(capaciteRestante));
 				myAgent.send(reply);
 			}
@@ -63,13 +63,13 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 			//augmenter ou diminuer le prix
 			
 			else if (msg.getPerformative() == AbstractAgent.DEMANDE_FACTURATION_TRANSPORTEUR){
-				//dans le cas ou c'est mon agent la capacité diminue, pas de facture
+				//dans le cas ou c'est mon agent la capacitï¿½ diminue, pas de facture
 				if(msg.getSender() == ((TransporteurAgent) myAgent).getFournisseurID()){
 					capaciteRestante -= ((TransporteurAgent) myAgent).getCapaciteTransporteur();
-					//on diminue la capacité et on facture les autres gus
+					//on diminue la capacitï¿½ et on facture les autres gus
 					for (AID id : demandeEnAttente.navigableKeySet()) {
 						if (demandeEnAttente.get(id) < capaciteRestante) {
-							//soit on accepte une demande dans les capacité et on demande a etre payé
+							//soit on accepte une demande dans les capacitï¿½ et on demande a etre payï¿½
 							capaciteRestante -= demandeEnAttente.get(id);
 							ACLMessage msgReply = new ACLMessage(AbstractAgent.REPONSE_FACTURATION_TRANSPORTEUR_POSITIVE);
 							msgReply.setSender(id);
@@ -86,9 +86,9 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 						
 					}
 					
-					//on verifie la capacité restante pour savoir la politique restante au tour suivant
+					//on verifie la capacitï¿½ restante pour savoir la politique restante au tour suivant
 				}
-				//ajout du message à la pile des demandes en attendant de recevoir la demande de son producteur
+				//ajout du message ï¿½ la pile des demandes en attendant de recevoir la demande de son producteur
 				else{
 					AID demandeAidTransport = msg.getSender();
 					int demandePrixTransport = Integer.parseInt(msg.getContent());

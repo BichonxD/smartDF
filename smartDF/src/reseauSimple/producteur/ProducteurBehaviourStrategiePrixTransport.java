@@ -30,7 +30,7 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 		int electriciteAFournirPrevisionnel = 0;
 		
 		if (((ProducteurAgent) myAgent).getClientsFournisseur() != null && ((ProducteurAgent) myAgent).getClientsFournisseur().size() != 0) {
-			ACLMessage electriciteprevisionnel = new ACLMessage(AbstractAgent.BESOIN_CONSOMMATEUR_DEMANDE);
+			ACLMessage electriciteprevisionnel = new ACLMessage(AbstractAgent.CONSOMMATEUR_BESOIN_DEMANDE);
 			for (AID id : ((ProducteurAgent) myAgent).getClientsFournisseur())
 				electriciteprevisionnel.addReceiver(id);
 			myAgent.send(electriciteprevisionnel);
@@ -38,7 +38,7 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 			int nombreReponse = 0;
 			
 			while (nombreReponse < ((ProducteurAgent) myAgent).getClientsFournisseur().size()) {
-				ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.BESOIN_CONSOMMATEUR_REPONSE));
+				ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.CONSOMMATEUR_BESOIN_REPONSE));
 				
 				if(msg != null)
 				{
@@ -51,7 +51,7 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 		int capaciteTransportPersonnel = 0;
 		
 		if (((ProducteurAgent) myAgent).getTransportsFournisseur() != null && ((ProducteurAgent) myAgent).getTransportsFournisseur().size() != 0) {
-			ACLMessage capaciteprevisionnel = new ACLMessage(AbstractAgent.CAPACITE_TRANSPORTEUR_DEMANDE);
+			ACLMessage capaciteprevisionnel = new ACLMessage(AbstractAgent.TRANSPORTEUR_CAPACITE_DEMANDE);
 			for (AID id : ((ProducteurAgent) myAgent).getTransportsFournisseur())
 				capaciteprevisionnel.addReceiver(id);
 			myAgent.send(capaciteprevisionnel);
@@ -59,7 +59,7 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 			int nombreReponse = 0;
 			
 			while (nombreReponse < ((ProducteurAgent) myAgent).getTransportsFournisseur().size()) {
-				ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.CAPACITE_TRANSPORTEUR_REPONSE));
+				ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_CAPACITE_REPONSE));
 				
 				if(msg != null)
 				{
@@ -82,7 +82,7 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 		}
 		
 		if (((ProducteurAgent) myAgent).getPrixFournisseur() != nouveauPrix) {
-			ACLMessage changementPrix = new ACLMessage(AbstractAgent.PRIX_PRODUCTEUR_CHANGEMENT);
+			ACLMessage changementPrix = new ACLMessage(AbstractAgent.PRODUCTEUR_PRIX_CHANGEMENT);
 			for (AID id : ((ProducteurAgent) myAgent).getClientsFournisseur())
 				changementPrix.addReceiver(id);
 			changementPrix.setContent(Integer.toString(nouveauPrix));

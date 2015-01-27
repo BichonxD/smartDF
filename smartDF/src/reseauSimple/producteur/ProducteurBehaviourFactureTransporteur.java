@@ -22,7 +22,7 @@ public class ProducteurBehaviourFactureTransporteur extends OneShotBehaviour
 		int electriciteATransporter = 0;
 		
 		if (((ProducteurAgent) myAgent).getClientsFournisseur() != null && ((ProducteurAgent) myAgent).getClientsFournisseur().size() != 0) {
-			ACLMessage electriciteprevisionnel = new ACLMessage(AbstractAgent.BESOIN_CONSOMMATEUR_DEMANDE);
+			ACLMessage electriciteprevisionnel = new ACLMessage(AbstractAgent.CONSOMMATEUR_BESOIN_DEMANDE);
 			for (AID id : ((ProducteurAgent) myAgent).getClientsFournisseur())
 				electriciteprevisionnel.addReceiver(id);
 			myAgent.send(electriciteprevisionnel);
@@ -30,7 +30,7 @@ public class ProducteurBehaviourFactureTransporteur extends OneShotBehaviour
 			int nombreReponse = 0;
 			
 			while (nombreReponse < ((ProducteurAgent) myAgent).getClientsFournisseur().size()) {
-				ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.BESOIN_CONSOMMATEUR_REPONSE));
+				ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.CONSOMMATEUR_BESOIN_REPONSE));
 				
 				if(msg != null)
 				{
@@ -43,7 +43,7 @@ public class ProducteurBehaviourFactureTransporteur extends OneShotBehaviour
 		int capaciteTransportPersonnel = 0;
 		
 		if (((ProducteurAgent) myAgent).getTransportsFournisseur() != null && ((ProducteurAgent) myAgent).getTransportsFournisseur().size() != 0) {
-			ACLMessage capaciteprevisionnel = new ACLMessage(AbstractAgent.CAPACITE_TRANSPORTEUR_DEMANDE);
+			ACLMessage capaciteprevisionnel = new ACLMessage(AbstractAgent.TRANSPORTEUR_CAPACITE_DEMANDE);
 			for (AID id : ((ProducteurAgent) myAgent).getTransportsFournisseur())
 				capaciteprevisionnel.addReceiver(id);
 			myAgent.send(capaciteprevisionnel);
@@ -51,7 +51,7 @@ public class ProducteurBehaviourFactureTransporteur extends OneShotBehaviour
 			int nombreReponse = 0;
 			
 			while (nombreReponse < ((ProducteurAgent) myAgent).getTransportsFournisseur().size()) {
-				ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.CAPACITE_TRANSPORTEUR_REPONSE));
+				ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_CAPACITE_REPONSE));
 				
 				if(msg != null)
 				{

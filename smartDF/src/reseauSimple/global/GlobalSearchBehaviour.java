@@ -11,6 +11,7 @@ public class GlobalSearchBehaviour extends OneShotBehaviour
 {
 	private static final long serialVersionUID = 1L;
 	private DFAgentDescription dfdRecherche = null;
+	private DFAgentDescription dfdRechercheTransporteurOfficiel = null;
 	private DFAgentDescription dfdRechercheOptionnelle = null;
 	
 	public GlobalSearchBehaviour(Agent a, DFAgentDescription dfdRecherche)
@@ -19,10 +20,18 @@ public class GlobalSearchBehaviour extends OneShotBehaviour
 		this.dfdRecherche = dfdRecherche;
 	}
 	
-	public GlobalSearchBehaviour(Agent a, DFAgentDescription dfdRecherche, DFAgentDescription dfdRechercheOptionnelle)
+	public GlobalSearchBehaviour(Agent a, DFAgentDescription dfdRecherche, DFAgentDescription dfdRechercheTransporteurOfficiel)
 	{
 		super(a);
 		this.dfdRecherche = dfdRecherche;
+		this.dfdRechercheTransporteurOfficiel = dfdRechercheTransporteurOfficiel;
+	}
+	
+	public GlobalSearchBehaviour(Agent a, DFAgentDescription dfdRecherche, DFAgentDescription dfdRechercheTransporteurOfficiel, DFAgentDescription dfdRechercheOptionnelle)
+	{
+		super(a);
+		this.dfdRecherche = dfdRecherche;
+		this.dfdRechercheTransporteurOfficiel = dfdRechercheTransporteurOfficiel;
 		this.dfdRechercheOptionnelle = dfdRechercheOptionnelle;
 	}
 	
@@ -46,6 +55,29 @@ public class GlobalSearchBehaviour extends OneShotBehaviour
 			for(int i = 0; i < resultRecherche.length; i++)
 			{
 				((AbstractAgent) myAgent).getAnnuairePerso()[i] = resultRecherche[i].getName();
+			}
+		}
+		
+		if(dfdRechercheTransporteurOfficiel != null)
+		{
+			DFAgentDescription[] resultRechercheTransporteurOfficiel = null;
+			
+			try
+			{
+				resultRechercheTransporteurOfficiel = DFService.search(myAgent, dfdRechercheTransporteurOfficiel);
+			}catch(FIPAException e)
+			{
+				e.printStackTrace();
+				System.err.println("Erreur aucun résultat trouvé pour la recherche optionnnelle.");
+			}
+			
+			if(resultRechercheTransporteurOfficiel != null)
+			{
+				((AbstractAgent) myAgent).setAnnuairePersoTransporteurOfficiel(new AID[resultRechercheTransporteurOfficiel.length]);
+				for(int i = 0; i < resultRechercheTransporteurOfficiel.length; i++)
+				{
+					((AbstractAgent) myAgent).getAnnuairePersoTransporteurOfficiel()[i] = resultRechercheTransporteurOfficiel[i].getName();
+				}
 			}
 		}
 		

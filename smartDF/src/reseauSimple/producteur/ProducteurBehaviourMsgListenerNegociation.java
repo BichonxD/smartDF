@@ -18,9 +18,9 @@ public class ProducteurBehaviourMsgListenerNegociation extends CyclicBehaviour {
 		// Reçoit les messages suivant et ecarte les autres
 		MessageTemplate mt = 
 				MessageTemplate.or(MessageTemplate.or(
-				MessageTemplate.MatchPerformative(AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT),
-				MessageTemplate.MatchPerformative(AbstractAgent.PRIX_PRODUCTEUR_DEMANDE)),
-				MessageTemplate.MatchPerformative(AbstractAgent.PRIX_PRODUCTEUR_DESABONNEMENT)); 
+				MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_ABONNEMENT),
+				MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_PRIX_DEMANDE)),
+				MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_DESABONNEMENT)); 
 		ACLMessage msg = myAgent.receive(mt);
 		
 		if(msg != null)
@@ -29,17 +29,17 @@ public class ProducteurBehaviourMsgListenerNegociation extends CyclicBehaviour {
 			switch(msg.getPerformative())
 			{
 				
-				case AbstractAgent.PRIX_PRODUCTEUR_ABONNEMENT :
+				case AbstractAgent.PRODUCTEUR_ABONNEMENT :
 					((ProducteurAgent) myAgent).addClientsFournisseur(msg.getSender());
 					break;
 				
-				case AbstractAgent.PRIX_PRODUCTEUR_DESABONNEMENT :
+				case AbstractAgent.PRODUCTEUR_DESABONNEMENT :
 					((ProducteurAgent) myAgent).removeClientsFournisseur(msg.getSender());
 					break;
 					
-				case AbstractAgent.PRIX_PRODUCTEUR_DEMANDE :
+				case AbstractAgent.PRODUCTEUR_PRIX_DEMANDE :
 					ACLMessage reply = msg.createReply();
-					reply.setPerformative(AbstractAgent.PRIX_PRODUCTEUR_REPONSE);
+					reply.setPerformative(AbstractAgent.PRODUCTEUR_PRIX_REPONSE);
 					reply.setContent(Integer.toString(((ProducteurAgent) myAgent).getPrixFournisseur()));
 					myAgent.send(reply);
 					break;

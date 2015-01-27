@@ -15,32 +15,44 @@ public abstract class AbstractAgent extends Agent
 	private static final long serialVersionUID = 1L;
 	private String serviceName = "defaultService";
 	private AID[] annuairePerso;
+	private AID[] annuairePersoTransporteurOfficiel;
 	private AID[] annuairePersoOptionnel;
 	private ArrayList<Behaviour> listCyclicBehaviour = new ArrayList<Behaviour>();
 	
-	static public final int PRIX_PRODUCTEUR_DEMANDE = 100;
-	static public final int PRIX_PRODUCTEUR_REPONSE = 101;
-	static public final int PRIX_PRODUCTEUR_ABONNEMENT = 102;
-	static public final int PRIX_PRODUCTEUR_DESABONNEMENT = 103;
-	static public final int PRIX_PRODUCTEUR_CHANGEMENT = 104;
-	
-	static public final int FACTURATION_PRODUCTEUR_DEMANDE = 110;
-	static public final int FACTURATION_PRODUCTEUR_REPONSE = 111;
+	// Informations sur le consommateur
+	static public final int CONSOMMATEUR_BESOIN_DEMANDE = 100;
+	static public final int CONSOMMATEUR_BESOIN_REPONSE = 101;
 
-	static public final int HORLOGE_PHASE_NEGOCIATION = 120;
-	static public final int HORLOGE_PHASE_FACTURATION = 121;
-	static public final int HORLOGE_PHASE_DEPARTAGE = 122;
-	
-	static public final int AMENDE_PRODUCTEUR = 130;
-	
-	static public final int BESOIN_CONSOMMATEUR_DEMANDE = 140;
-	static public final int BESOIN_CONSOMMATEUR_REPONSE = 141;
-	
-	static public final int CAPACITE_TRANSPORTEUR_DEMANDE = 150;
-	static public final int CAPACITE_TRANSPORTEUR_REPONSE = 151;
-	
-	static public final int PRIX_TRANSPORTEUR_DEMANDE = 160;
-	static public final int PRIX_TRANSPORTEUR_REPONSE = 161;
+	// Informations sur les phases de l'horloge
+	static public final int HORLOGE_PHASE_NEGOCIATION = 110;
+	static public final int HORLOGE_PHASE_FACTURATION = 111;
+	static public final int HORLOGE_PHASE_DEPARTAGE = 112;
+
+	// Informations sur le producteur
+	static public final int PRODUCTEUR_PRIX_DEMANDE = 120;
+	static public final int PRODUCTEUR_PRIX_REPONSE = 121;
+	static public final int PRODUCTEUR_PRIX_CHANGEMENT = 122;
+	static public final int PRODUCTEUR_ABONNEMENT = 123;
+	static public final int PRODUCTEUR_DESABONNEMENT = 124;
+	static public final int PRODUCTEUR_ARGENT_DEMANDE = 125;
+	static public final int PRODUCTEUR_ARGENT_REPONSE = 126;
+	static public final int PRODUCTEUR_NBCLIENT_DEMANDE = 127;
+	static public final int PRODUCTEUR_NBCLIENT_REPONSE = 128;
+
+	// Facturation pour le producteur
+	static public final int PRODUCTEUR_FACTURATION_DEMANDE = 130;
+	static public final int PRODUCTEUR_FACTURATION_REPONSE = 131;
+
+	// Constantes pour le producteur en phase departage
+	static public final int PRODUCTEUR_AMENDE = 140;
+
+	// Informations sur le transporteur
+	static public final int TRANSPORTEUR_CAPACITE_DEMANDE = 150;
+	static public final int TRANSPORTEUR_CAPACITE_REPONSE = 151;
+	static public final int TRANSPORTEUR_PRIX_DEMANDE = 152;
+	static public final int TRANSPORTEUR_PRIX_REPONSE = 153;
+	static public final int TRANSPORTEUR_ARGENT_DEMANDE = 154;
+	static public final int TRANSPORTEUR_ARGENT_REPONSE = 155;
 	
 	protected void setup()
 	{
@@ -75,6 +87,16 @@ public abstract class AbstractAgent extends Agent
 	public AID[] getAnnuairePerso()
 	{
 		return annuairePerso;
+	}
+	
+	public void setAnnuairePersoTransporteurOfficiel(AID[] annuairePersoTransporteurOfficiel)
+	{
+		this.annuairePersoTransporteurOfficiel = annuairePersoTransporteurOfficiel;
+	}
+	
+	public AID[] getAnnuairePersoTransporteurOfficiel()
+	{
+		return annuairePersoTransporteurOfficiel;
 	}
 	
 	public void setAnnuairePersoOptionnel(AID[] annuairePersoOptionnel)

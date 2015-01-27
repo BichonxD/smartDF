@@ -41,7 +41,7 @@ public class ConsommateurBehaviourMsgListenerFacturation extends CyclicBehaviour
 		// TODO Traitement du message
 		if(msg != null)
 		{
-			if(msg.getPerformative() == AbstractAgent.FACTURATION_PRODUCTEUR_DEMANDE)
+			if(msg.getPerformative() == AbstractAgent.PRODUCTEUR_FACTURATION_DEMANDE)
 			{	
 				int besoin = ((ConsommateurAgent) myAgent).getBesoin();
 				
@@ -59,16 +59,16 @@ public class ConsommateurBehaviourMsgListenerFacturation extends CyclicBehaviour
 				
 				int aPayer = besoin * ((ConsommateurAgent) myAgent).getPrixfournisseur();
 				ACLMessage reply = msg.createReply();
-				reply.setPerformative(AbstractAgent.FACTURATION_PRODUCTEUR_REPONSE);
+				reply.setPerformative(AbstractAgent.PRODUCTEUR_FACTURATION_REPONSE);
 				reply.setContent(Integer.toString(aPayer));
 				myAgent.send(reply);
 				
 				((ConsommateurAgent) myAgent).setaEteFacture(true);
 			}
 			
-			else if (msg.getPerformative() == AbstractAgent.BESOIN_CONSOMMATEUR_DEMANDE) {
+			else if (msg.getPerformative() == AbstractAgent.CONSOMMATEUR_BESOIN_DEMANDE) {
 				ACLMessage reply = msg.createReply();
-				reply.setPerformative(AbstractAgent.BESOIN_CONSOMMATEUR_REPONSE);
+				reply.setPerformative(AbstractAgent.CONSOMMATEUR_BESOIN_REPONSE);
 				
 				int besoin = ((ConsommateurAgent) myAgent).getBesoin();
 

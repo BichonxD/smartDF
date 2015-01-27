@@ -1,14 +1,7 @@
 package reseauSimple.observateur;
 
-import reseauSimple.consommateur.ConsommateurAgent;
-import reseauSimple.consommateur.ConsommateurBehaviourAskPrixProducteur;
-import reseauSimple.consommateur.ConsommateurBehaviourGestionnaireDepartage;
-import reseauSimple.consommateur.ConsommateurBehaviourMsgListenerFacturation;
-import reseauSimple.consommateur.ConsommateurBehaviourMsgListenerNegociation;
 import reseauSimple.global.AbstractAgent;
-import reseauSimple.global.GlobalBehaviourHorlogeTalker;
 import reseauSimple.global.GlobalSearchBehaviour;
-import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -18,6 +11,8 @@ import jade.lang.acl.MessageTemplate;
 public class ObservateurBehaviourHorlogeListener extends CyclicBehaviour
 {
 	private static final long serialVersionUID = 1L;
+	
+	private int nbTourEffectue = 0;
 	
 	@Override
 	public void action()
@@ -32,79 +27,54 @@ public class ObservateurBehaviourHorlogeListener extends CyclicBehaviour
 			{
 				/* 
 				 * Si nous sommes en phase de négociation :
-				 * - on met à jour les annuaires,
-				 * - on met à jour les prix producteurs et transporteurs.
+				 * - on MAJ les annuaires tous les 3 coups.
 				 */
 				case AbstractAgent.HORLOGE_PHASE_NEGOCIATION :
 					
-					// On supprime tous les comportements existants.
-					for(Behaviour b : ((AbstractAgent) myAgent).getListCyclicBehaviour())
+					// On MAJ les annuaires tous les 3 coups.
+					if(nbTourEffectue % 3 == 0)
 					{
-						myAgent.removeBehaviour(b);
-					}
-					((AbstractAgent) myAgent).getListCyclicBehaviour().clear();
-					
-					if(nbTourEffectue % ((ConsommateurAgent) myAgent).getDureeRenouvellement() == 0)
-					{
-						// On met à jour l'annuaire des producteurs.
-						DFAgentDescription rechercheProducteur = new DFAgentDescription();
-						ServiceDescription SDProducteur = new ServiceDescription();
-						SDProducteur.setName("producteur");
-						SDProducteur.setType("producteur");
-						rechercheProducteur.addServices(SDProducteur);
-						myAgent.addBehaviour(new GlobalSearchBehaviour(myAgent, rechercheProducteur));
+						// Paramètres pour la récupération des annuaires nécessaires
+						DFAgentDescription dfdRechercheProducteur = new DFAgentDescription();
+						ServiceDescription sdProd = new ServiceDescription();
+						sdProd.setName("producteur");
+						sdProd.setType("producteur");
+						dfdRechercheProducteur.addServices(sdProd);
 						
-						// On demande le prix à tous les producteurs.
-						myAgent.addBehaviour(new ConsommateurBehaviourAskPrixProducteur(myAgent));
+						DFAgentDescription dfdRechercheTransporteur = new DFAgentDescription();
+						ServiceDescription sdTrans = new ServiceDescription();
+						sdTrans.setName("transporteur");
+						sdTrans.setType("transporteur");
+						dfdRechercheTransporteur.addServices(sdTrans);
+						
+						DFAgentDescription dfdrechercheTransporteurOfficiel = new DFAgentDescription();
+						ServiceDescription SDTransporteurOfficiel = new ServiceDescription();
+						SDTransporteurOfficiel.setName("transporteur-officiel");
+						SDTransporteurOfficiel.setType("transporteur-officiel");
+						dfdrechercheTransporteurOfficiel.addServices(SDTransporteurOfficiel);
+						
+						// Récupération des annuaires
+						myAgent.addBehaviour(new GlobalSearchBehaviour(myAgent, dfdRechercheProducteur, dfdRechercheTransporteur, dfdrechercheTransporteurOfficiel));
 					}
-					// On ecoute les messages émis par les producteurs.
-					myAgent.addBehaviour(new ConsommateurBehaviourMsgListenerNegociation(myAgent, msg));
 					break;
 				
-				/*
-				 * Si nous sommes en phase de facturation :
-				 * - on créé un listener pour cette phase,
-				 * - on signale qu'on a terminé notre phase de facturation.
-				 */
-				case AbstractAgent.HORLOGE_PHASE_FACTURATION :
-					
-					// On supprime tous les comportements existants.
-					for(Behaviour b : ((AbstractAgent) myAgent).getListCyclicBehaviour())
-					{
-						myAgent.removeBehaviour(b);
-					}
-					((AbstractAgent) myAgent).getListCyclicBehaviour().clear();
-					
-					// On créé un listener pour cette phase.
-					ConsommateurBehaviourMsgListenerFacturation cbmlf = new ConsommateurBehaviourMsgListenerFacturation(myAgent, msg);
-					myAgent.addBehaviour(cbmlf);
-					((AbstractAgent) myAgent).getListCyclicBehaviour().add(cbmlf);
-					
-					// On signale qu'on a terminé notre phase de facturation.
-					myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msg));
-					break;
-					
-				/*
-				 * Si nous sommes en phase de departage :
-				 * - on créé un comportement qui va gérer la phase.
-				 */
 				case AbstractAgent.HORLOGE_PHASE_DEPARTAGE :
-					
-					// On supprime tous les comportements existants.
-					for(Behaviour b : ((AbstractAgent) myAgent).getListCyclicBehaviour())
-					{
-						myAgent.removeBehaviour(b);
-					}
-					((AbstractAgent) myAgent).getListCyclicBehaviour().clear();
-					
-					// On créé un comportement qui va gérer la phase
-					myAgent.addBehaviour(new ConsommateurBehaviourGestionnaireDepartage(myAgent, msg));
+					nbTourEffectue++;
 					break;
 					
 				default :
-					System.err.println("Message reçu inconnu.");
 					break;
 			}
+			
+			/* 
+			 * Dans tous les cas :
+			 * - on signale à la GUI qu'on change de phase,
+			 * - on demande les prix et l'argent de tous les producteurs,
+			 * - on demande les prix et l'argent de tous les transporteurs.
+			 */
+			((ObservateurAgent) myAgent).getMyGUI().changementDePhase(msg.getPerformative());
+			myAgent.addBehaviour(new ObservateurBehaviourAskProducteurs(myAgent));
+			myAgent.addBehaviour(new ObservateurBehaviourAskTransporteurs(myAgent));
 		}
 		else
 			block();
