@@ -32,7 +32,7 @@ public class ProducteurAgent extends AbstractAgent
 
 		System.out.println("Creation d'un nouveau producteur :\n" + toString());
 		
-		addBehaviour(new ConsommateurBehaviourHorlogeListener(this));
+		addBehaviour(new ProducteurBehaviourHorlogeListener(this));
 	}
 	
 	public int getIdProducteur()

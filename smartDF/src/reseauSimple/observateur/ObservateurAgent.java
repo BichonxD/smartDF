@@ -44,7 +44,7 @@ public class ObservateurAgent extends AbstractAgent
 	@Override
 	public String toString()
 	{
-		return "Observateur " + idObservateur + " nommé : " + getName();
+		return "Observateur " + idObservateur + " nommé : " + getName() + "\n";
 	}
 	
 }

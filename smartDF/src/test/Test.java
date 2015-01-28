@@ -8,6 +8,7 @@ package test;
 import java.util.ArrayList;
 
 import reseauSimple.consommateur.ConsommateurAgent;
+import reseauSimple.horloge.HorlogeAgent;
 import reseauSimple.observateur.ObservateurAgent;
 import reseauSimple.producteur.ProducteurAgent;
 import reseauSimple.transporteur.TransporteurAgent;
@@ -47,9 +48,12 @@ public class Test
 		
 		// Transporteur
 		lAC.add(mc.createNewAgent("Transporteur Officiel", TransporteurAgent.class.getName(), new Object[0]));
-		
+
 		// Observateur
 		lAC.add(mc.createNewAgent("Observateur", ObservateurAgent.class.getName(), new Object[0]));
+		
+		// Horloge
+		lAC.add(mc.createNewAgent("Horloge", HorlogeAgent.class.getName(), new Object[0]));
 		
 		for(AgentController aC : lAC)
 		{
