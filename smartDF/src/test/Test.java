@@ -1,5 +1,5 @@
 /**
- * A ajouter :
+ * A ajouter pour lancer le programme :
  * -gui jade.Boot smartDFTest:test.Test
  */
 
@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import reseauSimple.consommateur.ConsommateurAgent;
 import reseauSimple.observateur.ObservateurAgent;
 import reseauSimple.producteur.ProducteurAgent;
+import reseauSimple.transporteur.TransporteurAgent;
 import jade.core.Runtime;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -29,15 +30,26 @@ public class Test
 
 		int nbConsommateur = (int) (Math.random() * 7 + 3);
 		int nbProducteur = (int) (Math.random() * 7 + 3);
-		int nbTransporteur = (int) (Math.random() * 7 + 3);
 		
 		ArrayList<AgentController> lAC = new ArrayList<AgentController>();
-		for(int i = 0; i < nbClient + 1; i++)
+		
+		// Consommateurs
+		for(int i = 0; i < nbConsommateur + 1; i++)
 		{
 			lAC.add(mc.createNewAgent("Consommateur " + (i + 1), ConsommateurAgent.class.getName(), new Object[0]));
 		}
-		lAC.add(mc.createNewAgent("Producteur 1", ProducteurAgent.class.getName(), new Object[0]));
-		lAC.add(mc.createNewAgent("Observateur 1", ObservateurAgent.class.getName(), new Object[0]));
+		
+		// Producteurs
+		for(int i = 0; i < nbProducteur + 1; i++)
+		{
+			lAC.add(mc.createNewAgent("Producteur " + (i + 1), ProducteurAgent.class.getName(), new Object[0]));
+		}
+		
+		// Transporteur
+		lAC.add(mc.createNewAgent("Transporteur Officiel", TransporteurAgent.class.getName(), new Object[0]));
+		
+		// Observateur
+		lAC.add(mc.createNewAgent("Observateur", ObservateurAgent.class.getName(), new Object[0]));
 		
 		for(AgentController aC : lAC)
 		{

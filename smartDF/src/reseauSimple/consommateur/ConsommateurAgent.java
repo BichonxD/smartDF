@@ -100,7 +100,7 @@ public class ConsommateurAgent extends AbstractAgent
 	@Override
 	public String toString()
 	{
-		String ret = "Consommateur " + idConsommateur + " : \n";
+		String ret = "Consommateur " + idConsommateur + " nommé : " + getName() + "\n";
 		ret += "\tBesoins = " + besoin + " kWh\n";
 		if(consommateurProducteur)
 		{

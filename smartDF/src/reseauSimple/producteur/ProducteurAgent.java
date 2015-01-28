@@ -117,7 +117,7 @@ public class ProducteurAgent extends AbstractAgent
 	@Override
 	public String toString()
 	{
-		String ret = "Consommateur " + idProducteur + " : \n";
+		String ret = "Consommateur " + idProducteur + " nommé : " + getName() + "\n";
 		ret += "\tPrix = " + prixFournisseur + " €/kWh\n";
 		ret += "\tPossède : " + argentDispo + " €\n";
 		ret += "\tDoit fournir : " + electriciteAFournir + " kWh\n";

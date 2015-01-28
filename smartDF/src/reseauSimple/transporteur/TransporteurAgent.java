@@ -105,7 +105,7 @@ public class TransporteurAgent extends AbstractAgent
 	@Override
 	public String toString()
 	{
-		String ret = "Transporteur " + idTransporteur + " : \n";
+		String ret = "Transporteur " + idTransporteur + " nommé : " + getName() + "\n";
 		if(transporteurOfficiel)
 		{
 			ret += "\tC'est un Consommateur Officiel.\n";
