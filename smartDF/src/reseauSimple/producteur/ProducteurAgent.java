@@ -15,8 +15,10 @@ public class ProducteurAgent extends AbstractAgent
 	// Variables statiques
 	private static int currentID = 0;
 	
-	// Variables propres
+	// Caractéristiques du producteur
 	private final int idProducteur = getNextID();
+	
+	// Variables propres
 	private int prixFournisseur = (int) (Math.random() * (PRIX_MAX - PRIX_MIN) + PRIX_MIN);
 	private int argentDispo = 0;
 	private int electriciteAFournir = 0;
@@ -31,6 +33,11 @@ public class ProducteurAgent extends AbstractAgent
 		System.out.println("Creation d'un nouveau producteur :\n" + toString());
 		
 		addBehaviour(new ConsommateurBehaviourHorlogeListener());
+	}
+	
+	public int getIdProducteur()
+	{
+		return idProducteur;
 	}
 	
 	public int getPrixFournisseur()

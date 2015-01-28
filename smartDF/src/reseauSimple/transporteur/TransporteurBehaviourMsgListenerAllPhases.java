@@ -2,14 +2,8 @@ package reseauSimple.transporteur;
 
 import java.util.TreeMap;
 
-import com.sun.org.apache.xpath.internal.FoundIndex;
-
-import reseauSimple.consommateur.ConsommateurAgent;
 import reseauSimple.global.AbstractAgent;
-import reseauSimple.global.GlobalBehaviourHorlogeTalker;
 import jade.core.AID;
-import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -26,16 +20,14 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 		capaciteRestante = ((TransporteurAgent) myAgent).getCapaciteTransporteur();
 		prixTransporteur = ((TransporteurAgent) myAgent).getPrixKWhTransporteur();
 		
-		//on envoi notre argent à notre producteur :
+		//on envoi notre argent a notre producteur :
 		ACLMessage msg = new ACLMessage(AbstractAgent.TRANSPORTEUR_ENVOI_ARGENT);
 		msg.setSender(((TransporteurAgent) myAgent).getFournisseurID());
 		msg.setContent(Integer.toString(prixTransporteur));
 		myAgent.send(msg);
-		//et on le met à zero
-		((TransporteurAgent) myAgent).setArgentTransporteur(0);
-		//TODO luc, tu récupère l'argent et tu l'ajoute a tes tunes
 		
-		//TODO politique de changement de prix
+		//et on le met a zero
+		((TransporteurAgent) myAgent).setArgentTransporteur(0);
 		facturationMonFournisseur = false;
 		demandeEnAttente.clear();
 	}
@@ -67,7 +59,7 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 				myAgent.send(reply);
 			}
 			
-			//demande capacité => envoi capacité
+			//demande capacitï¿½ => envoi capacitï¿½
 			else if (msg.getPerformative() == AbstractAgent.TRANSPORTEUR_CAPACITE_DEMANDE){
 				ACLMessage reply = msg.createReply();
 				reply.setPerformative(AbstractAgent.TRANSPORTEUR_CAPACITE_REPONSE);
@@ -98,7 +90,7 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 							int aPayer = demandeEnAttente.get(id) * prixTransporteur;
 							msgReply.setContent(Integer.toString(aPayer));
 							myAgent.send(msgReply);
-							//TODO luc doit traiter ce message et me payer! Sinon pénalité :)
+							//TODO luc doit traiter ce message et me payer! Sinon pï¿½nalitï¿½ :)
 						}
 						
 						else{
@@ -134,7 +126,7 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 					}
 				}
 				
-				//et enfin si on a pas traité le fournisseur, on met le message dans la pile des demandes en attendant de recevoir la demande de son producteur
+				//et enfin si on a pas traite le fournisseur, on met le message dans la pile des demandes en attendant de recevoir la demande de son producteur
 				else{
 					AID demandeAidTransport = msg.getSender();
 					int demandePrixTransport = Integer.parseInt(msg.getContent());

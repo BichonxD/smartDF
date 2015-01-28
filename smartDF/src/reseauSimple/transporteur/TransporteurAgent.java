@@ -1,62 +1,124 @@
 package reseauSimple.transporteur;
 
 import reseauSimple.global.AbstractAgent;
+import reseauSimple.producteur.ProducteurAgent;
 import jade.core.AID;
 
-public class TransporteurAgent extends AbstractAgent {
+public class TransporteurAgent extends AbstractAgent
+{
+	// Constantes
 	private static final long serialVersionUID = 1L;
+	private static final int CAPACITE_MAX = 50;
+	private static final int CAPACITE_MIN = 15;
+	private static final int PRIX_MAX = 10;
+	private static final int PRIX_MIN = 5;
 
-	private AbstractAgent proprietaire;
+	// Variables statiques
+	private static int currentID = 0;
+
+	// Caractéristiques du transporteur
+	private final int idTransporteur = getNextID();
+	private final int prixKWhTransporteur = (int) (Math.random() * (PRIX_MAX - PRIX_MIN) + PRIX_MIN);
+	
+	// Variables propres
+	private ProducteurAgent proprietaire = null;
 	private int capaciteTransporteur;
-	private int prixKWhTransporteur;
-	private int argentTransporteur;
+	private int argentTransporteur = 0;
+	private boolean transporteurOfficiel = false;
 	private TransporteurBehaviourMsgListenerAllPhases tansporteurBehaviourMsg;
-
-	protected void setup() {
-		if (getArguments().length != 3) {
-			System.err
-					.println("Nombre d'argument invalides. Il faut 3 arguments : proprietaire, capaciteTransporteur, prixKWhTransporteur.");
-		} else {
-			proprietaire = (AbstractAgent) getArguments()[0];
-			capaciteTransporteur = (int) getArguments()[1];
-			prixKWhTransporteur = (int) getArguments()[2];
-			setServiceName("transporteur");
-			super.setup();
-
-			System.out.println("Creation d'un nouveau transporteur :\n" + toString());
-
-			addBehaviour(new TransporteurBehaviourHorlogeListener());
-			tansporteurBehaviourMsg = new TransporteurBehaviourMsgListenerAllPhases();
-			addBehaviour(tansporteurBehaviourMsg);
+	
+	protected void setup()
+	{
+		if(getArguments().length == 1)
+		{
+			try
+			{
+				proprietaire = (ProducteurAgent) getArguments()[0];
+			}
+			catch(ClassCastException e)
+			{
+				transporteurOfficiel = true;
+			}
 		}
-	}
-
-	public AID getFournisseurID() {
-		return proprietaire.getAID();
-	}
-
-	public int getCapaciteTransporteur() {
-		return capaciteTransporteur;
-	}
-
-	public int getPrixKWhTransporteur() {
-		return prixKWhTransporteur;
-	}
-
-	public void setPrixKWhTransporteur(int prixKWhTransporteur) {
-		this.prixKWhTransporteur = prixKWhTransporteur;
+		else
+			transporteurOfficiel = true;
+		
+		if(transporteurOfficiel)
+		{
+			setServiceName("transporteur-officiel");
+			capaciteTransporteur = Integer.MAX_VALUE;
+		}
+		else
+		{
+			setServiceName("transporteur");
+			capaciteTransporteur =  (int) (Math.random() * (CAPACITE_MAX - CAPACITE_MIN) + CAPACITE_MIN);
+		}
+		super.setup();
+		
+		System.out.println("Creation d'un nouveau transporteur :\n" + toString());
+		
+		addBehaviour(new TransporteurBehaviourHorlogeListener());
+		tansporteurBehaviourMsg = new TransporteurBehaviourMsgListenerAllPhases();
+		addBehaviour(tansporteurBehaviourMsg);
 	}
 	
-	public int getArgentTransporteur() {
+	public AID getFournisseurID()
+	{
+		return proprietaire == null ? null : proprietaire.getAID();
+	}
+	
+	public int getCapaciteTransporteur()
+	{
+		return capaciteTransporteur;
+	}
+	
+	public int getPrixKWhTransporteur()
+	{
+		return prixKWhTransporteur;
+	}
+	
+	public int getArgentTransporteur()
+	{
 		return argentTransporteur;
 	}
 	
-	public void setArgentTransporteur(int argentTransporteur) {
+	public void setArgentTransporteur(int argentTransporteur)
+	{
 		this.argentTransporteur = argentTransporteur;
 	}
-
-	public TransporteurBehaviourMsgListenerAllPhases getTansporteurBehaviourMsg() {
+	
+	public static int getNextID()
+	{
+		return currentID++;
+	}
+	
+	public boolean isTransporteurOfficiel()
+	{
+		return transporteurOfficiel;
+	}
+	
+	public TransporteurBehaviourMsgListenerAllPhases getTansporteurBehaviourMsg()
+	{
 		return tansporteurBehaviourMsg;
 	}
-
+	
+	@Override
+	public String toString()
+	{
+		String ret = "Transporteur " + idTransporteur + " : \n";
+		if(transporteurOfficiel)
+		{
+			ret += "\tC'est un Consommateur Officiel.\n";
+			ret += "\tCapacité de transport illimitée.\n";
+		}
+		else
+		{
+			ret += "\tSon propriétaire est le Producteur " + proprietaire.getIdProducteur() + "\n";
+			ret += "\tCapacité de transport = " + capaciteTransporteur + " kWh\n";
+		}
+		ret += "\tPrix de vente du kWh = " + prixKWhTransporteur + " €/kWh\n";
+		ret += "\tArgent = " + argentTransporteur + " €\n";
+		return ret;
+	}
+	
 }
