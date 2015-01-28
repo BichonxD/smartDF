@@ -9,6 +9,7 @@ public class TransporteurAgent extends AbstractAgent {
 	private AbstractAgent proprietaire;
 	private int capaciteTransporteur;
 	private int prixKWhTransporteur;
+	private int argentTransporteur;
 	private TransporteurBehaviourMsgListenerAllPhases tansporteurBehaviourMsg;
 
 	protected void setup() {
@@ -22,8 +23,7 @@ public class TransporteurAgent extends AbstractAgent {
 			setServiceName("transporteur");
 			super.setup();
 
-			System.out.println("Creation d'un nouveau transporteur :\n"
-					+ toString());
+			System.out.println("Creation d'un nouveau transporteur :\n" + toString());
 
 			addBehaviour(new TransporteurBehaviourHorlogeListener());
 			tansporteurBehaviourMsg = new TransporteurBehaviourMsgListenerAllPhases();
@@ -45,6 +45,14 @@ public class TransporteurAgent extends AbstractAgent {
 
 	public void setPrixKWhTransporteur(int prixKWhTransporteur) {
 		this.prixKWhTransporteur = prixKWhTransporteur;
+	}
+	
+	public int getArgentTransporteur() {
+		return argentTransporteur;
+	}
+	
+	public void setArgentTransporteur(int argentTransporteur) {
+		this.argentTransporteur = argentTransporteur;
 	}
 
 	public TransporteurBehaviourMsgListenerAllPhases getTansporteurBehaviourMsg() {
