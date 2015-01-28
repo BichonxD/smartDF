@@ -1,6 +1,7 @@
 package reseauSimple.horloge;
 
 import reseauSimple.global.AbstractAgent;
+import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
@@ -10,6 +11,11 @@ public class HorlogeBehaviourListener extends CyclicBehaviour
 	
 	private int phaseActuelle = AbstractAgent.HORLOGE_PHASE_NEGOCIATION;
 	private int nbReponseRecu = 0;
+	
+	public HorlogeBehaviourListener(Agent a)
+	{
+		super(a);
+	}
 	
 	@Override
 	public void action()

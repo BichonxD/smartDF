@@ -28,7 +28,7 @@ public class ObservateurAgent extends AbstractAgent
 		myGUI.setVisible(true);
 		
 		// Ajout d'un listener pour récupérer les réponses aux messages envoyés en continu
-		addBehaviour(new ObservateurBehaviourMsgListenerAllPhases());
+		addBehaviour(new ObservateurBehaviourMsgListenerAllPhases(this));
 	}
 	
 	public ObservateurGUI getMyGUI()

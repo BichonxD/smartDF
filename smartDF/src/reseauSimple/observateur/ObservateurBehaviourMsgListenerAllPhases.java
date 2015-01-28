@@ -3,6 +3,7 @@ package reseauSimple.observateur;
 import reseauSimple.global.AbstractAgent;
 import reseauSimple.global.GlobalBehaviourHorlogeTalker;
 import jade.core.AID;
+import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -12,6 +13,11 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 	private static final long serialVersionUID = 1L;
 	private int nbReponses = 0;
 	
+	public ObservateurBehaviourMsgListenerAllPhases(Agent a)
+	{
+		super(a);
+	}
+	
 	@Override
 	public void action()
 	{
@@ -19,11 +25,14 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 		AID[] producteursDisponibles = ((AbstractAgent) myAgent).getAnnuairePerso();
 		AID[] transporteursDisponibles = ((AbstractAgent) myAgent).getAnnuairePersoOptionnel();
 		AID[] transporteurOfficiel = ((AbstractAgent) myAgent).getAnnuairePersoTransporteurOfficiel();
+		int nbReponsesAttendues = 0;
 		
 		// Reçoit les messages de n'importe qui dans notre annuaire
 		MessageTemplate mt = null;
 		if(producteursDisponibles != null)
 		{
+			nbReponsesAttendues += producteursDisponibles.length;
+			
 			for(AID aid : producteursDisponibles)
 			{
 				if(mt == null)
@@ -35,6 +44,8 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 		
 		if(transporteursDisponibles != null)
 		{
+			nbReponsesAttendues += transporteursDisponibles.length;
+			
 			for(AID aid : transporteursDisponibles)
 			{
 				if(mt == null)
@@ -46,6 +57,8 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 		
 		if(transporteurOfficiel != null)
 		{
+			nbReponsesAttendues += transporteurOfficiel.length;
+			
 			for(AID aid : transporteurOfficiel)
 			{
 				if(mt == null)
@@ -113,7 +126,7 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 			block();
 		
 		// Si on a reçu des réponses de tous les agents on signale qu'on a finit cette phase à l'horloge
-		if(nbReponses == producteursDisponibles.length + transporteursDisponibles.length + transporteurOfficiel.length)
+		if(nbReponsesAttendues != 0 && nbReponses == nbReponsesAttendues)
 		{
 			myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msg));
 			nbReponses = 0;

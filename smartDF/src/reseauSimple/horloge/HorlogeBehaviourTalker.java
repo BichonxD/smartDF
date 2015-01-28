@@ -13,6 +13,7 @@ public class HorlogeBehaviourTalker extends OneShotBehaviour
 	
 	public HorlogeBehaviourTalker(Agent a, int msgPerformative)
 	{
+		super(a);
 		this.msgPerformative = msgPerformative;
 	}
 	

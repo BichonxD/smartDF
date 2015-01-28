@@ -32,7 +32,7 @@ public class ProducteurAgent extends AbstractAgent
 
 		System.out.println("Creation d'un nouveau producteur :\n" + toString());
 		
-		addBehaviour(new ConsommateurBehaviourHorlogeListener());
+		addBehaviour(new ConsommateurBehaviourHorlogeListener(this));
 	}
 	
 	public int getIdProducteur()
@@ -117,7 +117,7 @@ public class ProducteurAgent extends AbstractAgent
 	@Override
 	public String toString()
 	{
-		String ret = "Consommateur " + idProducteur + " nommé : " + getName() + "\n";
+		String ret = "Producteur " + idProducteur + " nommé : " + getName() + "\n";
 		ret += "\tPrix = " + prixFournisseur + " €/kWh\n";
 		ret += "\tPossède : " + argentDispo + " €\n";
 		ret += "\tDoit fournir : " + electriciteAFournir + " kWh\n";

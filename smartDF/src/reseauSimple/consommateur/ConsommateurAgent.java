@@ -20,7 +20,7 @@ public class ConsommateurAgent extends AbstractAgent
 	private final int idConsommateur = getNextID();
 	private final int besoin = (int) (Math.random() * (BESOIN_MAX - BESOIN_MIN) + BESOIN_MIN);
 	private final boolean consommateurProducteur = (((int) (Math.random() * 100))%2 == 0);
-	private final int capaciteProducteur = consommateurProducteur ? 0 : (int) (Math.random() * (besoin - 4 - PROD_MIN) + PROD_MIN);
+	private final int capaciteProducteur = consommateurProducteur ? (int) (Math.random() * (besoin - 4 - PROD_MIN) + PROD_MIN) : 0;
 	private final int dureeRenouvellement = (int) (Math.random() * (RENOUVELLEMENT_MAX - RENOUVELLEMENT_MIN) + RENOUVELLEMENT_MIN);
 	
 	// Variables propres
@@ -41,7 +41,7 @@ public class ConsommateurAgent extends AbstractAgent
 		fournisseurID = null;
 		prixfournisseur = 0;
 		
-		addBehaviour(new ConsommateurBehaviourHorlogeListener());
+		addBehaviour(new ConsommateurBehaviourHorlogeListener(this));
 	}
 	
 	public int getBesoin()
@@ -104,7 +104,7 @@ public class ConsommateurAgent extends AbstractAgent
 		ret += "\tBesoins = " + besoin + " kWh\n";
 		if(consommateurProducteur)
 		{
-			ret += "\tC'est un Consommateur-Producteur : ";
+			ret += "\tC'est un Consommateur-Producteur : \n";
 			ret += "\t\tProduction = " + capaciteProducteur + " kWh\n";
 		}
 		ret += "\tCherche un meilleur producteur tous les " + dureeRenouvellement + " tours.\n";

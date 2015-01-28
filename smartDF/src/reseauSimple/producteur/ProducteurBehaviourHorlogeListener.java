@@ -2,7 +2,8 @@ package reseauSimple.producteur;
 
 import reseauSimple.global.AbstractAgent;
 import reseauSimple.global.GlobalBehaviourHorlogeTalker;
-import reseauSimple.global.GlobalSearchBehaviour;
+import reseauSimple.global.GlobalBehaviourSearchAnnuaires;
+import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -13,6 +14,11 @@ import jade.lang.acl.MessageTemplate;
 public class ProducteurBehaviourHorlogeListener extends CyclicBehaviour
 {
 	private static final long serialVersionUID = 1L;
+	
+	public ProducteurBehaviourHorlogeListener(Agent a)
+	{
+		super(a);
+	}
 	
 	@Override
 	public void action()
@@ -54,7 +60,7 @@ public class ProducteurBehaviourHorlogeListener extends CyclicBehaviour
 					SDTransporteurOfficiel.setName("transporteur-officiel");
 					SDTransporteurOfficiel.setType("transporteur-officiel");
 					rechercheTransporteurOfficiel.addServices(SDTransporteurOfficiel);
-					myAgent.addBehaviour(new GlobalSearchBehaviour(myAgent, rechercheTransporteur, rechercheTransporteurOfficiel));
+					myAgent.addBehaviour(new GlobalBehaviourSearchAnnuaires(myAgent, rechercheTransporteur, rechercheTransporteurOfficiel));
 					
 					// On repense la politique de prix et de transport.
 					myAgent.addBehaviour(new ProducteurBehaviourStrategiePrixTransport(myAgent, msg));

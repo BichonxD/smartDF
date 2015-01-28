@@ -1,7 +1,8 @@
 package reseauSimple.observateur;
 
 import reseauSimple.global.AbstractAgent;
-import reseauSimple.global.GlobalSearchBehaviour;
+import reseauSimple.global.GlobalBehaviourSearchAnnuaires;
+import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -13,6 +14,11 @@ public class ObservateurBehaviourHorlogeListener extends CyclicBehaviour
 	private static final long serialVersionUID = 1L;
 	
 	private int nbTourEffectue = 0;
+	
+	public ObservateurBehaviourHorlogeListener(Agent a)
+	{
+		super(a);
+	}
 	
 	@Override
 	public void action()
@@ -54,7 +60,7 @@ public class ObservateurBehaviourHorlogeListener extends CyclicBehaviour
 						dfdrechercheTransporteurOfficiel.addServices(SDTransporteurOfficiel);
 						
 						// Récupération des annuaires
-						myAgent.addBehaviour(new GlobalSearchBehaviour(myAgent, dfdRechercheProducteur, dfdRechercheTransporteur, dfdrechercheTransporteurOfficiel));
+						myAgent.addBehaviour(new GlobalBehaviourSearchAnnuaires(myAgent, dfdRechercheProducteur, dfdrechercheTransporteurOfficiel, dfdRechercheTransporteur));
 					}
 					break;
 				

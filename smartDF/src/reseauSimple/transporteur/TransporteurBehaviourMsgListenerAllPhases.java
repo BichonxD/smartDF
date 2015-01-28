@@ -4,6 +4,7 @@ import java.util.TreeMap;
 
 import reseauSimple.global.AbstractAgent;
 import jade.core.AID;
+import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -15,6 +16,10 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 	private int prixTransporteur = ((TransporteurAgent) myAgent).getPrixKWhTransporteur();
 	private TreeMap<AID, Integer> demandeEnAttente = new TreeMap<AID, Integer>();
 	
+	public TransporteurBehaviourMsgListenerAllPhases(Agent a)
+	{
+		super(a);
+	}
 	
 	public void termineTour(){
 		capaciteRestante = ((TransporteurAgent) myAgent).getCapaciteTransporteur();

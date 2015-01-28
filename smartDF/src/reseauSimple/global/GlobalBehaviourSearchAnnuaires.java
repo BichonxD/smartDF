@@ -7,27 +7,27 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 
-public class GlobalSearchBehaviour extends OneShotBehaviour
+public class GlobalBehaviourSearchAnnuaires extends OneShotBehaviour
 {
 	private static final long serialVersionUID = 1L;
 	private DFAgentDescription dfdRecherche = null;
 	private DFAgentDescription dfdRechercheTransporteurOfficiel = null;
 	private DFAgentDescription dfdRechercheOptionnelle = null;
 	
-	public GlobalSearchBehaviour(Agent a, DFAgentDescription dfdRecherche)
+	public GlobalBehaviourSearchAnnuaires(Agent a, DFAgentDescription dfdRecherche)
 	{
 		super(a);
 		this.dfdRecherche = dfdRecherche;
 	}
 	
-	public GlobalSearchBehaviour(Agent a, DFAgentDescription dfdRecherche, DFAgentDescription dfdRechercheTransporteurOfficiel)
+	public GlobalBehaviourSearchAnnuaires(Agent a, DFAgentDescription dfdRecherche, DFAgentDescription dfdRechercheTransporteurOfficiel)
 	{
 		super(a);
 		this.dfdRecherche = dfdRecherche;
 		this.dfdRechercheTransporteurOfficiel = dfdRechercheTransporteurOfficiel;
 	}
 	
-	public GlobalSearchBehaviour(Agent a, DFAgentDescription dfdRecherche, DFAgentDescription dfdRechercheTransporteurOfficiel, DFAgentDescription dfdRechercheOptionnelle)
+	public GlobalBehaviourSearchAnnuaires(Agent a, DFAgentDescription dfdRecherche, DFAgentDescription dfdRechercheTransporteurOfficiel, DFAgentDescription dfdRechercheOptionnelle)
 	{
 		super(a);
 		this.dfdRecherche = dfdRecherche;

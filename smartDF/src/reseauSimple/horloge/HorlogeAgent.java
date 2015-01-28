@@ -1,7 +1,7 @@
 package reseauSimple.horloge;
 
 import reseauSimple.global.AbstractAgent;
-import reseauSimple.global.GlobalSearchBehaviour;
+import reseauSimple.global.GlobalBehaviourSearchAnnuaires;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
@@ -19,9 +19,9 @@ public class HorlogeAgent extends AbstractAgent
 		DFAgentDescription rechercheAllAgents = new DFAgentDescription();
 		ServiceDescription SDAllAgents = new ServiceDescription();
 		rechercheAllAgents.addServices(SDAllAgents);
-		addBehaviour(new GlobalSearchBehaviour(this, rechercheAllAgents));
+		addBehaviour(new GlobalBehaviourSearchAnnuaires(this, rechercheAllAgents));
 		addBehaviour(new HorlogeBehaviourTalker(this, AbstractAgent.HORLOGE_PHASE_NEGOCIATION));
-		addBehaviour(new HorlogeBehaviourListener());
+		addBehaviour(new HorlogeBehaviourListener(this));
 	}
 	
 }

@@ -57,8 +57,8 @@ public class TransporteurAgent extends AbstractAgent
 		
 		System.out.println("Creation d'un nouveau transporteur :\n" + toString());
 		
-		addBehaviour(new TransporteurBehaviourHorlogeListener());
-		tansporteurBehaviourMsg = new TransporteurBehaviourMsgListenerAllPhases();
+		addBehaviour(new TransporteurBehaviourHorlogeListener(this));
+		tansporteurBehaviourMsg = new TransporteurBehaviourMsgListenerAllPhases(this);
 		addBehaviour(tansporteurBehaviourMsg);
 	}
 	
@@ -108,13 +108,13 @@ public class TransporteurAgent extends AbstractAgent
 		String ret = "Transporteur " + idTransporteur + " nommé : " + getName() + "\n";
 		if(transporteurOfficiel)
 		{
-			ret += "\tC'est un Consommateur Officiel.\n";
-			ret += "\tCapacité de transport illimitée.\n";
+			ret += "\tC'est un Transporteur Officiel.\n";
+			ret += "\t\tCapacité de transport illimitée.\n";
 		}
 		else
 		{
 			ret += "\tSon propriétaire est le Producteur " + proprietaire.getIdProducteur() + "\n";
-			ret += "\tCapacité de transport = " + capaciteTransporteur + " kWh\n";
+			ret += "\t\tCapacité de transport = " + capaciteTransporteur + " kWh\n";
 		}
 		ret += "\tPrix de vente du kWh = " + prixKWhTransporteur + " €/kWh\n";
 		ret += "\tArgent = " + argentTransporteur + " €\n";

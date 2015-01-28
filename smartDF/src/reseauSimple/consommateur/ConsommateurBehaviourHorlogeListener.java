@@ -2,7 +2,8 @@ package reseauSimple.consommateur;
 
 import reseauSimple.global.AbstractAgent;
 import reseauSimple.global.GlobalBehaviourHorlogeTalker;
-import reseauSimple.global.GlobalSearchBehaviour;
+import reseauSimple.global.GlobalBehaviourSearchAnnuaires;
+import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -15,6 +16,11 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 	private static final long serialVersionUID = 1L;
 	
 	private int nbTourEffectue = 0;
+	
+	public ConsommateurBehaviourHorlogeListener(Agent a)
+	{
+		super(a);
+	}
 	
 	@Override
 	public void action()
@@ -54,7 +60,7 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 						SDProducteur.setName("producteur");
 						SDProducteur.setType("producteur");
 						rechercheProducteur.addServices(SDProducteur);
-						myAgent.addBehaviour(new GlobalSearchBehaviour(myAgent, rechercheProducteur));
+						myAgent.addBehaviour(new GlobalBehaviourSearchAnnuaires(myAgent, rechercheProducteur));
 						
 						// On demande le prix à tous les producteurs.
 						myAgent.addBehaviour(new ConsommateurBehaviourAskPrixProducteur(myAgent));
