@@ -25,6 +25,17 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 	public void termineTour(){
 		capaciteRestante = ((TransporteurAgent) myAgent).getCapaciteTransporteur();
 		prixTransporteur = ((TransporteurAgent) myAgent).getPrixKWhTransporteur();
+		
+		//on envoi notre argent à notre producteur :
+		ACLMessage msg = new ACLMessage(AbstractAgent.TRANSPORTEUR_ENVOI_ARGENT);
+		msg.setSender(((TransporteurAgent) myAgent).getFournisseurID());
+		msg.setContent(Integer.toString(prixTransporteur));
+		myAgent.send(msg);
+		//et on le met à zero
+		((TransporteurAgent) myAgent).setArgentTransporteur(0);
+		//TODO luc, tu récupère l'argent et tu l'ajoute a tes tunes
+		
+		//TODO politique de changement de prix
 		facturationMonFournisseur = false;
 		demandeEnAttente.clear();
 	}
@@ -130,6 +141,24 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 					demandeEnAttente.put(demandeAidTransport, demandePrixTransport);
 				}
 			}
+			
+			else if (msg.getPerformative() == AbstractAgent.TRANSPORTEUR_ENCAISSE_PAIEMENT) {
+				int argentDispo = ((TransporteurAgent) myAgent).getArgentTransporteur();
+				argentDispo += Integer.parseInt(msg.getContent());
+				((TransporteurAgent) myAgent).setArgentTransporteur(argentDispo);
+			}
+			
+			else if (msg.getPerformative() == AbstractAgent.TRANSPORTEUR_ARGENT_DEMANDE){
+				ACLMessage msgReply = msg.createReply();
+				msgReply.setPerformative(AbstractAgent.TRANSPORTEUR_ARGENT_REPONSE);
+				int argentDispo = ((TransporteurAgent) myAgent).getArgentTransporteur();
+				msgReply.setContent(Integer.toString(argentDispo));
+				myAgent.send(msgReply);
+			}
+			else {
+				System.out.println("performatif non compris par le transporteur");
+			}
+			
 		}
 				block();
 	}
