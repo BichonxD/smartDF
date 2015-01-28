@@ -5,29 +5,38 @@ import jade.core.AID;
 
 public class ConsommateurAgent extends AbstractAgent
 {
+	// Constantes
 	private static final long serialVersionUID = 1L;
+	private static final int BESOIN_MAX = 20;
+	private static final int BESOIN_MIN = 5;
+	private static final int PROD_MIN = 1;
+	private static final int RENOUVELLEMENT_MAX = 15;
+	private static final int RENOUVELLEMENT_MIN = 5;
 	
-	private int besoin;
-	private boolean consommateurProducteur;
-	private int capaciteProducteur;
+	// Variables statiques
+	private static int currentID = 0;
+	
+	// Caractéristiques du consommateur
+	private final int idConsommateur = getNextID();
+	private final int besoin = (int) (Math.random() * (BESOIN_MAX - BESOIN_MIN) + BESOIN_MIN);
+	private final boolean consommateurProducteur = (((int) (Math.random() * 100))%2 == 0);
+	private final int capaciteProducteur = consommateurProducteur ? 0 : (int) (Math.random() * (besoin - 4 - PROD_MIN) + PROD_MIN);
+	private final int dureeRenouvellement = (int) (Math.random() * (RENOUVELLEMENT_MAX - RENOUVELLEMENT_MIN) + RENOUVELLEMENT_MIN);
+	
+	// Variables propres
 	private AID fournisseurID;
 	private int prixfournisseur;
-	private int dureeRenouvellement = 12;
 	private boolean aEteFacture = false;
 	
 	protected void setup()
 	{
-		besoin = (int) getArguments()[0];
-		consommateurProducteur = (boolean) getArguments()[1];
-		capaciteProducteur = (int) getArguments()[2];
-		
 		if(consommateurProducteur)
 			setServiceName("consommateurProducteur");
 		else
 			setServiceName("consommateur");
 		super.setup();
 		
-		System.out.println("Hello World! My name is " + getLocalName());
+		System.out.println("Creation d'un nouveau consommateur :\n" + toString());
 		
 		fournisseurID = null;
 		prixfournisseur = 0;
@@ -81,6 +90,25 @@ public class ConsommateurAgent extends AbstractAgent
 
 	public void setaEteFacture(boolean aEteFacture) {
 		this.aEteFacture = aEteFacture;
+	}
+	
+	public static int getNextID()
+	{
+		return currentID++;
+	}
+	
+	@Override
+	public String toString()
+	{
+		String ret = "Consommateur " + idConsommateur + " : \n";
+		ret += "\tBesoins = " + besoin + " kWh\n";
+		if(consommateurProducteur)
+		{
+			ret += "\tC'est un Consommateur-Producteur : ";
+			ret += "\t\tProduction = " + capaciteProducteur + " kWh\n";
+		}
+		ret += "\tCherche un meilleur producteur tous les " + dureeRenouvellement + " tours.\n";
+		return ret;
 	}
 	
 }
