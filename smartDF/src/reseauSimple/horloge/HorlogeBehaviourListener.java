@@ -32,7 +32,7 @@ public class HorlogeBehaviourListener extends CyclicBehaviour
 					if(nbReponseRecu == 0)
 						System.out.println("\nNouvelle phase : " + phaseActuelle);
 					nbReponseRecu++;
-					System.out.println("J'ai reçu " + nbReponseRecu + " message sur " + ((AbstractAgent) myAgent).getAnnuairePerso().length + " et le dernier est de :\n" + msg.getSender());
+					//System.out.println("J'ai reçu " + nbReponseRecu + " message sur " + ((AbstractAgent) myAgent).getAnnuairePerso().length + " et le dernier est de :\n" + msg.getSender());
 				}
 				
 				// Si j'ai reçu la réponse de tous les agents

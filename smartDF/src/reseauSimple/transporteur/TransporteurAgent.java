@@ -1,7 +1,6 @@
 package reseauSimple.transporteur;
 
 import reseauSimple.global.AbstractAgent;
-import reseauSimple.producteur.ProducteurAgent;
 import jade.core.AID;
 
 public class TransporteurAgent extends AbstractAgent
@@ -21,19 +20,20 @@ public class TransporteurAgent extends AbstractAgent
 	private final int prixKWhTransporteur = (int) (Math.random() * (PRIX_MAX - PRIX_MIN) + PRIX_MIN);
 	
 	// Variables propres
-	private ProducteurAgent proprietaire = null;
+	private AID proprietaire = null;
 	private int capaciteTransporteur;
 	private int argentTransporteur = 0;
 	private boolean transporteurOfficiel = false;
 	private TransporteurBehaviourMsgListenerAllPhases tansporteurBehaviourMsg;
 	
 	protected void setup()
-	{
+	{	
+		
 		if(getArguments().length == 1)
 		{
 			try
 			{
-				proprietaire = (ProducteurAgent) getArguments()[0];
+				proprietaire = (AID) getArguments()[0];
 			}
 			catch(ClassCastException e)
 			{
@@ -66,7 +66,7 @@ public class TransporteurAgent extends AbstractAgent
 	
 	public AID getFournisseurID()
 	{
-		return proprietaire == null ? null : proprietaire.getAID();
+		return proprietaire == null ? null : proprietaire;
 	}
 	
 	public int getCapaciteTransporteur()
@@ -115,7 +115,7 @@ public class TransporteurAgent extends AbstractAgent
 		}
 		else
 		{
-			ret += "\tSon propriétaire est le Producteur " + proprietaire.getIdProducteur() + "\n";
+			ret += "\tSon propriétaire est le Producteur " + proprietaire + "\n";
 			ret += "\t\tCapacité de transport = " + capaciteTransporteur + " kWh\n";
 		}
 		ret += "\tPrix de vente du kWh = " + prixKWhTransporteur + " €/kWh\n";

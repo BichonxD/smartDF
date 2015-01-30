@@ -104,19 +104,20 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 			if (electriciteTransporteurUniverselPrevisionnel > 0) {
 				nouveauPrix *= 1.1;
 				//Si il a assez d'argent pour construire plus de trois transporteur, il en construit un et garde le reste afin de toujours avoir une marge pour payer les amendes
-				/*if (((ProducteurAgent) myAgent).getArgentFournisseur() > ((ProducteurAgent) myAgent).getPrixTransporteur() * 3) {
+				if (((ProducteurAgent) myAgent).getArgentFournisseur() > ((ProducteurAgent) myAgent).getPrixTransporteur() * 3) {
 					
 					Object[] argument = new Object[1];
-					argument[0] = myAgent;
+					argument[0] = myAgent.getAID();
 					
 					try {
-						AgentController ac = Test.mc.createNewAgent("Transporteur " + myAgent.getAID(), TransporteurAgent.class.getName(), argument);
+						AgentController ac = Test.mc.createNewAgent("Transporteur " + myAgent.getAID() + " " + ((ProducteurAgent) myAgent).getTransportsFournisseur().size(), TransporteurAgent.class.getName(), argument);
 						ac.start();
-						//Ajout a mes transporteurs via l'annuaire au debut de la phase 1 avec l'horloge
+						
+						((ProducteurAgent) myAgent).getTransportsFournisseur().add(new AID("Transporteur " + myAgent.getAID() + " " + ((ProducteurAgent) myAgent).getTransportsFournisseur().size(), AID.ISLOCALNAME));
 					} catch (StaleProxyException e) {
 						e.printStackTrace();
 					}
-				}*/
+				}
 			}
 			//Sinon il le diminue (marche pour le cas ou on a pas eu de client)
 			else

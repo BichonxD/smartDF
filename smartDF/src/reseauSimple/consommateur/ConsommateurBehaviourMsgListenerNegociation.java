@@ -104,7 +104,7 @@ public class ConsommateurBehaviourMsgListenerNegociation extends CyclicBehaviour
 			
 			else if(msg.getPerformative() == AbstractAgent.CONSOMMATEUR_BESOIN_DEMANDE)
 			{
-				System.out.println(myAgent.getAID() + " jai recu un truc");
+				//System.out.println(myAgent.getAID() + " jai recu un truc");
 				
 				ACLMessage reply = msg.createReply();
 				reply.setPerformative(AbstractAgent.CONSOMMATEUR_BESOIN_REPONSE);
