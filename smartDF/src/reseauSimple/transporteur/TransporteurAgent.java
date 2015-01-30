@@ -57,6 +57,8 @@ public class TransporteurAgent extends AbstractAgent
 		
 		System.out.println("Creation d'un nouveau transporteur :\n" + toString());
 		
+		addBehaviour(new TransporteurBehaviourMsgListenerDemandeInfos(this));
+		
 		addBehaviour(new TransporteurBehaviourHorlogeListener(this));
 		tansporteurBehaviourMsg = new TransporteurBehaviourMsgListenerAllPhases(this);
 		addBehaviour(tansporteurBehaviourMsg);

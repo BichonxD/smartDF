@@ -19,7 +19,7 @@ public class ProducteurBehaviourMsgListenerDepartage extends CyclicBehaviour
 	public void action()
 	{
 		// Reçoit les messages suivant et ecarte les autres
-		MessageTemplate mt = MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_AMENDE); 
+		MessageTemplate mt = MessageTemplate.or(MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_ENVOI_ARGENT), MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_AMENDE)); 
 		ACLMessage msg = myAgent.receive(mt);
 		
 		/*
@@ -27,8 +27,19 @@ public class ProducteurBehaviourMsgListenerDepartage extends CyclicBehaviour
 		 */
 		if(msg != null)
 		{
-			((ProducteurAgent) myAgent).setArgentFournisseur(((ProducteurAgent) myAgent).getArgentFournisseur() - Integer.parseInt(msg.getContent()));
+			switch(msg.getPerformative())
+			{
+				case AbstractAgent.TRANSPORTEUR_ENVOI_ARGENT :
+					((ProducteurAgent) myAgent).setArgentFournisseur(((ProducteurAgent) myAgent).getArgentFournisseur() + Integer.parseInt(msg.getContent()));
+					break;
+				
+				case AbstractAgent.PRODUCTEUR_AMENDE :
+					((ProducteurAgent) myAgent).setArgentFournisseur(((ProducteurAgent) myAgent).getArgentFournisseur() - Integer.parseInt(msg.getContent()));
+					break;
+			}
 		}
+		else
+			block();
 	}
 	
 }

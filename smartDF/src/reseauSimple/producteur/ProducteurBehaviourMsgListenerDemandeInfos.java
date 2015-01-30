@@ -6,11 +6,11 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-public class ProducteurBehaviourMsgListenerObservateur extends CyclicBehaviour
+public class ProducteurBehaviourMsgListenerDemandeInfos extends CyclicBehaviour
 {
 	private static final long serialVersionUID = 1L;
 	
-	public ProducteurBehaviourMsgListenerObservateur(Agent a)
+	public ProducteurBehaviourMsgListenerDemandeInfos(Agent a)
 	{
 		super(a);
 	}
@@ -32,9 +32,7 @@ public class ProducteurBehaviourMsgListenerObservateur extends CyclicBehaviour
 			
 			switch(msg.getPerformative())
 			{
-				/*
-				 * On renvoie notre prix pour ce tour si au consomateur qui le demande
-				 */
+				// On renvoie notre prix
 				case AbstractAgent.PRODUCTEUR_PRIX_DEMANDE:
 					reply = msg.createReply();
 					reply.setPerformative(AbstractAgent.PRODUCTEUR_PRIX_REPONSE);
@@ -42,9 +40,7 @@ public class ProducteurBehaviourMsgListenerObservateur extends CyclicBehaviour
 					myAgent.send(reply);
 					break;
 				
-				/*
-				 * On renvoie notre prix pour ce tour si au consomateur qui le demande
-				 */
+				// On renvoie notre argent
 				case AbstractAgent.PRODUCTEUR_ARGENT_DEMANDE:
 					reply = msg.createReply();
 					reply.setPerformative(AbstractAgent.PRODUCTEUR_ARGENT_REPONSE);
@@ -52,9 +48,7 @@ public class ProducteurBehaviourMsgListenerObservateur extends CyclicBehaviour
 					myAgent.send(reply);
 					break;
 				
-				/*
-				 * On renvoie notre prix pour ce tour si au consomateur qui le demande
-				 */
+				// On renvoie notre capacité
 				case AbstractAgent.PRODUCTEUR_NBCLIENT_DEMANDE:
 					reply = msg.createReply();
 					reply.setPerformative(AbstractAgent.PRODUCTEUR_NBCLIENT_REPONSE);
@@ -62,11 +56,9 @@ public class ProducteurBehaviourMsgListenerObservateur extends CyclicBehaviour
 					myAgent.send(reply);
 					break;
 				
-				/*
-				 * Cas d'erreur ne doit pas arriver
-				 */
+				// Cas d'erreur ne devant pas arriver
 				default:
-					System.out.println("Producteur " + myAgent.getAID() + " Negociation : Erreur n'est pas censé arriver");
+					System.out.println("Producteur " + myAgent.getAID() + ", demande d'infos : Erreur ne devant pas arriver.");
 					break;
 			}
 		}

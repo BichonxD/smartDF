@@ -3,6 +3,7 @@ package reseauSimple.producteur;
 import java.util.List;
 
 import reseauSimple.global.AbstractAgent;
+import reseauSimple.global.GlobalBehaviourHorlogeTalker;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
@@ -13,9 +14,12 @@ public class ProducteurBehaviourFactureClient extends OneShotBehaviour
 {
 	private static final long serialVersionUID = 1L;
 	
-	public ProducteurBehaviourFactureClient(Agent a)
+	private ACLMessage msgHorlogeToAnswer;
+	
+	public ProducteurBehaviourFactureClient(Agent a, ACLMessage msgHorlogeToAnswer)
 	{
 		super(a);
+		this.msgHorlogeToAnswer = msgHorlogeToAnswer;
 	}
 	
 	@Override
@@ -24,7 +28,7 @@ public class ProducteurBehaviourFactureClient extends OneShotBehaviour
 		List<AID> clientsFournisseur = ((ProducteurAgent) myAgent).getClientsFournisseur();
 		
 		/*
-		 * Envoi des demande de facturation, montant calculer par les consomateurs, ils ont le prix de leur fournisseur
+		 * Envoi des demande de facturation, montant calculé par les consomateurs, ils connaissent le prix de leur fournisseur
 		 */
 		if(clientsFournisseur != null)
 		{
@@ -34,19 +38,22 @@ public class ProducteurBehaviourFactureClient extends OneShotBehaviour
 			myAgent.send(facture);
 		}
 		
-		int nombreReponse = 0;
-		
-		/*
-		 * Encaissement
-		 */
-		while (nombreReponse < clientsFournisseur.size()) {
+		// Encaissement
+		for(int nombreReponse = 0; nombreReponse < clientsFournisseur.size();)
+		{
 			ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_FACTURATION_REPONSE));
 			
 			if(msg != null)
 			{
 				((ProducteurAgent) myAgent).setArgentFournisseur(((ProducteurAgent) myAgent).getArgentFournisseur() + Integer.parseInt(msg.getContent()));
+				nombreReponse++;
 			}
+			else
+				block();
 		}
+		
+		// On signale la fin du tour de facturation à l'horloge.
+		myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msgHorlogeToAnswer));
 	}
 	
 }

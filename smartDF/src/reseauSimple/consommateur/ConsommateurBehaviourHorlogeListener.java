@@ -84,7 +84,7 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 					((AbstractAgent) myAgent).getListCyclicBehaviour().clear();
 					
 					// On créé un listener pour cette phase.
-					ConsommateurBehaviourMsgListenerFacturation cbmlf = new ConsommateurBehaviourMsgListenerFacturation(myAgent, msg);
+					ConsommateurBehaviourMsgListenerFacturation cbmlf = new ConsommateurBehaviourMsgListenerFacturation(myAgent);
 					myAgent.addBehaviour(cbmlf);
 					((AbstractAgent) myAgent).getListCyclicBehaviour().add(cbmlf);
 					

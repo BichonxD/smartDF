@@ -69,8 +69,7 @@ public class ProducteurBehaviourHorlogeListener extends CyclicBehaviour
 				/*
 				 * Si nous sommes en phase de facturation :
 				 * - on demande au transporteur de nous facturer,
-				 * - on facture le consommateur,
-				 * - on signale la fin du tour de facturation à l'horloge.
+				 * - on facture le consommateur.
 				 */
 				case AbstractAgent.HORLOGE_PHASE_FACTURATION :
 					
@@ -85,10 +84,7 @@ public class ProducteurBehaviourHorlogeListener extends CyclicBehaviour
 					myAgent.addBehaviour(new ProducteurBehaviourFactureTransporteur(myAgent));
 					
 					// On signale qu'on a terminé notre phase de facturation.
-					myAgent.addBehaviour(new ProducteurBehaviourFactureClient(myAgent));
-					
-					// On signale la fin du tour de facturation à l'horloge.
-					myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msg));
+					myAgent.addBehaviour(new ProducteurBehaviourFactureClient(myAgent, msg));
 					break;
 					
 				/*

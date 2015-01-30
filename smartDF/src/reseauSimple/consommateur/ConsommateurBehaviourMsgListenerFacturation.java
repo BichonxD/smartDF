@@ -1,7 +1,6 @@
 package reseauSimple.consommateur;
 
 import reseauSimple.global.AbstractAgent;
-import reseauSimple.global.GlobalBehaviourHorlogeTalker;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -9,14 +8,11 @@ import jade.lang.acl.MessageTemplate;
 
 public class ConsommateurBehaviourMsgListenerFacturation extends CyclicBehaviour
 {
-	
 	private static final long serialVersionUID = 1L;
-	private ACLMessage msgHorlogeToAnswer;
 	
-	public ConsommateurBehaviourMsgListenerFacturation(Agent a, ACLMessage msgHorlogeToAnswer)
+	public ConsommateurBehaviourMsgListenerFacturation(Agent a)
 	{
 		super(a);
-		this.msgHorlogeToAnswer = msgHorlogeToAnswer;
 	}
 	
 	@Override
@@ -53,7 +49,6 @@ public class ConsommateurBehaviourMsgListenerFacturation extends CyclicBehaviour
 				
 				((ConsommateurAgent) myAgent).setaEteFacture(true);
 			}
-			
 			else if(msg.getPerformative() == AbstractAgent.CONSOMMATEUR_BESOIN_DEMANDE)
 			{
 				ACLMessage reply = msg.createReply();
@@ -67,7 +62,6 @@ public class ConsommateurBehaviourMsgListenerFacturation extends CyclicBehaviour
 					// si le consommateur produit trop d'electricité
 					if(((ConsommateurAgent) myAgent).getCapaciteProducteur() > besoin)
 						besoin = 0;
-					
 					else
 						besoin -= ((ConsommateurAgent) myAgent).getCapaciteProducteur();
 				}
@@ -75,15 +69,11 @@ public class ConsommateurBehaviourMsgListenerFacturation extends CyclicBehaviour
 				reply.setContent(Integer.toString(besoin));
 				myAgent.send(reply);
 			}
-			
 			else
 			{
 				System.out.println("Message non compris dans le msgListenerFacturation du consommateur.\n" + msg);
 				System.out.println(msg.getPerformative());
 			}
-			
-			// prevenir horloge et terminer behaviour
-			myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msgHorlogeToAnswer));
 		}
 		else
 			block();
