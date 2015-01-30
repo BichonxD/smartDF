@@ -19,6 +19,9 @@ public class ProducteurBehaviourFactureTransporteur extends OneShotBehaviour
 	@Override
 	public void action()
 	{
+		/*
+		 * Calcul de l'electricite a fournir ce tour ci si on a des clients
+		 */
 		int electriciteATransporter = 0;
 		
 		if (((ProducteurAgent) myAgent).getClientsFournisseur() != null && ((ProducteurAgent) myAgent).getClientsFournisseur().size() != 0) {
@@ -40,46 +43,65 @@ public class ProducteurBehaviourFactureTransporteur extends OneShotBehaviour
 			}
 		}
 		
-		int capaciteTransportPersonnel = 0;
-		
+		/*
+		 * Calcul et utilisation de la capacite de transport personnel, si on a des transporteur, au maximum de ce qu'on peut utiliser, ils sont gratuit donc pas de facturation
+		 */
 		if (((ProducteurAgent) myAgent).getTransportsFournisseur() != null && ((ProducteurAgent) myAgent).getTransportsFournisseur().size() != 0) {
-			ACLMessage capaciteprevisionnel = new ACLMessage(AbstractAgent.TRANSPORTEUR_CAPACITE_DEMANDE);
-			for (AID id : ((ProducteurAgent) myAgent).getTransportsFournisseur())
-				capaciteprevisionnel.addReceiver(id);
-			myAgent.send(capaciteprevisionnel);
-			
-			int nombreReponse = 0;
-			
-			while (nombreReponse < ((ProducteurAgent) myAgent).getTransportsFournisseur().size()) {
-				ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_CAPACITE_REPONSE));
-				
-				if(msg != null)
-				{
-					capaciteTransportPersonnel += Integer.parseInt(msg.getContent());
-					nombreReponse++;
+			for(AID a : ((ProducteurAgent) myAgent).getTransportsFournisseur()) {
+				if(electriciteATransporter > 0)			
+					break;
+				else {
+					ACLMessage demandeCapacite = new ACLMessage(AbstractAgent.TRANSPORTEUR_CAPACITE_DEMANDE);
+					demandeCapacite.addReceiver(a);
+					myAgent.send(demandeCapacite);
+							
+					boolean reponse = false;
+					int capacite = 0;
+					
+					while (!reponse) {
+						ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_CAPACITE_REPONSE));
+						
+						if(msg != null) {
+							capacite = Integer.parseInt(msg.getContent());
+							if(capacite < electriciteATransporter) {
+								electriciteATransporter -= capacite;
+							}
+							else {
+								capacite -= electriciteATransporter;
+								electriciteATransporter = 0;
+							}
+							ACLMessage reply = msg.createReply();
+							reply.setPerformative(AbstractAgent.TRANSPORTEUR_FACTURATION_DEMANDE);
+							reply.setContent(Integer.toString(capacite));
+							reponse = true;
+							/*
+							 * On attends pas de reponse de leur part car ils sont a nous, ils n'ont pas le choix
+							 */
+						}
+					}
 				}
 			}
 		}
 		
-		//Utiliser capacite transporteur prive avec le code juste en dessous
-		
 		/*
-		 * ACLMessage utilisation = new ACLMessage(AbstractAgent.DEMANDE_FACURATION_TRANSPORTEUR);
-			for (AID id : ((ProducteurAgent) myAgent).getTransportsFournisseur())
-				utilisation.addReceiver(id);
-			myAgent.send(utilisation);
+		 * Si il reste de l'electricte a transporter on utilise le transporteur universel et on le paye
 		 */
-		
-		
+		if (electriciteATransporter > 0) {
+			ACLMessage facturationTransporteurUniversel = new ACLMessage(AbstractAgent.TRANSPORTEUR_FACTURATION_DEMANDE);
+			facturationTransporteurUniversel.addReceiver(((ProducteurAgent) myAgent).getAnnuairePersoTransporteurOfficiel()[0]);
+			facturationTransporteurUniversel.setContent(Integer.toString(electriciteATransporter));
 			
-		int electriciteTransporteurUniversel =  electriciteATransporter - capaciteTransportPersonnel;
-		
-		//Recuperer AID transporteur universelle
-		AID TransporteurUniverselle;
-		
-		
-		
-		
+			boolean reponse = false;
+			
+			while (!reponse) {
+				ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_FACTURATION_REPONSE_POSITIVE));
+				
+				if(msg != null) {
+					((ProducteurAgent) myAgent).setArgentFournisseur(((ProducteurAgent) myAgent).getArgentFournisseur() - Integer.parseInt(msg.getContent()));
+					reponse = true;
+				}
+			}
+		}		
 	}
 
 }

@@ -1,7 +1,6 @@
 package reseauSimple.producteur;
 
 import java.util.ArrayList;
-import reseauSimple.consommateur.ConsommateurBehaviourHorlogeListener;
 import reseauSimple.global.AbstractAgent;
 import jade.core.AID;
 
@@ -22,6 +21,7 @@ public class ProducteurAgent extends AbstractAgent
 	private int prixFournisseur = (int) (Math.random() * (PRIX_MAX - PRIX_MIN) + PRIX_MIN);
 	private int argentDispo = 0;
 	private int electriciteAFournir = 0;
+	private int prixTransporteur = 10000;
 	private ArrayList<AID> clientsFournisseur = new ArrayList<AID>();
 	private ArrayList<AID> transportsFournisseur = new ArrayList<AID>();
 	
@@ -122,6 +122,14 @@ public class ProducteurAgent extends AbstractAgent
 		ret += "\tPossède : " + argentDispo + " €\n";
 		ret += "\tDoit fournir : " + electriciteAFournir + " kWh\n";
 		return ret;
+	}
+
+	public int getPrixTransporteur() {
+		return prixTransporteur;
+	}
+
+	public void setPrixTransporteur(int prixTransporteur) {
+		this.prixTransporteur = prixTransporteur;
 	}
 	
 }

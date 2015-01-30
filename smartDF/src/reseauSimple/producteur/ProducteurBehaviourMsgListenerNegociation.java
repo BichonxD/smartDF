@@ -29,14 +29,23 @@ public class ProducteurBehaviourMsgListenerNegociation extends CyclicBehaviour {
 			switch(msg.getPerformative())
 			{
 				
+				/*
+				 * On ajoute le consomateur a la liste de nos client
+				 */
 				case AbstractAgent.PRODUCTEUR_ABONNEMENT :
 					((ProducteurAgent) myAgent).addClientsFournisseur(msg.getSender());
 					break;
 				
+				/*
+				 * On enleve le consomateur de nos client
+				 */
 				case AbstractAgent.PRODUCTEUR_DESABONNEMENT :
 					((ProducteurAgent) myAgent).removeClientsFournisseur(msg.getSender());
 					break;
 					
+				/*
+				 * On renvoie notre prix pour ce tour si au consomateur qui le demande
+				 */
 				case AbstractAgent.PRODUCTEUR_PRIX_DEMANDE :
 					ACLMessage reply = msg.createReply();
 					reply.setPerformative(AbstractAgent.PRODUCTEUR_PRIX_REPONSE);
@@ -44,6 +53,9 @@ public class ProducteurBehaviourMsgListenerNegociation extends CyclicBehaviour {
 					myAgent.send(reply);
 					break;
 					
+				/*
+				 * Cas d'erreur ne doit pas arriver
+				 */
 				default:
 					System.out.println("Producteur " + myAgent.getAID() + " Negociation : Erreur n'est pas sense arriver");
 					break;
