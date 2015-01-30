@@ -21,10 +21,10 @@ public class ConsommateurBehaviourGestionnaireDepartage extends OneShotBehaviour
 	@Override
 	public void action()
 	{
-		// TODO Auto-generated method stub
-		if (((ConsommateurAgent) myAgent).isaEteFacture())
+		if(((ConsommateurAgent) myAgent).isaEteFacture())
 			((ConsommateurAgent) myAgent).setaEteFacture(false);
-		else {
+		else
+		{
 			ACLMessage amende = new ACLMessage(AbstractAgent.PRODUCTEUR_AMENDE);
 			int prix = ((ConsommateurAgent) myAgent).getBesoin() * ((ConsommateurAgent) myAgent).getPrixfournisseur() * 3;
 			amende.addReceiver(((ConsommateurAgent) myAgent).getFournisseurID());

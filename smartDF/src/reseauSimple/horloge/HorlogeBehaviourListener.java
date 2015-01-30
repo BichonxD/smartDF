@@ -29,10 +29,14 @@ public class HorlogeBehaviourListener extends CyclicBehaviour
 			{
 				if(nbReponseRecu < ((AbstractAgent) myAgent).getAnnuairePerso().length)
 				{
+					if(nbReponseRecu == 0)
+						System.out.println("\nNouvelle phase : " + phaseActuelle);
 					nbReponseRecu++;
+					System.out.println("J'ai reçu " + nbReponseRecu + " message sur " + ((AbstractAgent) myAgent).getAnnuairePerso().length + " et le dernier est de :\n" + msg);
 				}
+				
 				// Si j'ai reçu la réponse de tous les agents
-				else
+				if(nbReponseRecu == ((AbstractAgent) myAgent).getAnnuairePerso().length)
 				{
 					switch(phaseActuelle)
 					{
@@ -60,6 +64,8 @@ public class HorlogeBehaviourListener extends CyclicBehaviour
 			else
 			{
 				System.err.println("Un agent pense être dans la mauvaise phase.");
+				System.err.println(msg);
+				System.err.println(msg.getPerformative());
 			}
 		}
 		else

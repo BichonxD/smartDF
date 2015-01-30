@@ -15,6 +15,7 @@ public class ObservateurAgent extends AbstractAgent
 
 	// Variables propres
 	private ObservateurGUI myGUI;
+	private ObservateurBehaviourMsgListenerAllPhases msgListenerAllPhases;
 	
 	protected void setup()
 	{
@@ -28,7 +29,9 @@ public class ObservateurAgent extends AbstractAgent
 		myGUI.setVisible(true);
 		
 		// Ajout d'un listener pour récupérer les réponses aux messages envoyés en continu
-		addBehaviour(new ObservateurBehaviourMsgListenerAllPhases(this));
+		addBehaviour(new ObservateurBehaviourHorlogeListener(this));
+		msgListenerAllPhases = new ObservateurBehaviourMsgListenerAllPhases(this);
+		addBehaviour(msgListenerAllPhases);
 	}
 	
 	public ObservateurGUI getMyGUI()
@@ -39,6 +42,11 @@ public class ObservateurAgent extends AbstractAgent
 	public static int getNextID()
 	{
 		return currentID++;
+	}
+	
+	public ObservateurBehaviourMsgListenerAllPhases getMsgListenerAllPhases()
+	{
+		return msgListenerAllPhases;
 	}
 	
 	@Override

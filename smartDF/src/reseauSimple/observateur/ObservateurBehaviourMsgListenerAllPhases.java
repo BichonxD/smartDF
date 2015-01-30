@@ -12,6 +12,7 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 {
 	private static final long serialVersionUID = 1L;
 	private int nbReponses = 0;
+	private ACLMessage msgHorlogeToAnswer;
 	
 	public ObservateurBehaviourMsgListenerAllPhases(Agent a)
 	{
@@ -32,7 +33,7 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 		MessageTemplate mt = null;
 		if(producteursDisponibles != null)
 		{
-			nbReponsesAttendues += producteursDisponibles.length;
+			nbReponsesAttendues += producteursDisponibles.length * 3;
 			
 			for(AID aid : producteursDisponibles)
 			{
@@ -45,7 +46,7 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 		
 		if(transporteursDisponibles != null)
 		{
-			nbReponsesAttendues += transporteursDisponibles.length;
+			nbReponsesAttendues += transporteursDisponibles.length * 3;
 			
 			for(AID aid : transporteursDisponibles)
 			{
@@ -58,7 +59,7 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 		
 		if(transporteurOfficiel != null)
 		{
-			nbReponsesAttendues += transporteurOfficiel.length;
+			nbReponsesAttendues += transporteurOfficiel.length * 3;
 			
 			for(AID aid : transporteurOfficiel)
 			{
@@ -126,6 +127,8 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 					System.out.println(mt);
 					break;
 			}
+			
+			//System.out.println("Nombre de réponses reçues " + nbReponses + " sur " + nbReponsesAttendues);
 		}
 		else
 			block();
@@ -133,10 +136,15 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 		// Si on a reçu des réponses de tous les agents on signale qu'on a finit cette phase à l'horloge
 		if(nbReponsesAttendues != 0 && nbReponses == nbReponsesAttendues)
 		{
-			myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msg));
+			myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msgHorlogeToAnswer));
 			nbReponses = 0;
 		}
 		
+	}
+	
+	public void setMsgHorlogeToAnswer(ACLMessage msgHorlogeToAnswer)
+	{
+		this.msgHorlogeToAnswer = msgHorlogeToAnswer;
 	}
 	
 }

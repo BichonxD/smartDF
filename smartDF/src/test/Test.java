@@ -29,19 +29,21 @@ public class Test
 		Profile pMain = new ProfileImpl("localhost", 8888, null);
 		AgentContainer mc = rt.createMainContainer(pMain);
 
-		int nbConsommateur = (int) (Math.random() * 7 + 3);
-		int nbProducteur = (int) (Math.random() * 7 + 3);
+		//int nbConsommateur = (int) (Math.random() * 5 + 1);
+		//int nbProducteur = (int) (Math.random() * 5 + 1);
+		int nbConsommateur = 3;
+		int nbProducteur = 2;
 		
 		ArrayList<AgentController> lAC = new ArrayList<AgentController>();
 		
 		// Consommateurs
-		for(int i = 0; i < nbConsommateur + 1; i++)
+		for(int i = 0; i < nbConsommateur; i++)
 		{
 			lAC.add(mc.createNewAgent("Consommateur " + (i + 1), ConsommateurAgent.class.getName(), new Object[0]));
 		}
 		
 		// Producteurs
-		for(int i = 0; i < nbProducteur + 1; i++)
+		for(int i = 0; i < nbProducteur; i++)
 		{
 			lAC.add(mc.createNewAgent("Producteur " + (i + 1), ProducteurAgent.class.getName(), new Object[0]));
 		}

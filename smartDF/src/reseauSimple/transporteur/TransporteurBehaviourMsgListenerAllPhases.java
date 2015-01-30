@@ -42,16 +42,13 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 	@Override
 	public void action() {
 		// Recoit la quantite que veut transporter chaque producteur sur son reseau
-		MessageTemplate mt = null;
-		AID[] producteurpossible = ((AbstractAgent) myAgent).getAnnuairePerso();
-		if (producteurpossible != null && producteurpossible.length != 0) {
-			for (AID aid : producteurpossible) {
-				if (mt == null)
-					mt = MessageTemplate.MatchSender(aid);
-				else
-					mt = MessageTemplate.or(mt,MessageTemplate.MatchSender(aid));
-			}
-		}
+		MessageTemplate mt = 
+				MessageTemplate.or(MessageTemplate.or(MessageTemplate.or(MessageTemplate.or(
+				MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_PRIX_DEMANDE),
+				MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_CAPACITE_DEMANDE)),
+				MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_FACTURATION_DEMANDE)),
+				MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_ENCAISSE_PAIEMENT)),
+				MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_ARGENT_DEMANDE)); 
 		ACLMessage msg = myAgent.receive(mt);
 
 		//Traitement du message
@@ -109,7 +106,7 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 								int aPayer = demandeEnAttente.get(id) * prixTransporteur;
 								msgReply.setContent(Integer.toString(aPayer));
 								myAgent.send(msgReply);
-								//TODO luc doit traiter ce message et me payer! Sinon p�nalit� :)
+								// Luc doit traiter ce message et me payer! Sinon p�nalit� :)
 							}
 							
 							else{
@@ -173,6 +170,7 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 			}
 			
 		}
-				block();
+		else
+			block();
 	}
 }

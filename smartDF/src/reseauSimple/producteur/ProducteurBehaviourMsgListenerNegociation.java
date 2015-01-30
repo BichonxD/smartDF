@@ -6,58 +6,45 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-public class ProducteurBehaviourMsgListenerNegociation extends CyclicBehaviour {
+public class ProducteurBehaviourMsgListenerNegociation extends CyclicBehaviour
+{
 	private static final long serialVersionUID = 1L;
-
-	public ProducteurBehaviourMsgListenerNegociation (Agent a) {
+	
+	public ProducteurBehaviourMsgListenerNegociation(Agent a)
+	{
 		super(a);
 	}
-
+	
 	@Override
-	public void action() {
+	public void action()
+	{
 		// Reçoit les messages suivant et ecarte les autres
-		MessageTemplate mt = 
-				MessageTemplate.or(MessageTemplate.or(
-				MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_ABONNEMENT),
-				MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_PRIX_DEMANDE)),
-				MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_DESABONNEMENT)); 
+		MessageTemplate mt = MessageTemplate.or(MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_ABONNEMENT), MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_DESABONNEMENT));
 		ACLMessage msg = myAgent.receive(mt);
 		
 		if(msg != null)
 		{
-			
 			switch(msg.getPerformative())
 			{
-				
-				/*
-				 * On ajoute le consomateur a la liste de nos client
-				 */
-				case AbstractAgent.PRODUCTEUR_ABONNEMENT :
+			/*
+			 * On ajoute le consomateur a la liste de nos client
+			 */
+				case AbstractAgent.PRODUCTEUR_ABONNEMENT:
 					((ProducteurAgent) myAgent).addClientsFournisseur(msg.getSender());
 					break;
 				
 				/*
 				 * On enleve le consomateur de nos client
 				 */
-				case AbstractAgent.PRODUCTEUR_DESABONNEMENT :
+				case AbstractAgent.PRODUCTEUR_DESABONNEMENT:
 					((ProducteurAgent) myAgent).removeClientsFournisseur(msg.getSender());
 					break;
-					
-				/*
-				 * On renvoie notre prix pour ce tour si au consomateur qui le demande
-				 */
-				case AbstractAgent.PRODUCTEUR_PRIX_DEMANDE :
-					ACLMessage reply = msg.createReply();
-					reply.setPerformative(AbstractAgent.PRODUCTEUR_PRIX_REPONSE);
-					reply.setContent(Integer.toString(((ProducteurAgent) myAgent).getPrixFournisseur()));
-					myAgent.send(reply);
-					break;
-					
+				
 				/*
 				 * Cas d'erreur ne doit pas arriver
 				 */
 				default:
-					System.out.println("Producteur " + myAgent.getAID() + " Negociation : Erreur n'est pas sense arriver");
+					System.out.println("Producteur " + myAgent.getAID() + " Negociation : Erreur n'est pas censé arriver");
 					break;
 			}
 		}

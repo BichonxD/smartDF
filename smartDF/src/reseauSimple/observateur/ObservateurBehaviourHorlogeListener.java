@@ -36,6 +36,7 @@ public class ObservateurBehaviourHorlogeListener extends CyclicBehaviour
 				 * - on MAJ les annuaires tous les 3 coups.
 				 */
 				case AbstractAgent.HORLOGE_PHASE_NEGOCIATION :
+					((ObservateurAgent) myAgent).getMsgListenerAllPhases().setMsgHorlogeToAnswer(msg);
 					
 					// On MAJ les annuaires tous les 3 coups.
 					if(nbTourEffectue % 3 == 0)
@@ -53,22 +54,28 @@ public class ObservateurBehaviourHorlogeListener extends CyclicBehaviour
 						sdTrans.setType("transporteur");
 						dfdRechercheTransporteur.addServices(sdTrans);
 						
-						DFAgentDescription dfdrechercheTransporteurOfficiel = new DFAgentDescription();
+						DFAgentDescription dfdRechercheTransporteurOfficiel = new DFAgentDescription();
 						ServiceDescription SDTransporteurOfficiel = new ServiceDescription();
 						SDTransporteurOfficiel.setName("transporteur-officiel");
 						SDTransporteurOfficiel.setType("transporteur-officiel");
-						dfdrechercheTransporteurOfficiel.addServices(SDTransporteurOfficiel);
+						dfdRechercheTransporteurOfficiel.addServices(SDTransporteurOfficiel);
 						
 						// Récupération des annuaires
-						myAgent.addBehaviour(new GlobalBehaviourSearchAnnuaires(myAgent, dfdRechercheProducteur, dfdrechercheTransporteurOfficiel, dfdRechercheTransporteur));
+						myAgent.addBehaviour(new GlobalBehaviourSearchAnnuaires(myAgent, dfdRechercheProducteur, dfdRechercheTransporteurOfficiel, dfdRechercheTransporteur));
 					}
 					break;
 				
+				case AbstractAgent.HORLOGE_PHASE_FACTURATION :
+					((ObservateurAgent) myAgent).getMsgListenerAllPhases().setMsgHorlogeToAnswer(msg);
+					break;
+				
 				case AbstractAgent.HORLOGE_PHASE_DEPARTAGE :
+					((ObservateurAgent) myAgent).getMsgListenerAllPhases().setMsgHorlogeToAnswer(msg);
 					nbTourEffectue++;
 					break;
 					
 				default :
+					System.out.println("Message non compris par le gestionnaire de l'horloge de l'observateur.");
 					break;
 			}
 			
