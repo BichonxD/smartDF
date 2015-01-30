@@ -26,6 +26,7 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 		AID[] transporteursDisponibles = ((AbstractAgent) myAgent).getAnnuairePersoOptionnel();
 		AID[] transporteurOfficiel = ((AbstractAgent) myAgent).getAnnuairePersoTransporteurOfficiel();
 		int nbReponsesAttendues = 0;
+		ACLMessage msg = null;
 		
 		// Reçoit les messages de n'importe qui dans notre annuaire
 		MessageTemplate mt = null;
@@ -68,7 +69,10 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 			}
 		}
 		
-		ACLMessage msg = myAgent.receive(mt);
+		if(mt != null)
+			msg = myAgent.receive(mt);
+		else
+			block();
 		
 		if(msg != null)
 		{
@@ -118,7 +122,8 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 					break;
 				
 				default:
-					System.out.println("Message non compris.");
+					System.out.println("Message non compris dans l'observateur.\n" + msg + "\n" + msg.getPerformative());
+					System.out.println(mt);
 					break;
 			}
 		}

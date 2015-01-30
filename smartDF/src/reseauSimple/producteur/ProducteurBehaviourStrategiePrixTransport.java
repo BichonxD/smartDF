@@ -99,7 +99,7 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 					AgentContainer mc = rt.createMainContainer(pMain);
 					
 					Object[] argument = new Object[1];
-					argument[0] = myAgent.getAID();
+					argument[0] = myAgent;
 					
 					try {
 						AgentController ac = mc.createNewAgent("Transporteur " + myAgent.getAID(), TransporteurAgent.class.getName(), argument);
