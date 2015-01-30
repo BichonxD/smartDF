@@ -26,10 +26,12 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 		prixTransporteur = ((TransporteurAgent) myAgent).getPrixKWhTransporteur();
 		
 		//on envoi notre argent a notre producteur :
-		ACLMessage msg = new ACLMessage(AbstractAgent.TRANSPORTEUR_ENVOI_ARGENT);
-		msg.setSender(((TransporteurAgent) myAgent).getFournisseurID());
-		msg.setContent(Integer.toString(prixTransporteur));
-		myAgent.send(msg);
+		if(!((TransporteurAgent) myAgent).isTransporteurOfficiel()){
+			ACLMessage msg = new ACLMessage(AbstractAgent.TRANSPORTEUR_ENVOI_ARGENT);
+			msg.setSender(((TransporteurAgent) myAgent).getFournisseurID());
+			msg.setContent(Integer.toString(prixTransporteur));
+			myAgent.send(msg);
+		}
 		
 		//et on le met a zero
 		((TransporteurAgent) myAgent).setArgentTransporteur(0);
@@ -80,63 +82,77 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour {
 			//augmenter ou diminuer le prix
 			
 			else if (msg.getPerformative() == AbstractAgent.TRANSPORTEUR_FACTURATION_DEMANDE){
-				//dans le cas ou c'est mon agent la capacite diminue, pas de facture
-				if(msg.getSender() == ((TransporteurAgent) myAgent).getFournisseurID()){
-					capaciteRestante -= ((TransporteurAgent) myAgent).getCapaciteTransporteur();
-					facturationMonFournisseur = true;
 				
-					//on diminue la capacite et on facture les autres s'il y en a en attente
-					for (AID id : demandeEnAttente.navigableKeySet()) {
-						if (demandeEnAttente.get(id) < capaciteRestante) {
-							//soit on accepte une demande dans les capacite et on demande a etre paye
-							capaciteRestante -= demandeEnAttente.get(id);
-							ACLMessage msgReply = new ACLMessage(AbstractAgent.TRANSPORTEUR_FACTURATION_REPONSE_POSITIVE);
-							msgReply.setSender(id);
-							int aPayer = demandeEnAttente.get(id) * prixTransporteur;
+				//cas simple du transporteur officiel
+				if(((TransporteurAgent) myAgent).isTransporteurOfficiel()){
+					int demande = Integer.parseInt(msg.getContent());
+					ACLMessage msgReply = msg.createReply();
+					msgReply.setPerformative(AbstractAgent.TRANSPORTEUR_FACTURATION_REPONSE_POSITIVE);
+					int aPayer = demande * prixTransporteur;
+					msgReply.setContent(Integer.toString(aPayer));
+					myAgent.send(msgReply);
+				}
+				
+				else{
+					//dans le cas ou c'est mon agent la capacite diminue, pas de facture
+					if(msg.getSender() == ((TransporteurAgent) myAgent).getFournisseurID()){
+						capaciteRestante -= ((TransporteurAgent) myAgent).getCapaciteTransporteur();
+						facturationMonFournisseur = true;
+					
+						//on diminue la capacite et on facture les autres s'il y en a en attente
+						for (AID id : demandeEnAttente.navigableKeySet()) {
+							if (demandeEnAttente.get(id) < capaciteRestante) {
+								//soit on accepte une demande dans les capacite et on demande a etre paye
+								capaciteRestante -= demandeEnAttente.get(id);
+								ACLMessage msgReply = new ACLMessage(AbstractAgent.TRANSPORTEUR_FACTURATION_REPONSE_POSITIVE);
+								msgReply.setSender(id);
+								int aPayer = demandeEnAttente.get(id) * prixTransporteur;
+								msgReply.setContent(Integer.toString(aPayer));
+								myAgent.send(msgReply);
+								//TODO luc doit traiter ce message et me payer! Sinon p�nalit� :)
+							}
+							
+							else{
+								//si ca passe pas on la refuse!
+								ACLMessage msgReply = new ACLMessage(AbstractAgent.TRANSPORTEUR_FACTURATION_REPONSE_NEGATIVE);
+								msgReply.setSender(id);
+								myAgent.send(msgReply);
+							}
+						}
+						
+						//on verifie la capacite restante pour savoir la politique restante au tour suivant
+					}
+					
+					//dans le cas ou c'est pas une demande de facturation de mon fournisseur, mais que je l'ai deja transporte :
+					else if(msg.getSender() != ((TransporteurAgent) myAgent).getFournisseurID() && facturationMonFournisseur){
+						int demande = Integer.parseInt(msg.getContent());
+						if (demande < capaciteRestante) {
+							//si la demande passe
+							capaciteRestante -= demande;
+							ACLMessage msgReply = msg.createReply();
+							msgReply.setPerformative(AbstractAgent.TRANSPORTEUR_FACTURATION_REPONSE_POSITIVE);
+							int aPayer = demande * prixTransporteur;
 							msgReply.setContent(Integer.toString(aPayer));
 							myAgent.send(msgReply);
-							//TODO luc doit traiter ce message et me payer! Sinon p�nalit� :)
+							//On traite positivement
 						}
 						
 						else{
 							//si ca passe pas on la refuse!
-							ACLMessage msgReply = new ACLMessage(AbstractAgent.TRANSPORTEUR_FACTURATION_REPONSE_NEGATIVE);
-							msgReply.setSender(id);
+							ACLMessage msgReply = msg.createReply();
+							msgReply.setPerformative(AbstractAgent.TRANSPORTEUR_FACTURATION_REPONSE_NEGATIVE);
 							myAgent.send(msgReply);
 						}
 					}
 					
-					//on verifie la capacite restante pour savoir la politique restante au tour suivant
-				}
-				
-				//dans le cas ou c'est pas une demande de facturation de mon fournisseur, mais que je l'ai deja transporte :
-				else if(msg.getSender() != ((TransporteurAgent) myAgent).getFournisseurID() && facturationMonFournisseur){
-					int demande = Integer.parseInt(msg.getContent());
-					if (demande < capaciteRestante) {
-						//si la demande passe
-						capaciteRestante -= demande;
-						ACLMessage msgReply = msg.createReply();
-						msgReply.setPerformative(AbstractAgent.TRANSPORTEUR_FACTURATION_REPONSE_POSITIVE);
-						int aPayer = demande * prixTransporteur;
-						msgReply.setContent(Integer.toString(aPayer));
-						myAgent.send(msgReply);
-						//On traite positivement
-					}
-					
+					//et enfin si on a pas traite le fournisseur, on met le message dans la pile des demandes en attendant de recevoir la demande de son producteur
 					else{
-						//si ca passe pas on la refuse!
-						ACLMessage msgReply = msg.createReply();
-						msgReply.setPerformative(AbstractAgent.TRANSPORTEUR_FACTURATION_REPONSE_NEGATIVE);
-						myAgent.send(msgReply);
+						AID demandeAidTransport = msg.getSender();
+						int demandePrixTransport = Integer.parseInt(msg.getContent());
+						demandeEnAttente.put(demandeAidTransport, demandePrixTransport);
 					}
 				}
 				
-				//et enfin si on a pas traite le fournisseur, on met le message dans la pile des demandes en attendant de recevoir la demande de son producteur
-				else{
-					AID demandeAidTransport = msg.getSender();
-					int demandePrixTransport = Integer.parseInt(msg.getContent());
-					demandeEnAttente.put(demandeAidTransport, demandePrixTransport);
-				}
 			}
 			
 			else if (msg.getPerformative() == AbstractAgent.TRANSPORTEUR_ENCAISSE_PAIEMENT) {
