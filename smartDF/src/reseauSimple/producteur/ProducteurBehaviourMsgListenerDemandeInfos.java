@@ -62,6 +62,8 @@ public class ProducteurBehaviourMsgListenerDemandeInfos extends CyclicBehaviour
 					break;
 			}
 		}
+		else
+			block();
 	}
 	
 }

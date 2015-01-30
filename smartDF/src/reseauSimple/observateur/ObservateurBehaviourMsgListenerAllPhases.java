@@ -83,42 +83,40 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 			{
 				case AbstractAgent.PRODUCTEUR_PRIX_REPONSE:
 					int prixProd = Integer.parseInt(msg.getContent());
-					((ObservateurAgent) myAgent).getMyGUI().ajouterPrixProducteur(sender, "Le producteur " + sender.getName() + " a pour prix : " + prixProd + ".");
+					((ObservateurAgent) myAgent).getMyGUI().ajouterPrixProducteur(sender, "Le producteur " + sender.getLocalName() + " a pour prix : " + prixProd + ".");
 					nbReponses++;
 					break;
 				
 				case AbstractAgent.PRODUCTEUR_ARGENT_REPONSE:
 					int argentProd = Integer.parseInt(msg.getContent());
-					((ObservateurAgent) myAgent).getMyGUI().ajouterArgentProducteur(sender, "Le producteur " + sender.getName() + " a fait " + argentProd + "€ de bénéfices.");
+					((ObservateurAgent) myAgent).getMyGUI().ajouterArgentProducteur(sender, "Le producteur " + sender.getLocalName() + " a fait " + argentProd + "€ de bénéfices.");
 					nbReponses++;
 					break;
 				
 				case AbstractAgent.PRODUCTEUR_NBCLIENT_REPONSE:
 					int nbClientProd = Integer.parseInt(msg.getContent());
-					((ObservateurAgent) myAgent).getMyGUI().ajouterNbClientsProducteur(sender, "Le producteur " + sender.getName() + " a " + nbClientProd + " clients.");
+					((ObservateurAgent) myAgent).getMyGUI().ajouterNbClientsProducteur(sender, "Le producteur " + sender.getLocalName() + " a " + nbClientProd + " clients.");
 					nbReponses++;
 					break;
 				
 				case AbstractAgent.TRANSPORTEUR_PRIX_REPONSE:
 					int prixTrans = Integer.parseInt(msg.getContent());
-					((ObservateurAgent) myAgent).getMyGUI().ajouterPrixTransporteur(sender, "Le transporteur " + sender.getName() + " a pour prix : " + prixTrans + " €/kWh");
+					((ObservateurAgent) myAgent).getMyGUI().ajouterPrixTransporteur(sender, "Le transporteur " + sender.getLocalName() + " a pour prix : " + prixTrans + " €/kWh");
 					nbReponses++;
 					break;
 				
 				case AbstractAgent.TRANSPORTEUR_ARGENT_REPONSE:
 					int argentTrans = Integer.parseInt(msg.getContent());
-					((ObservateurAgent) myAgent).getMyGUI().ajouterArgentTransporteur(sender, "Le transporteur " + sender.getName() + " a fait " + argentTrans + "€ de bénéfices.");
+					((ObservateurAgent) myAgent).getMyGUI().ajouterArgentTransporteur(sender, "Le transporteur " + sender.getLocalName() + " a fait " + argentTrans + "€ de bénéfices.");
 					nbReponses++;
 					break;
 				
 				case AbstractAgent.TRANSPORTEUR_CAPACITE_REPONSE:
-					if(msg.getContent().equals("infini"))
-						((ObservateurAgent) myAgent).getMyGUI().ajouterCapaciteTransporteur(sender, "Le transporteur " + sender.getName() + " a une capacite de transport infinie.");
+					int capaciteTrans = Integer.parseInt(msg.getContent());
+					if(capaciteTrans == Integer.MAX_VALUE)
+						((ObservateurAgent) myAgent).getMyGUI().ajouterCapaciteTransporteur(sender, "Le transporteur " + sender.getLocalName() + " a une capacite de transport infinie.");
 					else
-					{
-						int capaciteTrans = Integer.parseInt(msg.getContent());
-						((ObservateurAgent) myAgent).getMyGUI().ajouterPrixProducteur(sender, "Le transporteur " + sender.getName() + " a pour capacite : " + capaciteTrans + " kWh.");
-					}
+						((ObservateurAgent) myAgent).getMyGUI().ajouterPrixProducteur(sender, "Le transporteur " + sender.getLocalName() + " a pour capacite : " + capaciteTrans + " kWh.");
 					nbReponses++;
 					break;
 				
@@ -127,8 +125,6 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 					System.out.println(mt);
 					break;
 			}
-			
-			//System.out.println("Nombre de réponses reçues " + nbReponses + " sur " + nbReponsesAttendues);
 		}
 		else
 			block();

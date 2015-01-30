@@ -26,9 +26,9 @@ public class ProducteurBehaviourMsgListenerNegociation extends CyclicBehaviour
 		{
 			switch(msg.getPerformative())
 			{
-			/*
-			 * On ajoute le consomateur a la liste de nos client
-			 */
+				/*
+				 * On ajoute le consomateur a la liste de nos client
+				 */
 				case AbstractAgent.PRODUCTEUR_ABONNEMENT:
 					((ProducteurAgent) myAgent).addClientsFournisseur(msg.getSender());
 					break;
@@ -48,6 +48,8 @@ public class ProducteurBehaviourMsgListenerNegociation extends CyclicBehaviour
 					break;
 			}
 		}
+		else
+			block();
 	}
 	
 }

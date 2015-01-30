@@ -19,7 +19,6 @@ public class ProducteurBehaviourFactureTransporteur extends OneShotBehaviour
 	@Override
 	public void action()
 	{
-		System.out.println("here1 ");
 		/*
 		 * Calcul de l'electricite a fournir ce tour-ci si on a des clients
 		 */
@@ -45,7 +44,6 @@ public class ProducteurBehaviourFactureTransporteur extends OneShotBehaviour
 					block();
 			}
 		}
-		System.out.println("here2 " + electriciteATransporter);
 		
 		/*
 		 * Calcul et utilisation de la capacite de transport personnel, si on a des transporteur, au maximum de ce qu'on peut utiliser, ils sont gratuit donc pas de facturation
@@ -98,7 +96,6 @@ public class ProducteurBehaviourFactureTransporteur extends OneShotBehaviour
 				}
 			}
 		}
-		System.out.println("here3 " + electriciteATransporter);
 		
 		/*
 		 * Si il reste de l'electricite a transporter on utilise le transporteur universel et on le paye
@@ -108,6 +105,7 @@ public class ProducteurBehaviourFactureTransporteur extends OneShotBehaviour
 			ACLMessage facturationTransporteurUniversel = new ACLMessage(AbstractAgent.TRANSPORTEUR_FACTURATION_DEMANDE);
 			facturationTransporteurUniversel.addReceiver(((ProducteurAgent) myAgent).getAnnuairePersoTransporteurOfficiel()[0]);
 			facturationTransporteurUniversel.setContent(Integer.toString(electriciteATransporter));
+			myAgent.send(facturationTransporteurUniversel);
 			
 			boolean reponse = false;
 			
@@ -124,7 +122,6 @@ public class ProducteurBehaviourFactureTransporteur extends OneShotBehaviour
 					block();
 			}
 		}
-		System.out.println("here4 " + electriciteATransporter);
 	}
 	
 }

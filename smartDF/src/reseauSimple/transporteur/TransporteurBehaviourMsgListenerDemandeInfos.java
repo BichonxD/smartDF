@@ -62,6 +62,8 @@ public class TransporteurBehaviourMsgListenerDemandeInfos extends CyclicBehaviou
 					break;
 			}
 		}
+		else
+			block();
 	}
 	
 }
