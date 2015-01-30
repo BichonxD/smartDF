@@ -117,6 +117,13 @@ public class ProducteurBehaviourFactureTransporteur extends OneShotBehaviour
 				{
 					((ProducteurAgent) myAgent).setArgentFournisseur(((ProducteurAgent) myAgent).getArgentFournisseur() - Integer.parseInt(msg.getContent()));
 					reponse = true;
+					
+					//System.out.println("TRANSPORTEUR_FACTURATION_REPONSE_POSITIVE: " + myAgent.getAID() + " paye " + msg.getContent() + " a " + msg.getSender());
+					
+					ACLMessage reply = msg.createReply();
+					reply.setPerformative(AbstractAgent.TRANSPORTEUR_ENCAISSE_PAIEMENT);
+					reply.setContent(msg.getContent());
+					myAgent.send(reply);
 				}
 				else
 					block();

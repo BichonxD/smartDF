@@ -24,7 +24,7 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 	{
 		// Récupération de tous les annuaires
 		AID[] producteursDisponibles = ((AbstractAgent) myAgent).getAnnuairePerso();
-		AID[] transporteursDisponibles = ((AbstractAgent) myAgent).getAnnuairePersoOptionnel();
+		//AID[] transporteursDisponibles = ((AbstractAgent) myAgent).getAnnuairePersoOptionnel();
 		AID[] transporteurOfficiel = ((AbstractAgent) myAgent).getAnnuairePersoTransporteurOfficiel();
 		int nbReponsesAttendues = 0;
 		ACLMessage msg = null;
@@ -33,7 +33,7 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 		MessageTemplate mt = null;
 		if(producteursDisponibles != null)
 		{
-			nbReponsesAttendues += producteursDisponibles.length * 3;
+			nbReponsesAttendues += producteursDisponibles.length * 4;
 			
 			for(AID aid : producteursDisponibles)
 			{
@@ -44,7 +44,7 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 			}
 		}
 		
-		if(transporteursDisponibles != null)
+		/*if(transporteursDisponibles != null)
 		{
 			nbReponsesAttendues += transporteursDisponibles.length * 3;
 			
@@ -55,7 +55,7 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 				else
 					mt = MessageTemplate.or(mt, MessageTemplate.MatchSender(aid));
 			}
-		}
+		}*/
 		
 		if(transporteurOfficiel != null)
 		{
@@ -79,6 +79,8 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 		{
 			AID sender = msg.getSender();
 			
+			//System.out.println(msg.getPerformative());
+			
 			switch(msg.getPerformative())
 			{
 				case AbstractAgent.PRODUCTEUR_PRIX_REPONSE:
@@ -98,6 +100,12 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 					((ObservateurAgent) myAgent).getMyGUI().ajouterNbClientsProducteur(sender, "Le producteur " + sender.getLocalName() + " a " + nbClientProd + " clients.");
 					nbReponses++;
 					break;
+					
+				case AbstractAgent.PRODUCTEUR_NBTRANSPORTEUR_REPONSE:
+					int nbTransProd = Integer.parseInt(msg.getContent());
+					((ObservateurAgent) myAgent).getMyGUI().ajouterNbTransporteursProducteur(sender, "Le producteur " + sender.getLocalName() + " a " + nbTransProd + " transporteurs personels.");
+					nbReponses++;
+					break;					
 				
 				case AbstractAgent.TRANSPORTEUR_PRIX_REPONSE:
 					int prixTrans = Integer.parseInt(msg.getContent());

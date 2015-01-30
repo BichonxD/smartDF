@@ -19,6 +19,7 @@ public class ObservateurGUI extends JFrame
 	private HashMap<AID, JLabel> labelsPrixProd = new HashMap<AID, JLabel>();
 	private HashMap<AID, JLabel> labelsArgentProd = new HashMap<AID, JLabel>();
 	private HashMap<AID, JLabel> labelsNbClientsProd = new HashMap<AID, JLabel>();
+	private HashMap<AID, JLabel> labelsNbTransporteursProd = new HashMap<AID, JLabel>();
 	private HashMap<AID, JLabel> labelsPrixTrans = new HashMap<AID, JLabel>();
 	private HashMap<AID, JLabel> labelsArgentTrans = new HashMap<AID, JLabel>();
 	private HashMap<AID, JLabel> labelsCapaciteTrans = new HashMap<AID, JLabel>();
@@ -103,6 +104,22 @@ public class ObservateurGUI extends JFrame
 		{
 			JLabel l = new JLabel(s);
 			labelsNbClientsProd.put(a, l);
+			getContentPane().add(l);
+		}
+		
+		pack();
+		revalidate();
+		repaint();
+	}
+	
+	public void ajouterNbTransporteursProducteur(AID a, String s)
+	{
+		if(labelsNbTransporteursProd.containsKey(a))
+			labelsNbTransporteursProd.get(a).setText(s);
+		else
+		{
+			JLabel l = new JLabel(s);
+			labelsNbTransporteursProd.put(a, l);
 			getContentPane().add(l);
 		}
 		

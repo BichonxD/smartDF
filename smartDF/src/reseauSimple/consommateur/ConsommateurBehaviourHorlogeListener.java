@@ -66,7 +66,9 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 						myAgent.addBehaviour(new ConsommateurBehaviourAskPrixProducteur(myAgent));
 					}
 					// On ecoute les messages émis par les producteurs.
-					myAgent.addBehaviour(new ConsommateurBehaviourMsgListenerNegociation(myAgent, msg));
+					ConsommateurBehaviourMsgListenerNegociation cbmln = new ConsommateurBehaviourMsgListenerNegociation(myAgent, msg);
+					myAgent.addBehaviour(cbmln);
+					((AbstractAgent) myAgent).getListCyclicBehaviour().add(cbmln);
 					break;
 				
 				/*

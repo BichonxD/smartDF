@@ -40,6 +40,11 @@ public class ObservateurBehaviourAskProducteurs extends OneShotBehaviour
 				ACLMessage msgNbClient = new ACLMessage(AbstractAgent.PRODUCTEUR_NBCLIENT_DEMANDE);
 				msgNbClient.addReceiver(aid);
 				myAgent.send(msgNbClient);
+				
+				// Nombre de transporteurs perso
+				ACLMessage msgNbTransporteurPerso = new ACLMessage(AbstractAgent.PRODUCTEUR_NBTRANSPORTEUR_DEMANDE);
+				msgNbTransporteurPerso.addReceiver(aid);
+				myAgent.send(msgNbTransporteurPerso);
 			}
 		}
 	}

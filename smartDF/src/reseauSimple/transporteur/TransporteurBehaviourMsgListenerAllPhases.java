@@ -34,12 +34,12 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 			msg.setSender(((TransporteurAgent) myAgent).getFournisseurID());
 			msg.setContent(Integer.toString(((TransporteurAgent) myAgent).getArgentTransporteur()));
 			myAgent.send(msg);
+			
+			// et on le met a zero
+			((TransporteurAgent) myAgent).setArgentTransporteur(0);
+			facturationMonFournisseur = false;
+			demandeEnAttente.clear();
 		}
-		
-		// et on le met a zero
-		((TransporteurAgent) myAgent).setArgentTransporteur(0);
-		facturationMonFournisseur = false;
-		demandeEnAttente.clear();
 	}
 	
 	@Override
@@ -143,6 +143,7 @@ public class TransporteurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 			}
 			else if(msg.getPerformative() == AbstractAgent.TRANSPORTEUR_ENCAISSE_PAIEMENT)
 			{
+				//System.out.println("TRANSPORTEUR_ENCAISSE_PAIEMENT:" + myAgent.getAID() + " je gagne pour mon dur labeur " + Integer.parseInt(msg.getContent()) + " euros paye par " + msg.getSender());
 				int argentDispo = ((TransporteurAgent) myAgent).getArgentTransporteur();
 				argentDispo += Integer.parseInt(msg.getContent());
 				((TransporteurAgent) myAgent).setArgentTransporteur(argentDispo);

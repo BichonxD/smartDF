@@ -39,7 +39,9 @@ public class ProducteurBehaviourFactureClient extends OneShotBehaviour
 		}
 		
 		// Encaissement
-		for(int nombreReponse = 0; nombreReponse < clientsFournisseur.size();)
+		int nombreReponse = 0;
+		
+		while (nombreReponse < clientsFournisseur.size())
 		{
 			ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_FACTURATION_REPONSE));
 			
@@ -47,6 +49,8 @@ public class ProducteurBehaviourFactureClient extends OneShotBehaviour
 			{
 				((ProducteurAgent) myAgent).setArgentFournisseur(((ProducteurAgent) myAgent).getArgentFournisseur() + Integer.parseInt(msg.getContent()));
 				nombreReponse++;
+				
+				//System.out.println("PRODUCTEUR_FACTURATION_REPONSE: " + msg.getSender() + " paye " + msg.getContent() + " a " + myAgent.getAID());
 			}
 			else
 				block();

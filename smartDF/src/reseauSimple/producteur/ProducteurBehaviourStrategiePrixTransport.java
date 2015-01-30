@@ -3,6 +3,7 @@ package reseauSimple.producteur;
 import reseauSimple.global.AbstractAgent;
 import reseauSimple.global.GlobalBehaviourHorlogeTalker;
 import reseauSimple.transporteur.TransporteurAgent;
+import test.Test;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.Profile;
@@ -35,10 +36,15 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 		 */
 		int electriciteAFournirPrevisionnel = 0;
 		
+		//System.out.println(myAgent.getAID() + " salut je demare ma phase de negociation");
+		
 		if (((ProducteurAgent) myAgent).getClientsFournisseur() != null && ((ProducteurAgent) myAgent).getClientsFournisseur().size() != 0) {
 			ACLMessage electriciteprevisionnel = new ACLMessage(AbstractAgent.CONSOMMATEUR_BESOIN_DEMANDE);
 			for (AID id : ((ProducteurAgent) myAgent).getClientsFournisseur())
+			{
 				electriciteprevisionnel.addReceiver(id);
+				//System.out.println("CONSOMMATEUR_BESOIN_DEMANDE: " + id + " de combien avez vous besoin signe " + myAgent.getAID());
+			}
 			myAgent.send(electriciteprevisionnel);
 			
 			int nombreReponse = 0;
@@ -50,9 +56,13 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 				{
 					electriciteAFournirPrevisionnel += Integer.parseInt(msg.getContent());
 					nombreReponse++;
+					
+					//System.out.println("CONSOMMATEUR_BESOIN_REPONSE: " + msg.getSender() + " a besoin de  " + msg.getContent() + " de kW/h fourni par " + myAgent.getAID());
 				}
 			}
 		}		
+		
+		//System.out.println(myAgent.getAID() + " a " + ((ProducteurAgent) myAgent).getClientsFournisseur().size() + " clients");
 		
 		/*
 		 * Calcul de la capacite personnel de transport pour calculer notre prix a ce tout ci, si on a des transporteurs
@@ -77,6 +87,8 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 				}
 			}
 		}
+		
+		//System.out.println(myAgent.getAID() + " a " + ((ProducteurAgent) myAgent).getTransportsFournisseur().size() + " transporteur personnel");
 			
 		/*
 		 * Calcul du prix a ce tour ci
@@ -91,24 +103,20 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 			//Si il arrive a remplier ses transporteur personnel il augmente son prix
 			if (electriciteTransporteurUniverselPrevisionnel > 0) {
 				nouveauPrix *= 1.1;
-				//Si il a assez d'argent pour construire plus de deux transporteur, il en construit un et garde le reste afin de toujours avoir une marge pour payer les amendes
-				if (((ProducteurAgent) myAgent).getArgentFournisseur() > ((ProducteurAgent) myAgent).getPrixTransporteur() *3) {
-					Runtime rt = Runtime.instance();
-					rt.setCloseVM(true);
-					Profile pMain = new ProfileImpl("localhost", 8888, null);
-					AgentContainer mc = rt.createMainContainer(pMain);
+				//Si il a assez d'argent pour construire plus de trois transporteur, il en construit un et garde le reste afin de toujours avoir une marge pour payer les amendes
+				/*if (((ProducteurAgent) myAgent).getArgentFournisseur() > ((ProducteurAgent) myAgent).getPrixTransporteur() * 3) {
 					
 					Object[] argument = new Object[1];
 					argument[0] = myAgent;
 					
 					try {
-						AgentController ac = mc.createNewAgent("Transporteur " + myAgent.getAID(), TransporteurAgent.class.getName(), argument);
+						AgentController ac = Test.mc.createNewAgent("Transporteur " + myAgent.getAID(), TransporteurAgent.class.getName(), argument);
 						ac.start();
 						//Ajout a mes transporteurs via l'annuaire au debut de la phase 1 avec l'horloge
 					} catch (StaleProxyException e) {
 						e.printStackTrace();
 					}
-				}
+				}*/
 			}
 			//Sinon il le diminue (marche pour le cas ou on a pas eu de client)
 			else
@@ -125,6 +133,9 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 			changementPrix.setContent(Integer.toString(nouveauPrix));
 			myAgent.send(changementPrix);
 		}
+		
+		//On applique le changement
+		((ProducteurAgent) myAgent).setPrixFournisseur(nouveauPrix);
 		
 		
 		/*

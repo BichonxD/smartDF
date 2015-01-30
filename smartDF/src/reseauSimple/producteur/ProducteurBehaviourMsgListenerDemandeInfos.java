@@ -20,10 +20,12 @@ public class ProducteurBehaviourMsgListenerDemandeInfos extends CyclicBehaviour
 	{
 		// Reçoit les messages suivant et ecarte les autres
 		MessageTemplate mt = 
-				MessageTemplate.or(MessageTemplate.or(
+				MessageTemplate.or(MessageTemplate.or(MessageTemplate.or(
 				MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_PRIX_DEMANDE),
 				MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_ARGENT_DEMANDE)),
+				MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_NBTRANSPORTEUR_DEMANDE)),
 				MessageTemplate.MatchPerformative(AbstractAgent.PRODUCTEUR_NBCLIENT_DEMANDE));
+		
 		ACLMessage msg = myAgent.receive(mt);
 		
 		if(msg != null)
@@ -48,11 +50,19 @@ public class ProducteurBehaviourMsgListenerDemandeInfos extends CyclicBehaviour
 					myAgent.send(reply);
 					break;
 				
-				// On renvoie notre capacité
+				// On renvoie notre nb de client
 				case AbstractAgent.PRODUCTEUR_NBCLIENT_DEMANDE:
 					reply = msg.createReply();
 					reply.setPerformative(AbstractAgent.PRODUCTEUR_NBCLIENT_REPONSE);
 					reply.setContent(Integer.toString(((ProducteurAgent) myAgent).getClientsFournisseur().size()));
+					myAgent.send(reply);
+					break;
+					
+					// On renvoie notre nombre de transporteur
+				case AbstractAgent.PRODUCTEUR_NBTRANSPORTEUR_DEMANDE:
+					reply = msg.createReply();
+					reply.setPerformative(AbstractAgent.PRODUCTEUR_NBTRANSPORTEUR_REPONSE);
+					reply.setContent(Integer.toString(((ProducteurAgent) myAgent).getTransportsFournisseur().size()));
 					myAgent.send(reply);
 					break;
 				

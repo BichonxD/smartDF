@@ -21,18 +21,18 @@ import jade.wrapper.StaleProxyException;
 
 public class Test
 {
+	public static Runtime rt = Runtime.instance();
+	public static Profile pMain = new ProfileImpl("localhost", 8888, null);
+	public static AgentContainer mc = rt.createMainContainer(pMain);
+	
 	public static void main(String[] a) throws StaleProxyException
 	{
-		Runtime rt = Runtime.instance();
 		rt.setCloseVM(true);
-		
-		Profile pMain = new ProfileImpl("localhost", 8888, null);
-		AgentContainer mc = rt.createMainContainer(pMain);
 
 		//int nbConsommateur = (int) (Math.random() * 5 + 1);
 		//int nbProducteur = (int) (Math.random() * 5 + 1);
-		int nbConsommateur = 3;
-		int nbProducteur = 2;
+		int nbConsommateur = 80;
+		int nbProducteur = 3;
 		
 		ArrayList<AgentController> lAC = new ArrayList<AgentController>();
 		

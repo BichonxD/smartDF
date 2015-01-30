@@ -6,11 +6,11 @@ import reseauSimple.global.AbstractAgent;
 import reseauSimple.global.GlobalBehaviourHorlogeTalker;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour
+public class ConsommateurBehaviourMsgListenerNegociation extends CyclicBehaviour
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -43,15 +43,12 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour
 			{
 				if(cpt < producteurpossible.length)
 				{
-					{
-						int prix = Integer.parseInt(msg.getContent());
-						repProducteur.put(msg.getSender(), prix);
-						cpt++;
-					}
-					if(cpt == producteurpossible.length)
-					{
-						
-					}
+					int prix = Integer.parseInt(msg.getContent());
+					repProducteur.put(msg.getSender(), prix);
+					cpt++;
+				}
+				if(cpt == producteurpossible.length)
+				{
 					// prendre la décision => dire au mec que c'est ok.
 					int prixTemp = repProducteur.get(repProducteur.firstKey());
 					AID aidTemp = repProducteur.firstKey();
@@ -107,6 +104,8 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour
 			
 			else if(msg.getPerformative() == AbstractAgent.CONSOMMATEUR_BESOIN_DEMANDE)
 			{
+				System.out.println(myAgent.getAID() + " jai recu un truc");
+				
 				ACLMessage reply = msg.createReply();
 				reply.setPerformative(AbstractAgent.CONSOMMATEUR_BESOIN_REPONSE);
 				
@@ -125,6 +124,8 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour
 				
 				reply.setContent(Integer.toString(besoin));
 				myAgent.send(reply);
+				
+				//System.out.println("CONSOMMATEUR_BESOIN_REPONSE: " + myAgent.getAID() + " j'ai besoin de  " + reply.getContent() + " de kW/h fourni par vous " + reply.getSender());
 			}
 			
 			else
@@ -136,12 +137,6 @@ public class ConsommateurBehaviourMsgListenerNegociation extends Behaviour
 		}
 		else
 			block();
-	}
-	
-	@Override
-	public boolean done()
-	{
-		return isDone;
 	}
 	
 }

@@ -38,10 +38,8 @@ public abstract class AbstractAgent extends Agent
 	static public final int PRODUCTEUR_ARGENT_REPONSE = 126;
 	static public final int PRODUCTEUR_NBCLIENT_DEMANDE = 127;
 	static public final int PRODUCTEUR_NBCLIENT_REPONSE = 128;
-
-	// Facturation pour le producteur
-	static public final int PRODUCTEUR_FACTURATION_DEMANDE = 130;
-	static public final int PRODUCTEUR_FACTURATION_REPONSE = 131;
+	static public final int PRODUCTEUR_NBTRANSPORTEUR_DEMANDE = 129;
+	static public final int PRODUCTEUR_NBTRANSPORTEUR_REPONSE = 130;
 
 	// Constantes pour le producteur en phase departage
 	static public final int PRODUCTEUR_AMENDE = 140;
@@ -58,6 +56,10 @@ public abstract class AbstractAgent extends Agent
 	static public final int TRANSPORTEUR_FACTURATION_REPONSE_NEGATIVE = 158;
 	static public final int TRANSPORTEUR_ENCAISSE_PAIEMENT = 159;
 	static public final int TRANSPORTEUR_ENVOI_ARGENT = 160;
+	
+	// Facturation pour le producteur
+	static public final int PRODUCTEUR_FACTURATION_DEMANDE = 170;
+	static public final int PRODUCTEUR_FACTURATION_REPONSE = 171;
 	
 	
 	protected void setup()
