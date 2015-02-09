@@ -46,6 +46,19 @@ public class ProducteurBehaviourFactureTransporteur extends OneShotBehaviour
 		}
 		
 		/*
+		 * Generation de l'electricite pour chaque client, autrement dit coup de facturation
+		 */
+		
+		//Determination du prix de fabrication pour ce tour ci
+		((ProducteurAgent) myAgent).setPrixFabrication((int) (Math.random() * (ProducteurAgent.getPrixFabricationMax() - ProducteurAgent.getPrixFabricationMin()) + ProducteurAgent.getPrixFabricationMin()));
+		
+		//Facturation
+		
+		//System.out.println(myAgent.getAID() + " paye " + ((ProducteurAgent) myAgent).getArgentFournisseur() + " - " + ((ProducteurAgent) myAgent).getPrixFabrication() + " * " + electriciteATransporter + " = " + (((ProducteurAgent) myAgent).getArgentFournisseur() - ((ProducteurAgent) myAgent).getPrixFabrication() * electriciteATransporter));
+		
+		((ProducteurAgent) myAgent).setArgentFournisseur(((ProducteurAgent) myAgent).getArgentFournisseur() - ((ProducteurAgent) myAgent).getPrixFabrication() * electriciteATransporter);
+		
+		/*
 		 * Calcul et utilisation de la capacite de transport personnel, si on a des transporteur, au maximum de ce qu'on peut utiliser, ils sont gratuit donc pas de facturation
 		 */
 		if(((ProducteurAgent) myAgent).getTransportsFournisseur() != null && ((ProducteurAgent) myAgent).getTransportsFournisseur().size() != 0)

@@ -15,8 +15,6 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 {
 	private static final long serialVersionUID = 1L;
 	
-	private int nbTourEffectue = 0;
-	
 	public ConsommateurBehaviourHorlogeListener(Agent a)
 	{
 		super(a);
@@ -52,7 +50,12 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 					}
 					((AbstractAgent) myAgent).getListCyclicBehaviour().clear();
 					
-					if(nbTourEffectue % ((ConsommateurAgent) myAgent).getDureeRenouvellement() == 0)
+					//Incrementation du nombre de tour pour le if plus bas
+					((ConsommateurAgent) myAgent).incrementeNbTourEffectue();
+					
+					//System.out.println(myAgent.getAID() + " " + ((ConsommateurAgent) myAgent).getNbTourEffectue() + " % " + ((ConsommateurAgent) myAgent).getDureeRenouvellement());
+					
+					if(((ConsommateurAgent) myAgent).getNbTourEffectue() % ((ConsommateurAgent) myAgent).getDureeRenouvellement() == 0)
 					{
 						// On met à jour l'annuaire des producteurs.
 						DFAgentDescription rechercheProducteur = new DFAgentDescription();
@@ -65,10 +68,15 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 						// On demande le prix à tous les producteurs.
 						myAgent.addBehaviour(new ConsommateurBehaviourAskPrixProducteur(myAgent));
 					}
+					else {
+						myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msg));
+					}
+					
 					// On ecoute les messages émis par les producteurs.
 					ConsommateurBehaviourMsgListenerNegociation cbmln = new ConsommateurBehaviourMsgListenerNegociation(myAgent, msg);
 					myAgent.addBehaviour(cbmln);
 					((AbstractAgent) myAgent).getListCyclicBehaviour().add(cbmln);
+					
 					break;
 				
 				/*

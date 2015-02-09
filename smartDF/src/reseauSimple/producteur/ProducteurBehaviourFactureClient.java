@@ -50,7 +50,7 @@ public class ProducteurBehaviourFactureClient extends OneShotBehaviour
 				((ProducteurAgent) myAgent).setArgentFournisseur(((ProducteurAgent) myAgent).getArgentFournisseur() + Integer.parseInt(msg.getContent()));
 				nombreReponse++;
 				
-				//System.out.println("PRODUCTEUR_FACTURATION_REPONSE: " + msg.getSender() + " paye " + msg.getContent() + " a " + myAgent.getAID());
+				//System.out.println("PRODUCTEUR_FACTURATION_REPONSE: " + myAgent.getAID() + " recoit " + msg.getContent() + " de " + msg.getSender());
 			}
 			else
 				block();

@@ -17,7 +17,7 @@ public class TransporteurAgent extends AbstractAgent
 
 	// Caractéristiques du transporteur
 	private final int idTransporteur = getNextID();
-	private final int prixKWhTransporteur = (int) (Math.random() * (PRIX_MAX - PRIX_MIN) + PRIX_MIN);
+	private int prixKWhTransporteur = (int) (Math.random() * (PRIX_MAX - PRIX_MIN) + PRIX_MIN);
 	
 	// Variables propres
 	private AID proprietaire = null;
@@ -52,6 +52,7 @@ public class TransporteurAgent extends AbstractAgent
 		{
 			setServiceName("transporteur");
 			capaciteTransporteur =  (int) (Math.random() * (CAPACITE_MAX - CAPACITE_MIN) + CAPACITE_MIN);
+			prixKWhTransporteur = PRIX_MAX;
 		}
 		super.setup();
 		
@@ -77,6 +78,11 @@ public class TransporteurAgent extends AbstractAgent
 	public int getPrixKWhTransporteur()
 	{
 		return prixKWhTransporteur;
+	}
+	
+	public void setPrixKWhTransporteur(int prixKWhTransporteur)
+	{
+		this.prixKWhTransporteur = prixKWhTransporteur;
 	}
 	
 	public int getArgentTransporteur()
@@ -121,6 +127,15 @@ public class TransporteurAgent extends AbstractAgent
 		ret += "\tPrix de vente du kWh = " + prixKWhTransporteur + " €/kWh\n";
 		ret += "\tArgent = " + argentTransporteur + " €\n";
 		return ret;
+	}
+	
+
+	public static int getPrixMax() {
+		return PRIX_MAX;
+	}
+
+	public static int getPrixMin() {
+		return PRIX_MIN;
 	}
 	
 }

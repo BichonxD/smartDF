@@ -20,7 +20,7 @@ public class ConsommateurBehaviourGestionnaireDepartage extends OneShotBehaviour
 	
 	@Override
 	public void action()
-	{
+	{		
 		if(((ConsommateurAgent) myAgent).isaEteFacture())
 			((ConsommateurAgent) myAgent).setaEteFacture(false);
 		else

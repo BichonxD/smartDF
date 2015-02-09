@@ -28,6 +28,7 @@ public class ConsommateurBehaviourMsgListenerNegociation extends CyclicBehaviour
 	@Override
 	public void action()
 	{
+		
 		// Reçoit les messages des producteurs
 		AID[] producteurpossible = ((AbstractAgent) myAgent).getAnnuairePerso();
 		MessageTemplate mt = MessageTemplate.or(MessageTemplate.or(
@@ -58,6 +59,9 @@ public class ConsommateurBehaviourMsgListenerNegociation extends CyclicBehaviour
 						if(repProducteur.get(id) < prixTemp)
 						{
 							prixTemp = repProducteur.get(id);
+							aidTemp = id;
+						}
+						else if (repProducteur.get(id) == prixTemp && ((Math.random() * 2) > 1)) {
 							aidTemp = id;
 						}
 					}

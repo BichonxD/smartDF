@@ -1,15 +1,17 @@
 package reseauSimple.producteur;
 
 import java.util.ArrayList;
+
 import reseauSimple.global.AbstractAgent;
+import reseauSimple.transporteur.TransporteurAgent;
 import jade.core.AID;
 
 public class ProducteurAgent extends AbstractAgent
 {
 	// Constantes
 	private static final long serialVersionUID = 1L;
-	private static final int PRIX_MAX = 15;
-	private static final int PRIX_MIN = 10;
+	private static final int PRIX_FABRICATION_MAX = 10;
+	private static final int PRIX_FABRICATION_MIN = 5;
 	
 	// Variables statiques
 	private static int currentID = 0;
@@ -18,10 +20,11 @@ public class ProducteurAgent extends AbstractAgent
 	private final int idProducteur = getNextID();
 	
 	// Variables propres
-	private int prixFournisseur = (int) (Math.random() * (PRIX_MAX - PRIX_MIN) + PRIX_MIN);
+	private int prixFournisseur = (int) (Math.random() * (PRIX_FABRICATION_MAX - PRIX_FABRICATION_MIN) + PRIX_FABRICATION_MIN + TransporteurAgent.getPrixMax() + 5);
 	private int argentDispo = 0;
 	private int electriciteAFournir = 0;
 	private int prixTransporteur = 10000;
+	private int prixFabrication = (PRIX_FABRICATION_MIN + PRIX_FABRICATION_MAX) / 2;
 	private ArrayList<AID> clientsFournisseur = new ArrayList<AID>();
 	private ArrayList<AID> transportsFournisseur = new ArrayList<AID>();
 	
@@ -131,6 +134,22 @@ public class ProducteurAgent extends AbstractAgent
 
 	public void setPrixTransporteur(int prixTransporteur) {
 		this.prixTransporteur = prixTransporteur;
+	}
+	
+	public static int getPrixFabricationMax() {
+		return PRIX_FABRICATION_MAX;
+	}
+
+	public static int getPrixFabricationMin() {
+		return PRIX_FABRICATION_MIN;
+	}
+
+	public int getPrixFabrication() {
+		return prixFabrication;
+	}
+
+	public void setPrixFabrication(int prixFabrication) {
+		this.prixFabrication = prixFabrication;
 	}
 	
 }

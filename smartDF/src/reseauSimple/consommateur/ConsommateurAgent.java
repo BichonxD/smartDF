@@ -23,6 +23,9 @@ public class ConsommateurAgent extends AbstractAgent
 	private final int capaciteProducteur = consommateurProducteur ? (int) (Math.random() * (besoin - 4 - PROD_MIN) + PROD_MIN) : 0;
 	private final int dureeRenouvellement = (int) (Math.random() * (RENOUVELLEMENT_MAX - RENOUVELLEMENT_MIN) + RENOUVELLEMENT_MIN);
 	
+	// Variable de configuration
+	private int nbTourEffectue;
+	
 	// Variables propres
 	private AID fournisseurID;
 	private int prixfournisseur;
@@ -40,6 +43,7 @@ public class ConsommateurAgent extends AbstractAgent
 		
 		fournisseurID = null;
 		prixfournisseur = 0;
+		nbTourEffectue = 0;
 		
 		addBehaviour(new ConsommateurBehaviourHorlogeListener(this));
 	}
@@ -109,6 +113,14 @@ public class ConsommateurAgent extends AbstractAgent
 		}
 		ret += "\tCherche un meilleur producteur tous les " + dureeRenouvellement + " tours.\n";
 		return ret;
+	}
+
+	public int getNbTourEffectue() {
+		return nbTourEffectue;
+	}
+
+	public void incrementeNbTourEffectue() {
+		this.nbTourEffectue++;
 	}
 	
 }

@@ -89,20 +89,54 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 		}
 		
 		//System.out.println(myAgent.getAID() + " a " + ((ProducteurAgent) myAgent).getTransportsFournisseur().size() + " transporteur personnel");
+		
+		/*
+		 * Recuperation du prix de fabrication de l'electricite du tour precedent, pour calculer le nouveau prix de vente
+		 */
+		int prixfabricationPrevious = ((ProducteurAgent) myAgent).getPrixFabrication();
+		
+		/*
+		 * Recuperation du prix du transporteur officiel
+		 */
+		ACLMessage demandePrixTransporteurOfficiel = new ACLMessage(AbstractAgent.TRANSPORTEUR_PRIX_DEMANDE);
+		demandePrixTransporteurOfficiel.addReceiver(((ProducteurAgent) myAgent).getAnnuairePersoTransporteurOfficiel()[0]);
+		myAgent.send(demandePrixTransporteurOfficiel);
+		
+		boolean reponse = false;
+		int prixTransporteurOfficiel = 0;
+		
+		while(!reponse)
+		{
+			ACLMessage msg = myAgent.receive(MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_PRIX_REPONSE));
+			
+			if(msg != null)
+			{
+				prixTransporteurOfficiel = Integer.parseInt(msg.getContent());
+				reponse = true;
+			}
+		}
 			
 		/*
 		 * Calcul du prix a ce tour ci
 		 */
 		int electriciteTransporteurUniverselPrevisionnel =  electriciteAFournirPrevisionnel - capaciteTransportPersonnel;
 		
-		int nouveauPrix = ((ProducteurAgent) myAgent).getPrixFournisseur();
+		int ancienPrix = ((ProducteurAgent) myAgent).getPrixFournisseur();
+		int nouveauPrix;
 		
-		//Si on est pas dans le cas initial, a savoir un fournisseur sans client
-		if(electriciteAFournirPrevisionnel != 0) {
+		//Pas de client et situation initial
+		if(electriciteAFournirPrevisionnel == 0) {
+			nouveauPrix = (int) (0.9 * ancienPrix);
 			
-			//Si il arrive a remplier ses transporteur personnel il augmente son prix
+			//On fixe le prix minimum
+			if (nouveauPrix < ((ProducteurAgent.getPrixFabricationMin() + ProducteurAgent.getPrixFabricationMax())/2 + prixTransporteurOfficiel + 1))
+				nouveauPrix = (ProducteurAgent.getPrixFabricationMin() + ProducteurAgent.getPrixFabricationMax())/2 + prixTransporteurOfficiel + 1;
+		}
+		else {
+			//Si il arrive a remplir ses transporteur personnel il augmente son prix
 			if (electriciteTransporteurUniverselPrevisionnel > 0) {
-				nouveauPrix *= 1.1;
+				nouveauPrix = (int) (1.1 * ancienPrix);
+				
 				//Si il a assez d'argent pour construire plus de trois transporteur, il en construit un et garde le reste afin de toujours avoir une marge pour payer les amendes
 				if (((ProducteurAgent) myAgent).getArgentFournisseur() > ((ProducteurAgent) myAgent).getPrixTransporteur() * 3) {
 					
@@ -114,14 +148,21 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 						ac.start();
 						
 						((ProducteurAgent) myAgent).getTransportsFournisseur().add(new AID("Transporteur " + myAgent.getAID() + " " + ((ProducteurAgent) myAgent).getTransportsFournisseur().size(), AID.ISLOCALNAME));
+						
+						((ProducteurAgent) myAgent).setArgentFournisseur(((ProducteurAgent) myAgent).getArgentFournisseur() - ((ProducteurAgent) myAgent).getPrixTransporteur());
 					} catch (StaleProxyException e) {
 						e.printStackTrace();
 					}
 				}
 			}
-			//Sinon il le diminue (marche pour le cas ou on a pas eu de client)
-			else
-				nouveauPrix *= 0.9;
+			//Sinon il le diminue
+			else {
+				nouveauPrix = (int) (0.9 * ancienPrix);
+				
+				//On fixe le prix minimum
+				if (nouveauPrix < ((ProducteurAgent.getPrixFabricationMin() + ProducteurAgent.getPrixFabricationMax())/2 + prixTransporteurOfficiel + 1))
+					nouveauPrix = (ProducteurAgent.getPrixFabricationMin() + ProducteurAgent.getPrixFabricationMax())/2 + prixTransporteurOfficiel + 1;
+			}
 		}
 		
 		/*
