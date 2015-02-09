@@ -20,8 +20,9 @@ public class TransporteurBehaviourMsgListenerDemandeInfos extends CyclicBehaviou
 	{
 		// Reçoit les messages suivant et ecarte les autres
 		MessageTemplate mt = 
-				MessageTemplate.or(MessageTemplate.or(
-				MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_PRIX_DEMANDE),
+				MessageTemplate.or(MessageTemplate.or(MessageTemplate.or(
+				MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_PROPRIO_DEMANDE),
+				MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_PRIX_DEMANDE)),
 				MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_ARGENT_DEMANDE)),
 				MessageTemplate.MatchPerformative(AbstractAgent.TRANSPORTEUR_CAPACITE_DEMANDE));
 		ACLMessage msg = myAgent.receive(mt);
@@ -32,6 +33,14 @@ public class TransporteurBehaviourMsgListenerDemandeInfos extends CyclicBehaviou
 			
 			switch(msg.getPerformative())
 			{
+				// On renvoie le nom de notre proprietaire
+				case AbstractAgent.TRANSPORTEUR_PROPRIO_DEMANDE:
+					reply = msg.createReply();
+					reply.setPerformative(AbstractAgent.TRANSPORTEUR_PROPRIO_REPONSE);
+					reply.setContent(((TransporteurAgent) myAgent).getFournisseurID().getLocalName());
+					myAgent.send(reply);
+					break;
+				
 				// On renvoie notre prix
 				case AbstractAgent.TRANSPORTEUR_PRIX_DEMANDE:
 					reply = msg.createReply();

@@ -1,9 +1,11 @@
 package reseauSimple.observateur;
 
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import jade.core.AID;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,14 +18,9 @@ public class ObservateurGUI extends JFrame
 	private JPanel panel = new JPanel();
 	private JLabel labelPhase = new JLabel("Tour 1 - Phase de Négociation :");
 	private int nbTours = 0;
-	private HashMap<AID, JLabel> labelsPrixProd = new HashMap<AID, JLabel>();
-	private HashMap<AID, JLabel> labelsArgentProd = new HashMap<AID, JLabel>();
-	private HashMap<AID, JLabel> labelsNbClientsProd = new HashMap<AID, JLabel>();
-	private HashMap<AID, JLabel> labelsNbTransporteursProd = new HashMap<AID, JLabel>();
-	private HashMap<AID, JLabel> labelsPrixTrans = new HashMap<AID, JLabel>();
-	private HashMap<AID, JLabel> labelsArgentTrans = new HashMap<AID, JLabel>();
-	private HashMap<AID, JLabel> labelsCapaciteTrans = new HashMap<AID, JLabel>();
-	private GridLayout grille = new GridLayout(10, 1);
+	private HashMap<AID, ArrayList<JLabel>> labelsProd = new HashMap<AID, ArrayList<JLabel>>();
+	private HashMap<AID, ArrayList<JLabel>> labelsTrans = new HashMap<AID, ArrayList<JLabel>>();
+	private GridLayout grille = new GridLayout(60, 0);
 	
 	public ObservateurGUI(final ObservateurAgent myAgent)
 	{
@@ -64,17 +61,52 @@ public class ObservateurGUI extends JFrame
 		repaint();
 	}
 	
+	/**
+	 * Créé une nouvelle liste de JLabel pour afficher un producteur.
+	 * @param a
+	 */
+	private void newEltLabelsProd(AID a)
+	{
+		if(!labelsProd.containsKey(a))
+		{
+			ArrayList<JLabel> lLabels = new ArrayList<JLabel>();
+			
+			// On ajoute 4 labels dans l'arraylist
+			for(int i = 0; i < 5; i++)
+			{
+				JLabel l = new JLabel();
+				lLabels.add(l);
+				getContentPane().add(l);
+			}
+			labelsProd.put(a, lLabels);
+		}
+	}
+	
+	/**
+	 * Créé une nouvelle liste de JLabel pour afficher un transporteur.
+	 * @param a
+	 */
+	private void newEltLabelsTrans(AID a)
+	{
+		if(!labelsTrans.containsKey(a))
+		{
+			ArrayList<JLabel> lLabels = new ArrayList<JLabel>();
+			
+			// On ajoute 5 labels dans l'arraylist
+			for(int i = 0; i < 5; i++)
+			{
+				JLabel l = new JLabel();
+				lLabels.add(l);
+				getContentPane().add(l);
+			}
+			labelsTrans.put(a, lLabels);
+		}
+	}
+	
 	public void ajouterPrixProducteur(AID a, String s)
 	{
-		if(labelsPrixProd.containsKey(a))
-			labelsPrixProd.get(a).setText(s);
-		else
-		{
-			JLabel l = new JLabel(s);
-			labelsPrixProd.put(a, l);
-			getContentPane().add(l);
-		}
-		
+		newEltLabelsProd(a);
+		labelsProd.get(a).get(0).setText(s);
 		pack();
 		revalidate();
 		repaint();
@@ -82,15 +114,8 @@ public class ObservateurGUI extends JFrame
 	
 	public void ajouterArgentProducteur(AID a, String s)
 	{
-		if(labelsArgentProd.containsKey(a))
-			labelsArgentProd.get(a).setText(s);
-		else
-		{
-			JLabel l = new JLabel(s);
-			labelsArgentProd.put(a, l);
-			getContentPane().add(l);
-		}
-		
+		newEltLabelsProd(a);
+		labelsProd.get(a).get(1).setText(s);
 		pack();
 		revalidate();
 		repaint();
@@ -98,15 +123,8 @@ public class ObservateurGUI extends JFrame
 	
 	public void ajouterNbClientsProducteur(AID a, String s)
 	{
-		if(labelsNbClientsProd.containsKey(a))
-			labelsNbClientsProd.get(a).setText(s);
-		else
-		{
-			JLabel l = new JLabel(s);
-			labelsNbClientsProd.put(a, l);
-			getContentPane().add(l);
-		}
-		
+		newEltLabelsProd(a);
+		labelsProd.get(a).get(2).setText(s);
 		pack();
 		revalidate();
 		repaint();
@@ -114,15 +132,17 @@ public class ObservateurGUI extends JFrame
 	
 	public void ajouterNbTransporteursProducteur(AID a, String s)
 	{
-		if(labelsNbTransporteursProd.containsKey(a))
-			labelsNbTransporteursProd.get(a).setText(s);
-		else
-		{
-			JLabel l = new JLabel(s);
-			labelsNbTransporteursProd.put(a, l);
-			getContentPane().add(l);
-		}
-		
+		newEltLabelsProd(a);
+		labelsProd.get(a).get(3).setText(s);
+		pack();
+		revalidate();
+		repaint();
+	}
+	
+	public void ajouterProprioTransporteur(AID a, String s)
+	{
+		newEltLabelsTrans(a);
+		labelsTrans.get(a).get(0).setText(s);
 		pack();
 		revalidate();
 		repaint();
@@ -130,15 +150,8 @@ public class ObservateurGUI extends JFrame
 	
 	public void ajouterPrixTransporteur(AID a, String s)
 	{
-		if(labelsPrixTrans.containsKey(a))
-			labelsPrixTrans.get(a).setText(s);
-		else
-		{
-			JLabel l = new JLabel(s);
-			labelsPrixTrans.put(a, l);
-			getContentPane().add(l);
-		}
-		
+		newEltLabelsTrans(a);
+		labelsTrans.get(a).get(1).setText(s);
 		pack();
 		revalidate();
 		repaint();
@@ -146,15 +159,8 @@ public class ObservateurGUI extends JFrame
 	
 	public void ajouterArgentTransporteur(AID a, String s)
 	{
-		if(labelsArgentTrans.containsKey(a))
-			labelsArgentTrans.get(a).setText(s);
-		else
-		{
-			JLabel l = new JLabel(s);
-			labelsArgentTrans.put(a, l);
-			getContentPane().add(l);
-		}
-		
+		newEltLabelsTrans(a);
+		labelsTrans.get(a).get(2).setText(s);
 		pack();
 		revalidate();
 		repaint();
@@ -162,15 +168,8 @@ public class ObservateurGUI extends JFrame
 	
 	public void ajouterCapaciteTransporteur(AID a, String s)
 	{
-		if(labelsCapaciteTrans.containsKey(a))
-			labelsCapaciteTrans.get(a).setText(s);
-		else
-		{
-			JLabel l = new JLabel(s);
-			labelsCapaciteTrans.put(a, l);
-			getContentPane().add(l);
-		}
-		
+		newEltLabelsTrans(a);
+		labelsTrans.get(a).get(3).setText(s);
 		pack();
 		revalidate();
 		repaint();

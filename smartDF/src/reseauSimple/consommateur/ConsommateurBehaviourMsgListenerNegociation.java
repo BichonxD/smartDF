@@ -15,7 +15,6 @@ public class ConsommateurBehaviourMsgListenerNegociation extends CyclicBehaviour
 	private static final long serialVersionUID = 1L;
 	
 	private ACLMessage msgHorlogeToAnswer;
-	private boolean isDone = false;
 	private TreeMap<AID, Integer> repProducteur = new TreeMap<AID, Integer>();
 	private int cpt = 0;
 	
@@ -97,7 +96,6 @@ public class ConsommateurBehaviourMsgListenerNegociation extends CyclicBehaviour
 					}
 					
 					myAgent.addBehaviour(new GlobalBehaviourHorlogeTalker(myAgent, msgHorlogeToAnswer));
-					isDone = true;
 				}
 			}
 			

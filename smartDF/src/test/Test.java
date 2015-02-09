@@ -32,7 +32,7 @@ public class Test
 		//int nbConsommateur = (int) (Math.random() * 5 + 1);
 		//int nbProducteur = (int) (Math.random() * 5 + 1);
 		int nbConsommateur = 80;
-		int nbProducteur = 3;
+		int nbProducteur = 10;
 		
 		ArrayList<AgentController> lAC = new ArrayList<AgentController>();
 		

@@ -55,7 +55,7 @@ public class ConsommateurBehaviourHorlogeListener extends CyclicBehaviour
 					
 					//System.out.println(myAgent.getAID() + " " + ((ConsommateurAgent) myAgent).getNbTourEffectue() + " % " + ((ConsommateurAgent) myAgent).getDureeRenouvellement());
 					
-					if(((ConsommateurAgent) myAgent).getNbTourEffectue() % ((ConsommateurAgent) myAgent).getDureeRenouvellement() == 0)
+					if(((ConsommateurAgent) myAgent).getNbTourEffectue() % ((ConsommateurAgent) myAgent).getDureeRenouvellement() == 1)
 					{
 						// On met à jour l'annuaire des producteurs.
 						DFAgentDescription rechercheProducteur = new DFAgentDescription();

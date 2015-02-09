@@ -29,8 +29,8 @@ public class HorlogeBehaviourListener extends CyclicBehaviour
 			{
 				if(nbReponseRecu < ((AbstractAgent) myAgent).getAnnuairePerso().length)
 				{
-					if(nbReponseRecu == 0)
-						System.out.println("\nNouvelle phase : " + phaseActuelle);
+					//if(nbReponseRecu == 0)
+						//System.out.println("\nNouvelle phase : " + phaseActuelle);
 					nbReponseRecu++;
 					//System.out.println("J'ai reçu " + nbReponseRecu + " message sur " + ((AbstractAgent) myAgent).getAnnuairePerso().length + " et le dernier est de :\n" + msg.getSender());
 				}
@@ -57,7 +57,7 @@ public class HorlogeBehaviourListener extends CyclicBehaviour
 							break;
 					}
 					
-					myAgent.addBehaviour(new HorlogeBehaviourTalker(myAgent, phaseActuelle));
+					((HorlogeAgent) myAgent).getHorlogeTalker().notifyNouvellePhase(phaseActuelle);
 					nbReponseRecu = 0;
 				}
 			}

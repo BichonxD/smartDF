@@ -95,6 +95,11 @@ public class TransporteurAgent extends AbstractAgent
 		this.argentTransporteur = argentTransporteur;
 	}
 	
+	public static int getCurrentID()
+	{
+		return currentID;
+	}
+	
 	public static int getNextID()
 	{
 		return currentID++;

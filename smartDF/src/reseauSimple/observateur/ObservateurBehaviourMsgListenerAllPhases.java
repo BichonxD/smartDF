@@ -46,7 +46,7 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 		
 		/*if(transporteursDisponibles != null)
 		{
-			nbReponsesAttendues += transporteursDisponibles.length * 3;
+			nbReponsesAttendues += transporteursDisponibles.length * 4;
 			
 			for(AID aid : transporteursDisponibles)
 			{
@@ -103,10 +103,15 @@ public class ObservateurBehaviourMsgListenerAllPhases extends CyclicBehaviour
 					
 				case AbstractAgent.PRODUCTEUR_NBTRANSPORTEUR_REPONSE:
 					int nbTransProd = Integer.parseInt(msg.getContent());
-					((ObservateurAgent) myAgent).getMyGUI().ajouterNbTransporteursProducteur(sender, "Le producteur " + sender.getLocalName() + " a " + nbTransProd + " transporteurs personels.");
+					((ObservateurAgent) myAgent).getMyGUI().ajouterNbTransporteursProducteur(sender, "Le producteur " + sender.getLocalName() + " a " + nbTransProd + " transporteurs personnels.");
 					nbReponses++;
-					break;					
-				
+					break;
+					
+				case AbstractAgent.TRANSPORTEUR_PROPRIO_REPONSE:
+					((ObservateurAgent) myAgent).getMyGUI().ajouterProprioTransporteur(sender, "Le transporteur " + sender.getLocalName() + " a pour proprietaire : " + msg.getContent() + ".");
+					nbReponses++;
+					break;
+					
 				case AbstractAgent.TRANSPORTEUR_PRIX_REPONSE:
 					int prixTrans = Integer.parseInt(msg.getContent());
 					((ObservateurAgent) myAgent).getMyGUI().ajouterPrixTransporteur(sender, "Le transporteur " + sender.getLocalName() + " a pour prix : " + prixTrans + " €/kWh");

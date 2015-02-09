@@ -9,6 +9,10 @@ public class HorlogeAgent extends AbstractAgent
 {
 	private static final long serialVersionUID = 1L;
 	
+	private static final long tickerTalker = 500;
+	
+	private HorlogeBehaviourTalker horlogeTalker;
+	
 	protected void setup()
 	{
 		setServiceName("horloge");
@@ -20,8 +24,13 @@ public class HorlogeAgent extends AbstractAgent
 		ServiceDescription SDAllAgents = new ServiceDescription();
 		rechercheAllAgents.addServices(SDAllAgents);
 		addBehaviour(new GlobalBehaviourSearchAnnuaires(this, rechercheAllAgents));
-		addBehaviour(new HorlogeBehaviourTalker(this, AbstractAgent.HORLOGE_PHASE_NEGOCIATION));
+		horlogeTalker = new HorlogeBehaviourTalker(this, tickerTalker, AbstractAgent.HORLOGE_PHASE_NEGOCIATION);
+		addBehaviour(horlogeTalker);
 		addBehaviour(new HorlogeBehaviourListener(this));
+	}
+	
+	public HorlogeBehaviourTalker getHorlogeTalker() {
+		return horlogeTalker;
 	}
 	
 }

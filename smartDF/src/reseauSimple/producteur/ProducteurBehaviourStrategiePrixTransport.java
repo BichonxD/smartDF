@@ -6,13 +6,9 @@ import reseauSimple.transporteur.TransporteurAgent;
 import test.Test;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.core.Profile;
-import jade.core.ProfileImpl;
-import jade.core.Runtime;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
@@ -91,11 +87,6 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 		//System.out.println(myAgent.getAID() + " a " + ((ProducteurAgent) myAgent).getTransportsFournisseur().size() + " transporteur personnel");
 		
 		/*
-		 * Recuperation du prix de fabrication de l'electricite du tour precedent, pour calculer le nouveau prix de vente
-		 */
-		int prixfabricationPrevious = ((ProducteurAgent) myAgent).getPrixFabrication();
-		
-		/*
 		 * Recuperation du prix du transporteur officiel
 		 */
 		ACLMessage demandePrixTransporteurOfficiel = new ACLMessage(AbstractAgent.TRANSPORTEUR_PRIX_DEMANDE);
@@ -144,10 +135,11 @@ public class ProducteurBehaviourStrategiePrixTransport extends OneShotBehaviour
 					argument[0] = myAgent.getAID();
 					
 					try {
-						AgentController ac = Test.mc.createNewAgent("Transporteur " + myAgent.getAID() + " " + ((ProducteurAgent) myAgent).getTransportsFournisseur().size(), TransporteurAgent.class.getName(), argument);
+						String name = "Transporteur " + TransporteurAgent.getCurrentID() + " de " + myAgent.getLocalName();
+						AgentController ac = Test.mc.createNewAgent(name, TransporteurAgent.class.getName(), argument);
 						ac.start();
 						
-						((ProducteurAgent) myAgent).getTransportsFournisseur().add(new AID("Transporteur " + myAgent.getAID() + " " + ((ProducteurAgent) myAgent).getTransportsFournisseur().size(), AID.ISLOCALNAME));
+						((ProducteurAgent) myAgent).getTransportsFournisseur().add(new AID(name, AID.ISLOCALNAME));
 						
 						((ProducteurAgent) myAgent).setArgentFournisseur(((ProducteurAgent) myAgent).getArgentFournisseur() - ((ProducteurAgent) myAgent).getPrixTransporteur());
 					} catch (StaleProxyException e) {

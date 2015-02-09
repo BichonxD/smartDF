@@ -56,6 +56,8 @@ public abstract class AbstractAgent extends Agent
 	static public final int TRANSPORTEUR_FACTURATION_REPONSE_NEGATIVE = 158;
 	static public final int TRANSPORTEUR_ENCAISSE_PAIEMENT = 159;
 	static public final int TRANSPORTEUR_ENVOI_ARGENT = 160;
+	static public final int TRANSPORTEUR_PROPRIO_DEMANDE = 161;
+	static public final int TRANSPORTEUR_PROPRIO_REPONSE = 162;
 	
 	// Facturation pour le producteur
 	static public final int PRODUCTEUR_FACTURATION_DEMANDE = 170;

@@ -41,6 +41,11 @@ public class ObservateurBehaviourAskTransporteurs extends OneShotBehaviour
 				ACLMessage msgCapacite = new ACLMessage(AbstractAgent.TRANSPORTEUR_CAPACITE_DEMANDE);
 				msgCapacite.addReceiver(aid);
 				myAgent.send(msgCapacite);
+				
+				// Proprietaire
+				ACLMessage msgProprio = new ACLMessage(AbstractAgent.TRANSPORTEUR_PROPRIO_DEMANDE);
+				msgProprio.addReceiver(aid);
+				myAgent.send(msgProprio);
 			}
 		}
 		
@@ -49,6 +54,8 @@ public class ObservateurBehaviourAskTransporteurs extends OneShotBehaviour
 		{
 			for(AID aid : transporteurOfficiel)
 			{
+				((ObservateurAgent) myAgent).getMyGUI().ajouterProprioTransporteur(aid, "Le transporteur " + aid.getLocalName() + " est le transporteur officiel.");
+				
 				// Prix
 				ACLMessage msgPrix = new ACLMessage(AbstractAgent.TRANSPORTEUR_PRIX_DEMANDE);
 				msgPrix.addReceiver(aid);
